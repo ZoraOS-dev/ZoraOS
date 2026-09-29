@@ -61,6 +61,43 @@ font-size:28px;
 
 <body>
 
+<div id="home">
+  <div class="status">
+    <div>9:41</div>
+    <div>📶 🔋</div>
+  </div>
+
+  <h1>ZoraOS</h1>
+  <p>Your world. Your OS.</p>
+
+  <div class="grid">
+    <div class="icon" onclick="openApp('Browser')">🌐<span>Browser</span></div>
+    <div class="icon" onclick="openApp('Settings')">⚙️<span>Settings</span></div>
+    <div class="icon" onclick="openApp('Gallery')">🖼️<span>Gallery</span></div>
+    <div class="icon" onclick="openApp('Zora')">✨<span>Zora</span></div>
+  </div>
+</div>
+
+<div id="app" style="display:none;padding:30px;">
+  <button onclick="closeApp()">← Home</button>
+  <h1 id="title"></h1>
+  <p>Welcome to your first ZoraOS app.</p>
+</div>
+
+<script>
+function openApp(name){
+  home.style.display="none";
+  app.style.display="block";
+  title.innerText=name;
+}
+function closeApp(){
+  app.style.display="none";
+  home.style.display="block";
+}
+</script>
+
+</body>
+
 <div class="status">
 <div>9:41</div>
 <div>📶 🔋</div>
