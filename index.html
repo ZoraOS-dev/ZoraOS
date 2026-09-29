@@ -1,152 +1,63 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ZoraOS</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#0f172a,#111827,#1d4ed8);
-  color:#fff;
   overflow:hidden;
+  background:linear-gradient(160deg,#020617,#0f172a,#1e3a8a);
+  color:#fff;
 }
 .screen{position:fixed;inset:0}
+
+/* LOCKSCREEN */
 #lock{
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding:60px 25px;
-  transition:.45s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:60px 24px;
+  background:linear-gradient(160deg,#020617,#0f172a,#1e40af);
+  transition:.4s;
 }
-.time{font-size:72px;font-weight:700;text-align:center}
-.date{text-align:center;color:#cbd5e1;margin-top:8px}
-.hint{text-align:center;color:#cbd5e1;margin-bottom:8px}
+.time{
+  font-size:72px;
+  font-weight:bold;
+  text-align:center;
+}
+.date{
+  text-align:center;
+  color:#cbd5e1;
+  margin-top:8px;
+}
+.swipe{
+  text-align:center;
+  color:#cbd5e1;
+  margin-bottom:10px;
+}
 .bar{
-  width:140px;height:5px;background:#fff;border-radius:99px;
-  margin:0 auto 18px;opacity:.9;
-}
-#home{display:none;min-height:100vh}
-.status{display:flex;justify-content:space-between;padding:18px;font-size:14px}
-h1{padding:30px 20px 0;font-size:42px}
-.sub{padding:6px 20px;color:#cbd5e1}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:28px 20px}
-.icon{
-  background:rgba(255,255,255,.08);border-radius:22px;
-  padding:18px 8px;text-align:center;backdrop-filter:blur(18px);
-  transition:.15s;
-}
-.icon:active{transform:scale(.82)}
-.icon span{display:block;font-size:11px;margin-top:8px}
-.dock{
-  position:fixed;left:16px;right:16px;bottom:18px;
-  display:flex;justify-content:space-around;padding:12px;
-  border-radius:28px;background:rgba(255,255,255,.12);
-  backdrop-filter:blur(20px);
-}
-.dock-icon{
-  width:52px;height:52px;display:flex;align-items:center;
-  justify-content:center;font-size:28px;border-radius:16px;
-}
-#app{
-  position:fixed;inset:0;background:linear-gradient(135deg,#111827,#0f172a);
-  padding:30px;transform:scale(.75);opacity:0;
-  pointer-events:none;border-radius:40px;
-  transition:.45s cubic-bezier(.16,1,.3,1);
-}
-#app.open{transform:scale(1);opacity:1;pointer-events:auto;border-radius:0}
-.back{
-  border:none;background:rgba(255,255,255,.1);color:#fff;
-  padding:12px 18px;border-radius:18px;
-}
-</style>
-</head>
-<body>
-
-<div id="lock" class="screen">
-  <div>
-    <div class="time" id="clock">9:41</div>
-    <div class="date">Tuesday, 29 September</div>
-  </div>
-
-  <div>
-    <div class="hint">Swipe up to unlock</div>
-    <div class="bar"></div>
-  </div>
-</div>
-
-<div id="home" class="screen">
-  <div class="status"><div id="topTime">9:41</div><div>📶 🔋</div></div>
-  <h1>ZoraOS</h1>
-  <div class="sub">Your world. Your OS.</div>
-
-  <div class="grid">
-    <div class="icon" onclick="openApp('Browser')">🌐<span>Browser</span></div>
-    <div class="icon" onclick="openApp('Settings')">⚙️<span>Settings</span></div>
-    <div class="icon" onclick="openApp('Gallery')">🖼️<span>Gallery</span></div>
-    <div class="icon" onclick="openApp('Zora')">✨<span>Zora</span></div>
-  </div>
-
-  <div class="dock">
-    <div class="dock-icon" onclick="openApp('Phone')">📞</div>
-    <div class="dock-icon" onclick="openApp('Messages')">💬</div>
-    <div class="dock-icon" onclick="openApp('Camera')">📷</div>
-    <div class="dock-icon" onclick="openApp('Music')">🎵</div>
-  </div>
-</div>
-
-<div id="app">
-  <button class="back" onclick="closeApp()">← Home</button>
-  <h1 id="title" style="padding:30px 0 10px"></h1>
-  <p>Welcome to ZoraOS.</p>
-</div>
-
-<script>
-const lock=document.getElementById("lock");
-const home=document.getElementById("home");
-const app=document.getElementById("app");
-const title=document.getElementById("title");
-
-function tick(){
-  const d=new Date();
-  const t=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  clock.textContent=t;
-  topTime.textContent=t;
-}
-tick();
-setInterval(tick,1000);
-
-let startY=0;
-lock.addEventListener("touchstart",e=>startY=e.touches[0].clientY);
-lock.addEventListener("touchend",e=>{
-  if(startY-e.changedTouches[0].clientY>80){
-    lock.style.transform="translateY(-100%)";
-    lock.style.opacity="0";
-    setTimeout(()=>{
-      lock.style.display="none";
-      home.style.display="block";
-    },350);
-  }
-});
-
-function openApp(name){
-  title.textContent=name;
-  home.style.opacity="0";
-  home.style.transform="scale(.96)";
-  setTimeout(()=>{
-    home.style.display="none";
-    app.classList.add("open");
-  },150);
+  width:140px;
+  height:5px;
+  background:#fff;
+  border-radius:99px;
+  margin:auto;
 }
 
-function closeApp(){
-  app.classList.remove("open");
-  setTimeout(()=>{
-    home.style.display="block";
-    home.style.opacity="1";
-    home.style.transform="scale(1)";
-  },220);
+/* HOME */
+#home{
+  display:none;
+  min-height:100vh;
+  background:linear-gradient(160deg,#020617,#0f172a,#1e3a8a);
 }
-</script>
-
-</body>
-</html>
+.status{
+  display:flex;
+  justify-content:space-between;
+  padding:18px;
+  font-size:14px;
+}
+h1{
+  font-size:42px;
+  padding:32px 20px
