@@ -1,63 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ZoraOS</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   font-family:Arial,sans-serif;
-  overflow:hidden;
   background:linear-gradient(160deg,#020617,#0f172a,#1e3a8a);
-  color:#fff;
+  color:#fff;overflow:hidden;
 }
 .screen{position:fixed;inset:0}
 
-/* LOCKSCREEN */
+/* Lock */
 #lock{
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
+  display:flex;flex-direction:column;justify-content:space-between;
   padding:60px 24px;
-  background:linear-gradient(160deg,#020617,#0f172a,#1e40af);
   transition:.4s;
 }
-.time{
-  font-size:72px;
-  font-weight:bold;
-  text-align:center;
-}
-.date{
-  text-align:center;
-  color:#cbd5e1;
-  margin-top:8px;
-}
-.swipe{
-  text-align:center;
-  color:#cbd5e1;
-  margin-bottom:10px;
-}
-.bar{
-  width:140px;
-  height:5px;
-  background:#fff;
-  border-radius:99px;
-  margin:auto;
-}
+.time{font-size:68px;font-weight:bold;text-align:center}
+.date{text-align:center;color:#cbd5e1}
+.swipe{text-align:center;color:#cbd5e1}
+.bar{width:140px;height:5px;background:#fff;border-radius:99px;margin:14px auto}
 
-/* HOME */
-#home{
-  display:none;
-  min-height:100vh;
-  background:linear-gradient(160deg,#020617,#0f172a,#1e3a8a);
+/* Home */
+#home{display:none}
+.status{display:flex;justify-content:space-between;padding:18px;font-size:14px}
+h1{padding:32px 20px 0;font-size:42px}
+.sub{padding:6px 20px;color:#cbd5e1}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;padding:28px 20px;
 }
-.status{
-  display:flex;
-  justify-content:space-between;
-  padding:18px;
-  font-size:14px;
+.icon{
+  background:rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:18px 8px;
+  text-align:center;
 }
-h1{
-  font-size:42px;
-  padding:32px 20px
+.icon span{display:block;font-size:11px;margin-top:8px}
+.dock{
+  position:fixed;left:16px;right:16px;bottom:18px;
+  display:flex;justify-content:space-around;
+  padding:12px;border-radius:28px;
+  background:rgba(255,255,255,.12);
+}
+.dock div{font-size:28px}
+
+/* App */
+#app{
+  position:fixed;inset:0;
+  background:#111827;
+  padding:30px;
+  transform:scale(.8);
+  opacity:0;
+  pointer-events:none;
+  transition:.35s;
+}
+#app.open{
+  transform:scale(1);
+  opacity:1;
+  pointer-events:auto;
+}
+button{
+  border:none;background:#334155;color:#fff;
+  padding:10px 16px;border-radius:14px;
+}
+</style>
+</head>
+<body>
+
+<div id="lock" class="screen">
+  <div>
+    <div class="time" id="clock">09:41</div>
+    <div class="date">Tuesday · ZoraOS</div>
+  </div>
+  <div>
+    <div class="swipe">Swipe up to unlock</div>
+    <div class="bar"></div>
+  </div>
+</div>
+
+<div id="home" class="screen">
+  <div class="status">
+    <div id="topTime">09:41</div>
+    <div>📶 🔋</div>
+  </div>
+
+  <h1>ZoraOS</h1>
+  <div class="sub">Your world. Your OS.</div>
+
+  <div class="grid">
+    <div class="icon" onclick="openApp('Browser')">🌐<span>Browser</span></div>
+    <div class="icon" onclick="openApp('Settings')">⚙️<span>Settings</span></div>
+    <div class="icon" onclick="openApp('Gallery')">🖼️<span>Gallery</span></div>
+    <div class="icon"
