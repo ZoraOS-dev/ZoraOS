@@ -1,11 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZoraOS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZoraOS</title>
+<style>
+body{
+margin:0;
+background:linear-gradient(#0f172a,#111827);
+font-family:Arial;
+color:white;
+}
+.status{
+display:flex;
+justify-content:space-between;
+padding:18px;
+font-size:14px;
+}
+h1{
+padding:40px 20px 0;
+font-size:42px;
+margin:0;
+}
+p{
+padding:0 20px;
+color:#b8b8b8;
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+padding:30px 20px;
+text-align:center;
+}
+.icon{
+background:rgba(255,255,255,.08);
+border-radius:22px;
+padding:18px 8px;
+font-size:28px;
+}
+.icon span{
+display:block;
+font-size:11px;
+margin-top:8px;
+}
+.dock{
+position:fixed;
+left:15px;
+right:15px;
+bottom:18px;
+background:rgba(255,255,255,.12);
+border-radius:30px;
+display:flex;
+justify-content:space-around;
+padding:14px;
+backdrop-filter:blur(20px);
+font-size:28px;
+}
+</style>
 </head>
-<body style="background:#0b0b0b;color:white;font-family:Arial;text-align:center;padding-top:80px;">
-  <h1>ZoraOS</h1>
-  <p>Your world. Your OS.</p>
+
+<body>
+
+<div class="status">
+<div>9:41</div>
+<div>📶 🔋</div>
+</div>
+
+<h1>ZoraOS</h1>
+<p>Your world. Your OS.</p>
+
+<div class="grid">
+<div class="icon">🌐<span>Browser</span></div>
+<div class="icon">⚙️<span>Settings</span></div>
+<div class="icon">🖼️<span>Gallery</span></div>
+<div class="icon">✨<span>Zora</span></div>
+</div>
+
+<div class="dock">
+📞 💬 📷 🎵
+</div>
+
 </body>
 </html>
