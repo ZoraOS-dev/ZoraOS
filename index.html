@@ -349,7 +349,88 @@ function closeApp() {
     document.getElementById("app").classList.remove("open");
 
 }
+/* SWIPE DOWN TO CLOSE APP */
 
+const app = document.getElementById("app");
+
+let appStartY = 0;
+let appCurrentY = 0;
+let appSwiping = false;
+
+app.addEventListener("touchstart", function(e) {
+    appStartY = e.touches[0].clientY;
+    appCurrentY = appStartY;
+    appSwiping = true;
+});
+
+app.addEventListener("touchmove", function(e) {
+
+    if (!appSwiping) return;
+
+    appCurrentY = e.touches[0].clientY;
+
+    const distance = appCurrentY - appStartY;
+
+    /* Only allow downward movement */
+    if (distance > 0) {
+
+        app.style.transform =
+            "translateY(" + distance + "px) scale(" +
+            (1 - Math.min(distance / 1500, 0.08)) +
+            ")";
+
+        app.style.opacity =
+            1 - Math.min(distance / 500, 0.35);
+    }
+
+});
+
+app.addEventListener("touchend", function() {
+
+    if (!appSwiping) return;
+
+    const distance = appCurrentY - appStartY;
+
+    appSwiping = false;
+
+    if (distance > 100) {
+
+        /* Close app */
+
+        app.style.transition =
+            "transform 0.3s ease, opacity 0.3s ease";
+
+        app.style.transform =
+            "translateY(100%) scale(0.9)";
+
+        app.style.opacity = "0";
+
+        setTimeout(function() {
+
+            app.classList.remove("open");
+
+            app.style.transform = "";
+            app.style.opacity = "";
+            app.style.transition = "";
+
+        }, 300);
+
+    } else {
+
+        /* Snap back */
+
+        app.style.transition =
+            "transform 0.25s ease, opacity 0.25s ease";
+
+        app.style.transform = "";
+        app.style.opacity = "";
+
+        setTimeout(function() {
+            app.style.transition = "";
+        }, 250);
+    }
+
+});
 </script>
 
 </body>
