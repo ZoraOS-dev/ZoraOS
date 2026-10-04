@@ -8,692 +8,826 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>ZoraOS</title>
 
 <style>
-
 *{
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
-user-select:none;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
 }
 
 html,body{
-margin:0;
-width:100%;
-height:100%;
-overflow:hidden;
-font-family:Arial,Helvetica,sans-serif;
-background:#000;
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#000;
 }
 
 :root{
---icon-radius:23px;
---brightness:1;
---volume:70%;
+  --icon-radius:20px;
 }
 
 .phone{
-position:relative;
-width:100%;
-height:100dvh;
-overflow:hidden;
-background:#080b13;
+  position:relative;
+  width:100%;
+  height:100dvh;
+  overflow:hidden;
+  background:#080b13;
 }
 
-/* ================= WALLPAPER ================= */
+/* WALLPAPER */
 
 .wallpaper{
-position:absolute;
-inset:-5%;
-width:110%;
-height:110%;
+  position:absolute;
+  inset:-5%;
+  width:110%;
+  height:110%;
 
-background:
-radial-gradient(circle at 20% 20%,#5472ff 0%,transparent 30%),
-radial-gradient(circle at 80% 35%,#9f4cff 0%,transparent 35%),
-radial-gradient(circle at 50% 85%,#07162f 0%,transparent 45%),
-linear-gradient(145deg,#07101f,#10182c 50%,#040711);
+  background:
+    radial-gradient(circle at 20% 20%,#5472ff 0%,transparent 30%),
+    radial-gradient(circle at 80% 35%,#9f4cff 0%,transparent 35%),
+    radial-gradient(circle at 50% 85%,#07162f 0%,transparent 45%),
+    linear-gradient(145deg,#07101f,#10182c 50%,#040711);
 
-transition:
-transform .55s cubic-bezier(.2,.8,.2,1),
-filter .55s ease,
-background .5s ease;
+  transition:
+    transform .55s cubic-bezier(.2,.8,.2,1),
+    filter .55s ease;
 }
 
 .phone.app-open .wallpaper{
-transform:scale(1.1);
-filter:blur(8px) brightness(.75);
-}
-
-.phone.dark .wallpaper{
-filter:brightness(.7);
+  transform:scale(1.1);
+  filter:blur(8px) brightness(.75);
 }
 
 .brightness-layer{
-position:absolute;
-inset:0;
-background:#000;
-opacity:0;
-pointer-events:none;
-z-index:900;
-transition:.2s;
+  position:absolute;
+  inset:0;
+  background:#000;
+  opacity:0;
+  pointer-events:none;
+  z-index:900;
 }
 
-/* ================= STATUS ================= */
+/* STATUS */
 
 .statusbar{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:46px;
-padding:12px 18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-color:white;
-z-index:30;
-font-size:14px;
-font-weight:600;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:46px;
+  padding:12px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  z-index:30;
+  font-size:14px;
+  font-weight:600;
 }
 
 .status-right{
-display:flex;
-gap:7px;
-align-items:center;
+  display:flex;
+  gap:7px;
+  align-items:center;
 }
 
-/* ================= HOME ================= */
+/* HOME */
 
 .home{
-position:absolute;
-inset:0;
-z-index:5;
-padding:72px 18px 115px;
-transition:.45s cubic-bezier(.2,.8,.2,1);
+  position:absolute;
+  inset:0;
+  z-index:5;
+  padding:72px 18px 115px;
+  transition:.45s cubic-bezier(.2,.8,.2,1);
 }
 
 .phone.app-open .home{
-transform:scale(.93);
-filter:blur(3px);
-opacity:.35;
+  transform:scale(.93);
+  filter:blur(3px);
+  opacity:.35;
 }
 
 .hero{
-margin-bottom:30px;
+  margin-bottom:30px;
 }
 
 .hero-time{
-font-size:54px;
-color:white;
-font-weight:300;
-letter-spacing:-3px;
+  font-size:54px;
+  color:white;
+  font-weight:300;
+  letter-spacing:-3px;
 }
 
 .hero-date{
-color:rgba(255,255,255,.7);
-font-size:15px;
-margin-top:4px;
+  color:rgba(255,255,255,.7);
+  font-size:15px;
+  margin-top:4px;
 }
 
 .app-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:25px 14px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px 14px;
 }
 
 .icon-wrap{
-text-align:center;
-color:white;
-font-size:12px;
+  text-align:center;
+  color:white;
+  font-size:12px;
 }
 
 .icon{
-width:62px;
-height:62px;
-margin:auto;
-border-radius:var(--icon-radius);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:29px;
+  width:62px;
+  height:62px;
+  margin:auto;
 
-background:rgba(255,255,255,.16);
+  border-radius:var(--icon-radius);
 
-box-shadow:
-inset 0 1px 1px rgba(255,255,255,.35),
-0 8px 20px rgba(0,0,0,.22);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-backdrop-filter:blur(20px);
+  font-size:29px;
 
-transition:
-transform .18s ease,
-border-radius .35s ease;
+  background:rgba(255,255,255,.16);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.35),
+    0 8px 20px rgba(0,0,0,.22);
+
+  backdrop-filter:blur(20px);
+
+  transition:
+    transform .18s ease,
+    border-radius .35s ease;
 }
 
 .icon:active{
-transform:scale(.86);
+  transform:scale(.86);
 }
 
 .icon-name{
-margin-top:7px;
-text-shadow:0 1px 5px #000;
+  margin-top:7px;
+  text-shadow:0 1px 5px #000;
 }
 
 body[data-icons="round"]{
---icon-radius:50%;
+  --icon-radius:50%;
 }
 
 body[data-icons="squircle"]{
---icon-radius:18px;
+  --icon-radius:18px;
 }
 
 body[data-icons="soft"]{
---icon-radius:27px;
+  --icon-radius:27px;
 }
 
-/* ================= DOCK ================= */
+/* SNAKE ICON */
+
+.snake-icon{
+  background:
+    linear-gradient(145deg,#49ff77,#08a947);
+  box-shadow:
+    0 8px 22px rgba(0,255,100,.25);
+}
+
+/* DOCK */
 
 .dock{
-position:absolute;
-left:16px;
-right:16px;
-bottom:18px;
-height:84px;
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:18px;
+  height:84px;
 
-border-radius:29px;
+  border-radius:29px;
 
-background:rgba(255,255,255,.13);
-backdrop-filter:blur(28px);
+  background:rgba(255,255,255,.13);
+  backdrop-filter:blur(28px);
 
-display:flex;
-justify-content:space-around;
-align-items:center;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
 
-border:1px solid rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.12);
 
-z-index:12;
-transition:.4s;
+  z-index:12;
+
+  transition:.4s;
 }
 
 .phone.app-open .dock{
-transform:translateY(120px);
+  transform:translateY(120px);
 }
 
-/* ================= APPS ================= */
+/* APP WINDOW */
 
 .app-window{
-position:absolute;
-inset:0;
+  position:absolute;
+  inset:0;
 
-background:#f5f5f7;
+  background:#f5f5f7;
 
-z-index:100;
+  z-index:100;
 
-transform:
-translateY(40px)
-scale(.2);
+  transform:
+    translateY(40px)
+    scale(.2);
 
-opacity:0;
+  opacity:0;
+  pointer-events:none;
 
-pointer-events:none;
+  border-radius:36px;
+  overflow:hidden;
 
-border-radius:36px;
+  transition:
+    transform .55s cubic-bezier(.2,.85,.25,1.12),
+    opacity .25s,
+    border-radius .55s;
 
-overflow:hidden;
-
-transition:
-transform .55s cubic-bezier(.2,.85,.25,1.12),
-opacity .25s,
-border-radius .55s;
-
-transform-origin:center 70%;
+  transform-origin:center 70%;
 }
 
 .app-window.open{
-transform:translateY(0) scale(1);
-opacity:1;
-pointer-events:auto;
+  transform:translateY(0) scale(1);
+  opacity:1;
+  pointer-events:auto;
 }
 
 .app-window.closing{
-transform:translateY(105%) scale(.82);
-opacity:.5;
+  transform:translateY(105%) scale(.82);
+  opacity:.5;
 }
 
 .app-header{
-height:95px;
-padding:52px 20px 10px;
+  height:95px;
+  padding:52px 20px 10px;
 
-background:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.9);
 
-font-weight:bold;
-font-size:24px;
+  font-weight:bold;
+  font-size:24px;
 }
 
 .app-content{
-height:calc(100% - 95px);
-overflow-y:auto;
-padding:18px;
+  height:calc(100% - 95px);
+  overflow-y:auto;
+  padding:18px;
 }
 
 .gesture-area{
-position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:35px;
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:35px;
 
-display:flex;
-justify-content:center;
-align-items:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 
-z-index:200;
+  z-index:200;
 }
 
 .gesture-bar{
-width:125px;
-height:5px;
-
-border-radius:20px;
-background:#111;
+  width:125px;
+  height:5px;
+  border-radius:20px;
+  background:#111;
 }
 
-/* ================= CARDS ================= */
+/* CARDS */
 
 .card{
-background:white;
-padding:18px;
-margin-bottom:13px;
-border-radius:22px;
-box-shadow:0 5px 20px rgba(0,0,0,.05);
+  background:white;
+  padding:18px;
+  margin-bottom:13px;
+  border-radius:22px;
+  box-shadow:0 5px 20px rgba(0,0,0,.05);
 }
 
 .card h3{
-margin:0 0 7px;
+  margin:0 0 7px;
 }
 
 .setting-row{
-background:white;
-border-radius:20px;
-padding:15px 16px;
-margin-bottom:12px;
+  background:white;
+  border-radius:20px;
+  padding:15px 16px;
+  margin-bottom:12px;
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .theme-options{
-display:flex;
-gap:12px;
-margin-top:14px;
+  display:flex;
+  gap:12px;
 }
 
 .theme-button{
-width:58px;
-height:58px;
-border:none;
-border-radius:18px;
-font-size:25px;
-background:#eee;
+  width:58px;
+  height:58px;
+
+  border:none;
+  border-radius:18px;
+
+  font-size:25px;
+  background:#eee;
 }
 
 .theme-button.active{
-outline:3px solid #4b7cff;
+  outline:3px solid #4b7cff;
 }
 
-/* ================= CONTROL CENTRE ================= */
+/* CONTROL CENTRE */
 
 .control-centre{
-position:absolute;
-top:0;
-left:0;
-right:0;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:100%;
 
-height:100%;
+  z-index:400;
 
-z-index:400;
+  background:rgba(8,12,25,.55);
+  backdrop-filter:blur(35px);
 
-background:rgba(8,12,25,.55);
-backdrop-filter:blur(35px);
+  transform:translateY(-105%);
+  opacity:0;
+  pointer-events:none;
 
-transform:translateY(-105%);
-opacity:0;
-
-pointer-events:none;
-
-transition:
-transform .55s cubic-bezier(.2,.85,.25,1),
-opacity .3s;
+  transition:
+    transform .55s cubic-bezier(.2,.85,.25,1),
+    opacity .3s;
 }
 
 .control-centre.open{
-transform:translateY(0);
-opacity:1;
-pointer-events:auto;
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
 }
 
 .cc-panel{
-padding:55px 18px 30px;
-height:100%;
-overflow-y:auto;
+  padding:55px 18px 30px;
+  height:100%;
+  overflow-y:auto;
 }
 
 .cc-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-color:white;
-margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  margin-bottom:20px;
 }
 
 .cc-title{
-font-size:29px;
-font-weight:700;
+  font-size:29px;
+  font-weight:700;
 }
 
 .cc-subtitle{
-font-size:13px;
-opacity:.65;
-margin-top:3px;
+  font-size:13px;
+  opacity:.65;
+  margin-top:3px;
 }
 
 .cc-close{
-width:42px;
-height:42px;
-border-radius:50%;
-border:1px solid rgba(255,255,255,.15);
-background:rgba(255,255,255,.12);
-color:white;
-font-size:20px;
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.15);
+
+  background:rgba(255,255,255,.12);
+  color:white;
+  font-size:20px;
 }
 
 .cc-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:13px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
 }
 
 .cc-tile{
-min-height:105px;
-padding:16px;
+  min-height:105px;
+  padding:16px;
 
-border-radius:26px;
+  border-radius:26px;
 
-background:rgba(255,255,255,.13);
-border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.1);
 
-color:white;
+  color:white;
 
-backdrop-filter:blur(25px);
+  backdrop-filter:blur(25px);
 
-transition:.2s;
+  transition:.2s;
 }
 
 .cc-tile:active{
-transform:scale(.95);
+  transform:scale(.95);
 }
 
 .cc-tile.active{
-background:rgba(90,120,255,.65);
+  background:rgba(90,120,255,.65);
 }
 
 .cc-icon{
-font-size:28px;
-margin-bottom:13px;
+  font-size:28px;
+  margin-bottom:13px;
 }
 
 .cc-name{
-font-size:14px;
-font-weight:bold;
+  font-size:14px;
+  font-weight:bold;
 }
 
 .cc-state{
-font-size:11px;
-opacity:.65;
-margin-top:4px;
+  font-size:11px;
+  opacity:.65;
+  margin-top:4px;
 }
 
 .slider-card{
-margin-top:13px;
+  margin-top:13px;
+  padding:18px;
 
-padding:18px;
+  border-radius:26px;
 
-border-radius:26px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.1);
 
-background:rgba(255,255,255,.13);
-border:1px solid rgba(255,255,255,.1);
-
-color:white;
+  color:white;
 }
 
 .slider-label{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-font-size:14px;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-size:14px;
 }
 
 input[type="range"]{
-width:100%;
-accent-color:#fff;
+  width:100%;
+  accent-color:#fff;
 }
 
-/* ================= WALLPAPER PICKER ================= */
-
 .wallpaper-picker{
-margin-top:13px;
-padding:18px;
+  margin-top:13px;
+  padding:18px;
 
-border-radius:26px;
+  border-radius:26px;
 
-background:rgba(255,255,255,.13);
-border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.1);
 
-color:white;
+  color:white;
 }
 
 .wallpaper-title{
-font-size:16px;
-font-weight:bold;
-margin-bottom:13px;
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:13px;
 }
 
 .wallpaper-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
 }
 
 .wall-option{
-height:100px;
-border-radius:18px;
-border:2px solid transparent;
-overflow:hidden;
+  height:100px;
+  border-radius:18px;
+  border:2px solid transparent;
 }
 
 .wall-option.active{
-border-color:white;
+  border-color:white;
 }
 
 .wall-1{
-background:
-radial-gradient(circle at 20% 20%,#5472ff,transparent 35%),
-radial-gradient(circle at 80% 40%,#b53cff,transparent 40%),
-linear-gradient(145deg,#07101f,#111a38);
+  background:
+  radial-gradient(circle at 20% 20%,#5472ff,transparent 35%),
+  radial-gradient(circle at 80% 40%,#b53cff,transparent 40%),
+  linear-gradient(145deg,#07101f,#111a38);
 }
 
 .wall-2{
-background:
-radial-gradient(circle at 80% 20%,#00eaff,transparent 35%),
-radial-gradient(circle at 20% 80%,#0066ff,transparent 40%),
-linear-gradient(145deg,#00131c,#071d40);
+  background:
+  radial-gradient(circle at 80% 20%,#00eaff,transparent 35%),
+  radial-gradient(circle at 20% 80%,#0066ff,transparent 40%),
+  linear-gradient(145deg,#00131c,#071d40);
 }
 
 .wall-3{
-background:
-radial-gradient(circle at 50% 20%,#ff4fd8,transparent 35%),
-radial-gradient(circle at 20% 80%,#ff7b39,transparent 40%),
-linear-gradient(145deg,#220018,#321007);
+  background:
+  radial-gradient(circle at 50% 20%,#ff4fd8,transparent 35%),
+  radial-gradient(circle at 20% 80%,#ff7b39,transparent 40%),
+  linear-gradient(145deg,#220018,#321007);
 }
 
 .wall-4{
-background:
-radial-gradient(circle at 20% 30%,#66ff99,transparent 35%),
-radial-gradient(circle at 80% 70%,#00aaff,transparent 40%),
-linear-gradient(145deg,#001c14,#00172c);
+  background:
+  radial-gradient(circle at 20% 30%,#66ff99,transparent 35%),
+  radial-gradient(circle at 80% 70%,#00aaff,transparent 40%),
+  linear-gradient(145deg,#001c14,#00172c);
 }
 
 .wall-5{
-background:
-radial-gradient(circle at 70% 20%,#ffffff,transparent 20%),
-radial-gradient(circle at 20% 70%,#777,transparent 35%),
-linear-gradient(145deg,#080808,#333);
+  background:
+  radial-gradient(circle at 70% 20%,#fff,transparent 20%),
+  radial-gradient(circle at 20% 70%,#777,transparent 35%),
+  linear-gradient(145deg,#080808,#333);
 }
 
 .wall-6{
-background:
-radial-gradient(circle at 50% 50%,#9c5cff,transparent 30%),
-linear-gradient(145deg,#090020,#160035,#000);
+  background:
+  radial-gradient(circle at 50% 50%,#9c5cff,transparent 30%),
+  linear-gradient(145deg,#090020,#160035,#000);
 }
 
-/* ================= LOCKSCREEN ================= */
+/* LOCKSCREEN */
 
 .lockscreen{
-position:absolute;
-inset:0;
+  position:absolute;
+  inset:0;
 
-z-index:500;
+  z-index:500;
 
-display:flex;
-flex-direction:column;
-align-items:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 
-color:white;
+  color:white;
 
-background:
-radial-gradient(circle at 50% 70%,rgba(60,75,255,.4),transparent 40%),
-linear-gradient(160deg,rgba(7,10,24,.25),rgba(0,0,0,.6));
+  background:
+    radial-gradient(circle at 50% 70%,rgba(60,75,255,.4),transparent 40%),
+    linear-gradient(160deg,rgba(7,10,24,.25),rgba(0,0,0,.6));
 
-backdrop-filter:blur(2px);
+  backdrop-filter:blur(2px);
 
-transition:
-transform .65s cubic-bezier(.2,.8,.2,1),
-opacity .5s;
+  transition:
+    transform .65s cubic-bezier(.2,.8,.2,1),
+    opacity .5s;
 }
 
 .lockscreen.hidden{
-transform:translateY(-105%);
-opacity:0;
-pointer-events:none;
+  transform:translateY(-105%);
+  opacity:0;
+  pointer-events:none;
 }
 
 .lock-date{
-margin-top:95px;
-font-size:17px;
-opacity:.8;
+  margin-top:95px;
+  font-size:17px;
+  opacity:.8;
 }
 
 .lock-time{
-font-size:82px;
-font-weight:200;
-letter-spacing:-6px;
-margin-top:5px;
+  font-size:82px;
+  font-weight:200;
+  letter-spacing:-6px;
+  margin-top:5px;
 }
 
 .lock-fingerprint{
-position:absolute;
-bottom:100px;
+  position:absolute;
+  bottom:100px;
 
-width:68px;
-height:68px;
+  width:68px;
+  height:68px;
 
-border-radius:50%;
+  border-radius:50%;
 
-background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.12);
 
-display:flex;
-justify-content:center;
-align-items:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 
-font-size:31px;
+  font-size:31px;
 
-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
 }
 
 .lock-hint{
-position:absolute;
-bottom:40px;
-font-size:13px;
-opacity:.7;
+  position:absolute;
+  bottom:40px;
+  font-size:13px;
+  opacity:.7;
 }
 
 .notification{
-position:absolute;
+  position:absolute;
+  top:145px;
+  left:20px;
+  right:20px;
 
-top:145px;
-left:20px;
-right:20px;
+  padding:16px;
 
-padding:16px;
+  border-radius:22px;
 
-border-radius:22px;
+  background:rgba(255,255,255,.15);
 
-background:rgba(255,255,255,.15);
+  backdrop-filter:blur(20px);
 
-backdrop-filter:blur(20px);
+  color:white;
 
-color:white;
-
-display:flex;
-gap:13px;
+  display:flex;
+  gap:13px;
 }
 
-.notification-icon{
-font-size:27px;
-}
-
-/* ================= ZORA ================= */
+/* ZORA */
 
 .zora-orb{
-width:90px;
-height:90px;
+  width:90px;
+  height:90px;
 
-border-radius:30px;
+  border-radius:30px;
+  margin:30px auto;
 
-margin:30px auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-display:flex;
-align-items:center;
-justify-content:center;
+  font-size:42px;
+  color:white;
 
-font-size:42px;
-color:white;
+  background:linear-gradient(145deg,#446cff,#ac42ff);
 
-background:
-linear-gradient(145deg,#446cff,#ac42ff);
-
-box-shadow:
-0 15px 50px rgba(86,85,255,.35);
+  box-shadow:
+    0 15px 50px rgba(86,85,255,.35);
 }
 
-/* ================= DARK MODE ================= */
+/* ================= SNAKE GAME ================= */
+
+.snake-content{
+  background:#080b10;
+  padding:12px !important;
+  color:white;
+  overflow:hidden !important;
+}
+
+.snake-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:5px 5px 12px;
+}
+
+.snake-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.snake-score{
+  background:rgba(255,255,255,.1);
+  padding:8px 13px;
+  border-radius:15px;
+  font-size:13px;
+}
+
+#snakeCanvas{
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;
+
+  max-height:62vh;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    ),
+    #07100c;
+
+  background-size:20px 20px;
+
+  border-radius:25px;
+
+  box-shadow:
+    inset 0 0 30px rgba(0,0,0,.5),
+    0 10px 35px rgba(0,0,0,.35);
+}
+
+.snake-controls{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:13px;
+}
+
+.snake-btn{
+  width:54px;
+  height:44px;
+
+  border:0;
+  border-radius:15px;
+
+  background:rgba(255,255,255,.12);
+  color:white;
+
+  font-size:20px;
+}
+
+.snake-btn:active{
+  transform:scale(.9);
+  background:rgba(90,255,130,.3);
+}
+
+.snake-hint{
+  text-align:center;
+  font-size:11px;
+  opacity:.5;
+  margin-top:8px;
+}
+
+.snake-gameover{
+  position:absolute;
+  left:50%;
+  top:50%;
+
+  transform:translate(-50%,-50%);
+
+  width:80%;
+
+  padding:25px;
+
+  text-align:center;
+
+  border-radius:27px;
+
+  background:rgba(10,15,18,.92);
+
+  backdrop-filter:blur(20px);
+
+  color:white;
+
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+
+  display:none;
+}
+
+.snake-gameover.show{
+  display:block;
+}
+
+.snake-gameover h2{
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+.snake-final-score{
+  opacity:.7;
+  margin-bottom:18px;
+}
+
+.snake-restart{
+  border:0;
+
+  padding:13px 24px;
+
+  border-radius:17px;
+
+  background:linear-gradient(135deg,#46ff76,#08a947);
+
+  color:white;
+
+  font-weight:bold;
+  font-size:15px;
+}
+
+/* DARK MODE */
 
 .phone.dark .app-window{
-background:#101114;
-color:white;
+  background:#101114;
+  color:white;
 }
 
 .phone.dark .app-header{
-background:#18191d;
-color:white;
+  background:#18191d;
+  color:white;
 }
 
 .phone.dark .card,
 .phone.dark .setting-row{
-background:#1b1c20;
-color:white;
+  background:#1b1c20;
+  color:white;
 }
-
 </style>
 </head>
 
@@ -702,26 +836,22 @@ color:white;
 <div class="phone" id="phone">
 
 <div class="wallpaper" id="wallpaper"></div>
-
 <div class="brightness-layer" id="brightnessLayer"></div>
 
-<!-- STATUS BAR -->
+<!-- STATUS -->
 
 <div class="statusbar">
 
 <span id="statusTime">10:30</span>
 
 <div class="status-right">
-
-<span id="wifiStatus">▮▮▮</span>
+<span>▮▮▮</span>
 <span>⌁</span>
-<span id="batteryText">87%</span>
+<span>87%</span>
 <span>▰</span>
-
 </div>
 
 </div>
-
 
 <!-- HOME -->
 
@@ -738,7 +868,6 @@ Sunday, October 4
 </div>
 
 </div>
-
 
 <div class="app-grid">
 
@@ -777,14 +906,20 @@ Sunday, October 4
 <div class="icon-name">Files</div>
 </div>
 
-<div class="icon-wrap" onclick="openApp('clock')">
-<div class="icon">🕐</div>
-<div class="icon-name">Clock</div>
+<div class="icon-wrap" onclick="openApp('snake')">
+
+<div class="icon snake-icon">
+🐍
+</div>
+
+<div class="icon-name">
+Snake
+</div>
+
 </div>
 
 </div>
 </main>
-
 
 <!-- DOCK -->
 
@@ -808,7 +943,6 @@ Sunday, October 4
 
 </div>
 
-
 <!-- GENERIC APP -->
 
 <section class="app-window" id="genericApp">
@@ -825,7 +959,6 @@ App
 
 </section>
 
-
 <!-- SETTINGS -->
 
 <section class="app-window" id="settingsApp">
@@ -837,26 +970,17 @@ Settings
 <div class="app-content">
 
 <div class="card">
-
 <h3>ZoraOS</h3>
-
-<p>
-Your world. Your OS.
-</p>
-
+<p>Your world. Your OS.</p>
 </div>
 
 <div class="setting-row">
-
 <div>
 <b>Icon Style</b>
-
-<div style="font-size:12px;color:#777;">
+<div style="font-size:12px;color:#777">
 Choose your ZoraOS icon shape
 </div>
-
 </div>
-
 </div>
 
 <div class="theme-options">
@@ -890,7 +1014,12 @@ onclick="setIconTheme('round')">
 
 <div class="setting-row">
 <span>Version</span>
-<span>ZoraOS Web 1.1</span>
+<span>ZoraOS Web 1.2</span>
+</div>
+
+<div class="setting-row">
+<span>Game</span>
+<span>Zora Snake</span>
 </div>
 
 <div class="setting-row">
@@ -906,8 +1035,7 @@ onclick="setIconTheme('round')">
 
 </section>
 
-
-<!-- ================= CONTROL CENTRE ================= -->
+<!-- CONTROL CENTRE -->
 
 <section class="control-centre" id="controlCentre">
 
@@ -916,7 +1044,6 @@ onclick="setIconTheme('round')">
 <div class="cc-top">
 
 <div>
-
 <div class="cc-title">
 Control Centre
 </div>
@@ -924,7 +1051,6 @@ Control Centre
 <div class="cc-subtitle">
 ZoraOS Quick Controls
 </div>
-
 </div>
 
 <button class="cc-close"
@@ -934,130 +1060,74 @@ onclick="closeControlCentre()">
 
 </div>
 
-
 <div class="cc-grid">
-
 
 <div class="cc-tile active"
 id="wifiTile"
 onclick="toggleControl('wifi')">
 
 <div class="cc-icon">📶</div>
-
-<div class="cc-name">
-Wi-Fi
-</div>
-
-<div class="cc-state"
-id="wifiState">
-Connected
-</div>
+<div class="cc-name">Wi-Fi</div>
+<div class="cc-state" id="wifiState">Connected</div>
 
 </div>
-
 
 <div class="cc-tile"
 id="bluetoothTile"
 onclick="toggleControl('bluetooth')">
 
 <div class="cc-icon">🔵</div>
-
-<div class="cc-name">
-Bluetooth
-</div>
-
-<div class="cc-state"
-id="bluetoothState">
-Off
-</div>
+<div class="cc-name">Bluetooth</div>
+<div class="cc-state" id="bluetoothState">Off</div>
 
 </div>
-
 
 <div class="cc-tile"
 id="darkTile"
 onclick="toggleControl('dark')">
 
 <div class="cc-icon">🌙</div>
-
-<div class="cc-name">
-Dark Mode
-</div>
-
-<div class="cc-state"
-id="darkState">
-Off
-</div>
+<div class="cc-name">Dark Mode</div>
+<div class="cc-state" id="darkState">Off</div>
 
 </div>
-
 
 <div class="cc-tile"
 id="airplaneTile"
 onclick="toggleControl('airplane')">
 
 <div class="cc-icon">✈️</div>
-
-<div class="cc-name">
-Airplane Mode
-</div>
-
-<div class="cc-state"
-id="airplaneState">
-Off
-</div>
+<div class="cc-name">Airplane Mode</div>
+<div class="cc-state" id="airplaneState">Off</div>
 
 </div>
-
 
 <div class="cc-tile"
 id="rotationTile"
 onclick="toggleControl('rotation')">
 
 <div class="cc-icon">🔒</div>
-
-<div class="cc-name">
-Rotation Lock
-</div>
-
-<div class="cc-state"
-id="rotationState">
-Off
-</div>
+<div class="cc-name">Rotation Lock</div>
+<div class="cc-state" id="rotationState">Off</div>
 
 </div>
-
 
 <div class="cc-tile"
 onclick="openWallpaperPicker()">
 
 <div class="cc-icon">🖼️</div>
-
-<div class="cc-name">
-Wallpaper
-</div>
-
-<div class="cc-state">
-Customize
-</div>
+<div class="cc-name">Wallpaper</div>
+<div class="cc-state">Customize</div>
 
 </div>
 
 </div>
-
-
-<!-- BRIGHTNESS -->
 
 <div class="slider-card">
 
 <div class="slider-label">
-
 <span>🔆 Brightness</span>
-
-<span id="brightnessValue">
-100%
-</span>
-
+<span id="brightnessValue">100%</span>
 </div>
 
 <input
@@ -1069,19 +1139,11 @@ value="100">
 
 </div>
 
-
-<!-- VOLUME -->
-
 <div class="slider-card">
 
 <div class="slider-label">
-
 <span>🔊 Volume</span>
-
-<span id="volumeValue">
-70%
-</span>
-
+<span id="volumeValue">70%</span>
 </div>
 
 <input
@@ -1093,9 +1155,6 @@ value="70">
 
 </div>
 
-
-<!-- WALLPAPERS -->
-
 <div class="wallpaper-picker">
 
 <div class="wallpaper-title">
@@ -1105,37 +1164,29 @@ ZoraOS Wallpapers
 <div class="wallpaper-grid">
 
 <div class="wall-option wall-1"
-onclick="setWallpaper(1)">
-</div>
+onclick="setWallpaper(1)"></div>
 
 <div class="wall-option wall-2"
-onclick="setWallpaper(2)">
-</div>
+onclick="setWallpaper(2)"></div>
 
 <div class="wall-option wall-3"
-onclick="setWallpaper(3)">
-</div>
+onclick="setWallpaper(3)"></div>
 
 <div class="wall-option wall-4"
-onclick="setWallpaper(4)">
-</div>
+onclick="setWallpaper(4)"></div>
 
 <div class="wall-option wall-5"
-onclick="setWallpaper(5)">
-</div>
+onclick="setWallpaper(5)"></div>
 
 <div class="wall-option wall-6"
-onclick="setWallpaper(6)">
-</div>
+onclick="setWallpaper(6)"></div>
 
 </div>
 
 </div>
 
 </div>
-
 </section>
-
 
 <!-- LOCKSCREEN -->
 
@@ -1151,18 +1202,16 @@ Sunday, October 4
 
 <div class="notification">
 
-<div class="notification-icon">
+<div style="font-size:27px">
 ⚡
 </div>
 
 <div>
-
 <b>ZoraOS</b>
 
-<div style="font-size:13px;margin-top:3px;">
+<div style="font-size:13px;margin-top:3px">
 Welcome back to your world.
 </div>
-
 </div>
 
 </div>
@@ -1180,10 +1229,9 @@ Swipe up to unlock
 
 </div>
 
-
 <script>
 
-/* ================= VARIABLES ================= */
+/* ================= BASIC ================= */
 
 const phone =
 document.getElementById("phone");
@@ -1212,42 +1260,35 @@ document.getElementById("wallpaper");
 const brightnessLayer =
 document.getElementById("brightnessLayer");
 
-let currentApp = null;
+let currentApp=null;
 
 
 /* ================= CLOCK ================= */
 
 function updateClock(){
 
-const now = new Date();
+const now=new Date();
 
-const time =
-now.toLocaleTimeString([],{
+const time=now.toLocaleTimeString([],{
 hour:"2-digit",
 minute:"2-digit"
 });
 
-const date =
-now.toLocaleDateString([],{
+const date=now.toLocaleDateString([],{
 weekday:"long",
 month:"long",
 day:"numeric"
 });
 
 document.getElementById("statusTime").textContent=time;
-
 document.getElementById("homeTime").textContent=time;
-
 document.getElementById("lockTime").textContent=time;
-
 document.getElementById("homeDate").textContent=date;
-
 document.getElementById("lockDate").textContent=date;
 
 }
 
 updateClock();
-
 setInterval(updateClock,10000);
 
 
@@ -1264,13 +1305,28 @@ localStorage.setItem(
 
 }
 
+let lockStartY=0;
+
+lockscreen.addEventListener("touchstart",e=>{
+lockStartY=e.touches[0].clientY;
+},{passive:true});
+
+lockscreen.addEventListener("touchend",e=>{
+
+const endY=e.changedTouches[0].clientY;
+
+if(lockStartY-endY>70){
+unlockPhone();
+}
+
+},{passive:true});
+
 
 /* ================= CONTROL CENTRE ================= */
 
 function openControlCentre(){
 
-if(currentApp)
-return;
+if(currentApp)return;
 
 controlCentre.classList.add("open");
 
@@ -1282,40 +1338,29 @@ controlCentre.classList.remove("open");
 
 }
 
-
-/* ================= TOP SWIPE ================= */
-
 let ccStartY=0;
 
 phone.addEventListener("touchstart",e=>{
-
 ccStartY=e.touches[0].clientY;
-
-},{
-passive:true
-});
+},{passive:true});
 
 phone.addEventListener("touchend",e=>{
 
 const endY=e.changedTouches[0].clientY;
 
 if(
-ccStartY < 80 &&
-endY-ccStartY > 80 &&
+ccStartY<80 &&
+endY-ccStartY>80 &&
 !currentApp &&
 lockscreen.classList.contains("hidden")
 ){
-
 openControlCentre();
-
 }
 
-},{
-passive:true
-});
+},{passive:true});
 
 
-/* ================= CONTROL TOGGLES ================= */
+/* ================= CONTROLS ================= */
 
 let controls={
 wifi:true,
@@ -1329,28 +1374,18 @@ function toggleControl(type){
 
 controls[type]=!controls[type];
 
-const tile=
-document.getElementById(type+"Tile");
-
-const state=
-document.getElementById(type+"State");
-
-if(!tile)
-return;
+const tile=document.getElementById(type+"Tile");
+const state=document.getElementById(type+"State");
 
 tile.classList.toggle(
 "active",
 controls[type]
 );
 
-if(type==="wifi")
 state.textContent=
-controls[type]?"Connected":"Off";
-
-else
-state.textContent=
-controls[type]?"On":"Off";
-
+controls[type] ?
+(type==="wifi"?"Connected":"On") :
+"Off";
 
 if(type==="dark"){
 
@@ -1384,13 +1419,9 @@ JSON.stringify(controls)
 /* ================= BRIGHTNESS ================= */
 
 const brightnessSlider=
-document.getElementById(
-"brightnessSlider"
-);
+document.getElementById("brightnessSlider");
 
-brightnessSlider.addEventListener(
-"input",
-()=>{
+brightnessSlider.addEventListener("input",()=>{
 
 const value=
 Number(brightnessSlider.value);
@@ -1400,8 +1431,7 @@ brightnessLayer.style.opacity=
 
 document.getElementById(
 "brightnessValue"
-).textContent=
-value+"%";
+).textContent=value+"%";
 
 localStorage.setItem(
 "zoraBrightness",
@@ -1414,21 +1444,15 @@ value
 /* ================= VOLUME ================= */
 
 const volumeSlider=
-document.getElementById(
-"volumeSlider"
-);
+document.getElementById("volumeSlider");
 
-volumeSlider.addEventListener(
-"input",
-()=>{
+volumeSlider.addEventListener("input",()=>{
 
-const value=
-volumeSlider.value;
+const value=volumeSlider.value;
 
 document.getElementById(
 "volumeValue"
-).textContent=
-value+"%";
+).textContent=value+"%";
 
 localStorage.setItem(
 "zoraVolume",
@@ -1480,7 +1504,6 @@ linear-gradient(145deg,#090020,#160035,#000)
 
 };
 
-
 function setWallpaper(number){
 
 wallpaper.style.background=
@@ -1491,23 +1514,19 @@ localStorage.setItem(
 number
 );
 
-document
-.querySelectorAll(".wall-option")
-.forEach(x=>
-x.classList.remove("active")
-);
-
-const options=
 document.querySelectorAll(
 ".wall-option"
-);
+).forEach(x=>{
+x.classList.remove("active");
+});
+
+const options=
+document.querySelectorAll(".wall-option");
 
 if(options[number-1])
-options[number-1]
-.classList.add("active");
+options[number-1].classList.add("active");
 
 }
-
 
 function openWallpaperPicker(){
 
@@ -1519,7 +1538,7 @@ behavior:"smooth"
 }
 
 
-/* ================= APPS ================= */
+/* ================= APP DATA ================= */
 
 const appData={
 
@@ -1530,9 +1549,7 @@ html:`
 
 <div class="card">
 <h3>Hey.</h3>
-<p>
-I'm Zora, your assistant inside ZoraOS.
-</p>
+<p>I'm Zora, your assistant inside ZoraOS.</p>
 </div>
 
 <div class="card">
@@ -1601,40 +1618,95 @@ html:`
 `
 },
 
-clock:{
-title:"Clock",
-html:`
-<div style="
-font-size:65px;
-text-align:center;
-margin-top:80px;">
-🕐
-</div>
-`
-},
-
 phone:{
 title:"Phone",
 html:`
-<div class="card">
-📞 Recent Calls
-</div>
-
-<div class="card">
-Dial Pad
-</div>
+<div class="card">📞 Recent Calls</div>
+<div class="card">Dial Pad</div>
 `
 },
 
 browser:{
 title:"Zora Browser",
 html:`
-<div class="card">
-🌐 Search the web
+<div class="card">🌐 Search the web</div>
+<div class="card">ZoraOS Start Page</div>
+`
+},
+
+/* SNAKE */
+
+snake:{
+title:"Zora Snake",
+html:`
+
+<div class="snake-content">
+
+<div class="snake-top">
+
+<div class="snake-title">
+🐍 Zora Snake
 </div>
 
-<div class="card">
-ZoraOS Start Page
+<div class="snake-score">
+Score: <span id="snakeScore">0</span>
+</div>
+
+</div>
+
+<canvas id="snakeCanvas"
+width="320"
+height="320">
+</canvas>
+
+<div class="snake-controls">
+
+<button class="snake-btn"
+onclick="changeSnakeDirection('up')">
+▲
+</button>
+
+</div>
+
+<div class="snake-controls">
+
+<button class="snake-btn"
+onclick="changeSnakeDirection('left')">
+◀
+</button>
+
+<button class="snake-btn"
+onclick="changeSnakeDirection('down')">
+▼
+</button>
+
+<button class="snake-btn"
+onclick="changeSnakeDirection('right')">
+▶
+</button>
+
+</div>
+
+<div class="snake-hint">
+Swipe on the game • Arrow keys also work
+</div>
+
+<div class="snake-gameover"
+id="snakeGameOver">
+
+<h2>Game Over 🐍</h2>
+
+<div class="snake-final-score">
+Score: <span id="snakeFinalScore">0</span>
+</div>
+
+<button class="snake-restart"
+onclick="startSnake()">
+Play Again
+</button>
+
+</div>
+
 </div>
 `
 }
@@ -1652,14 +1724,19 @@ if(name==="settings"){
 
 currentApp=settingsApp;
 
-}
+phone.classList.add("app-open");
 
-else{
+requestAnimationFrame(()=>{
+currentApp.classList.add("open");
+});
+
+return;
+
+}
 
 const data=appData[name];
 
-if(!data)
-return;
+if(!data)return;
 
 genericTitle.textContent=data.title;
 
@@ -1667,13 +1744,17 @@ genericContent.innerHTML=data.html;
 
 currentApp=genericApp;
 
-}
-
 phone.classList.add("app-open");
 
 requestAnimationFrame(()=>{
 
 currentApp.classList.add("open");
+
+if(name==="snake"){
+
+setTimeout(startSnake,200);
+
+}
 
 });
 
@@ -1684,13 +1765,11 @@ currentApp.classList.add("open");
 
 function closeCurrentApp(){
 
-if(!currentApp)
-return;
+if(!currentApp)return;
 
 const appToClose=currentApp;
 
 appToClose.classList.add("closing");
-
 appToClose.classList.remove("open");
 
 phone.classList.remove("app-open");
@@ -1714,26 +1793,16 @@ let appCurrentY=0;
 document.querySelectorAll(".app-window")
 .forEach(app=>{
 
-app.addEventListener(
-"touchstart",
-e=>{
+app.addEventListener("touchstart",e=>{
 
-appStartY=
-e.touches[0].clientY;
-
+appStartY=e.touches[0].clientY;
 appCurrentY=appStartY;
 
-},{
-passive:true
-});
+},{passive:true});
 
+app.addEventListener("touchmove",e=>{
 
-app.addEventListener(
-"touchmove",
-e=>{
-
-appCurrentY=
-e.touches[0].clientY;
+appCurrentY=e.touches[0].clientY;
 
 const distance=
 appStartY-appCurrentY;
@@ -1745,10 +1814,7 @@ distance>0
 ){
 
 const scale=
-Math.max(
-.78,
-1-distance/900
-);
+Math.max(.78,1-distance/900);
 
 app.style.transition="none";
 
@@ -1761,14 +1827,9 @@ app.style.borderRadius=
 
 }
 
-},{
-passive:true
-});
+},{passive:true});
 
-
-app.addEventListener(
-"touchend",
-()=>{
+app.addEventListener("touchend",()=>{
 
 const distance=
 appStartY-appCurrentY;
@@ -1790,6 +1851,483 @@ closeCurrentApp();
 });
 
 });
+
+
+/* ================================================= */
+/*                     SNAKE GAME                     */
+/* ================================================= */
+
+let snake=[];
+let snakeFood={x:10,y:10};
+
+let snakeDirection={
+x:1,
+y:0
+};
+
+let nextSnakeDirection={
+x:1,
+y:0
+};
+
+let snakeScore=0;
+let snakeLoop=null;
+
+const snakeSize=16;
+const snakeGrid=20;
+
+
+/* START */
+
+function startSnake(){
+
+const canvas=
+document.getElementById("snakeCanvas");
+
+if(!canvas)return;
+
+const gameOver=
+document.getElementById("snakeGameOver");
+
+gameOver.classList.remove("show");
+
+snake=[
+{x:10,y:10},
+{x:9,y:10},
+{x:8,y:10}
+];
+
+snakeDirection={
+x:1,
+y:0
+};
+
+nextSnakeDirection={
+x:1,
+y:0
+};
+
+snakeScore=0;
+
+placeSnakeFood();
+
+updateSnakeScore();
+
+clearInterval(snakeLoop);
+
+snakeLoop=
+setInterval(
+runSnake,
+120
+);
+
+drawSnake();
+
+}
+
+
+/* GAME LOOP */
+
+function runSnake(){
+
+if(!document.getElementById("snakeCanvas")){
+
+clearInterval(snakeLoop);
+return;
+
+}
+
+snakeDirection=
+nextSnakeDirection;
+
+const head={
+x:snake[0].x+snakeDirection.x,
+y:snake[0].y+snakeDirection.y
+};
+
+
+/* WALL COLLISION */
+
+if(
+head.x<0 ||
+head.x>=snakeGrid ||
+head.y<0 ||
+head.y>=snakeGrid
+){
+
+endSnake();
+return;
+
+}
+
+
+/* BODY COLLISION */
+
+for(let i=0;i<snake.length;i++){
+
+if(
+head.x===snake[i].x &&
+head.y===snake[i].y
+){
+
+endSnake();
+return;
+
+}
+
+}
+
+
+snake.unshift(head);
+
+
+/* FOOD */
+
+if(
+head.x===snakeFood.x &&
+head.y===snakeFood.y
+){
+
+snakeScore++;
+
+updateSnakeScore();
+
+placeSnakeFood();
+
+}else{
+
+snake.pop();
+
+}
+
+drawSnake();
+
+}
+
+
+/* FOOD */
+
+function placeSnakeFood(){
+
+let valid=false;
+
+while(!valid){
+
+snakeFood={
+x:Math.floor(Math.random()*snakeGrid),
+y:Math.floor(Math.random()*snakeGrid)
+};
+
+valid=true;
+
+for(const part of snake){
+
+if(
+part.x===snakeFood.x &&
+part.y===snakeFood.y
+){
+
+valid=false;
+break;
+
+}
+
+}
+
+}
+
+}
+
+
+/* DRAW */
+
+function drawSnake(){
+
+const canvas=
+document.getElementById("snakeCanvas");
+
+if(!canvas)return;
+
+const ctx=
+canvas.getContext("2d");
+
+const size=
+canvas.width/snakeGrid;
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* FOOD */
+
+ctx.fillStyle="#ff405d";
+
+ctx.beginPath();
+
+ctx.arc(
+snakeFood.x*size+size/2,
+snakeFood.y*size+size/2,
+size*.34,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+/* SNAKE */
+
+snake.forEach((part,index)=>{
+
+ctx.fillStyle=
+index===0
+?"#6cff8b"
+:"#21d95b";
+
+const padding=1.5;
+
+ctx.beginPath();
+
+ctx.roundRect(
+part.x*size+padding,
+part.y*size+padding,
+size-padding*2,
+size-padding*2,
+5
+);
+
+ctx.fill();
+
+});
+
+
+/* EYES */
+
+const head=snake[0];
+
+if(head){
+
+ctx.fillStyle="#07100c";
+
+const eyeSize=2.5;
+
+let eye1;
+let eye2;
+
+if(snakeDirection.x!==0){
+
+const eyeX=
+head.x*size+
+(snakeDirection.x>0?size*.68:size*.32);
+
+eye1={
+x:eyeX,
+y:head.y*size+size*.32
+};
+
+eye2={
+x:eyeX,
+y:head.y*size+size*.68
+};
+
+}else{
+
+const eyeY=
+head.y*size+
+(snakeDirection.y>0?size*.68:size*.32);
+
+eye1={
+x:head.x*size+size*.32,
+y:eyeY
+};
+
+eye2={
+x:head.x*size+size*.68,
+y:eyeY
+};
+
+}
+
+ctx.beginPath();
+ctx.arc(
+eye1.x,
+eye1.y,
+eyeSize,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(
+eye2.x,
+eye2.y,
+eyeSize,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+}
+
+}
+
+
+/* DIRECTION */
+
+function changeSnakeDirection(direction){
+
+if(direction==="up" && snakeDirection.y!==1){
+
+nextSnakeDirection={
+x:0,
+y:-1
+};
+
+}
+
+if(direction==="down" && snakeDirection.y!==-1){
+
+nextSnakeDirection={
+x:0,
+y:1
+};
+
+}
+
+if(direction==="left" && snakeDirection.x!==1){
+
+nextSnakeDirection={
+x:-1,
+y:0
+};
+
+}
+
+if(direction==="right" && snakeDirection.x!==-1){
+
+nextSnakeDirection={
+x:1,
+y:0
+};
+
+}
+
+}
+
+
+/* KEYBOARD */
+
+document.addEventListener("keydown",e=>{
+
+if(!currentApp)return;
+
+if(e.key==="ArrowUp"){
+changeSnakeDirection("up");
+}
+
+if(e.key==="ArrowDown"){
+changeSnakeDirection("down");
+}
+
+if(e.key==="ArrowLeft"){
+changeSnakeDirection("left");
+}
+
+if(e.key==="ArrowRight"){
+changeSnakeDirection("right");
+}
+
+});
+
+
+/* TOUCH SWIPE */
+
+let snakeTouchX=0;
+let snakeTouchY=0;
+
+document.addEventListener("touchstart",e=>{
+
+if(!e.target.closest("#snakeCanvas"))
+return;
+
+snakeTouchX=e.touches[0].clientX;
+snakeTouchY=e.touches[0].clientY;
+
+},{passive:true});
+
+
+document.addEventListener("touchend",e=>{
+
+if(!e.target.closest("#snakeCanvas"))
+return;
+
+const dx=
+e.changedTouches[0].clientX-snakeTouchX;
+
+const dy=
+e.changedTouches[0].clientY-snakeTouchY;
+
+if(Math.max(
+Math.abs(dx),
+Math.abs(dy)
+)<25)return;
+
+if(Math.abs(dx)>Math.abs(dy)){
+
+if(dx>0)
+changeSnakeDirection("right");
+else
+changeSnakeDirection("left");
+
+}else{
+
+if(dy>0)
+changeSnakeDirection("down");
+else
+changeSnakeDirection("up");
+
+}
+
+},{passive:true});
+
+
+/* SCORE */
+
+function updateSnakeScore(){
+
+const score=
+document.getElementById("snakeScore");
+
+if(score)
+score.textContent=snakeScore;
+
+}
+
+
+/* GAME OVER */
+
+function endSnake(){
+
+clearInterval(snakeLoop);
+
+const gameOver=
+document.getElementById("snakeGameOver");
+
+const finalScore=
+document.getElementById("snakeFinalScore");
+
+if(finalScore)
+finalScore.textContent=snakeScore;
+
+if(gameOver)
+gameOver.classList.add("show");
+
+}
 
 
 /* ================= ICON THEMES ================= */
@@ -1820,9 +2358,9 @@ document.body.getAttribute(
 document.querySelectorAll(
 ".theme-button"
 )
-.forEach(button=>
-button.classList.remove("active")
-);
+.forEach(button=>{
+button.classList.remove("active");
+});
 
 const button=
 document.getElementById(
@@ -1835,9 +2373,7 @@ button.classList.add("active");
 }
 
 const savedTheme=
-localStorage.getItem(
-"zoraIconTheme"
-);
+localStorage.getItem("zoraIconTheme");
 
 if(savedTheme){
 
@@ -1851,26 +2387,17 @@ savedTheme
 updateThemeButtons();
 
 
-/* ================= RESTORE SETTINGS ================= */
+/* ================= RESTORE ================= */
 
 const savedWallpaper=
-localStorage.getItem(
-"zoraWallpaper"
-);
+localStorage.getItem("zoraWallpaper");
 
-if(savedWallpaper){
-
-setWallpaper(
-Number(savedWallpaper)
-);
-
-}
+if(savedWallpaper)
+setWallpaper(Number(savedWallpaper));
 
 
 const savedBrightness=
-localStorage.getItem(
-"zoraBrightness"
-);
+localStorage.getItem("zoraBrightness");
 
 if(savedBrightness){
 
@@ -1889,14 +2416,11 @@ savedBrightness+"%";
 
 
 const savedVolume=
-localStorage.getItem(
-"zoraVolume"
-);
+localStorage.getItem("zoraVolume");
 
 if(savedVolume){
 
-volumeSlider.value=
-savedVolume;
+volumeSlider.value=savedVolume;
 
 document.getElementById(
 "volumeValue"
@@ -1907,29 +2431,21 @@ savedVolume+"%";
 
 
 const savedControls=
-localStorage.getItem(
-"zoraControls"
-);
+localStorage.getItem("zoraControls");
 
 if(savedControls){
 
 try{
 
-controls=
-JSON.parse(savedControls);
+controls=JSON.parse(savedControls);
 
-Object.keys(controls)
-.forEach(type=>{
+Object.keys(controls).forEach(type=>{
 
 const tile=
-document.getElementById(
-type+"Tile"
-);
+document.getElementById(type+"Tile");
 
 const state=
-document.getElementById(
-type+"State"
-);
+document.getElementById(type+"State");
 
 if(tile)
 tile.classList.toggle(
@@ -1940,11 +2456,7 @@ controls[type]
 if(state)
 state.textContent=
 controls[type]
-?(
-type==="wifi"
-?"Connected"
-:"On"
-)
+?(type==="wifi"?"Connected":"On")
 :"Off";
 
 });
@@ -1954,17 +2466,14 @@ phone.classList.toggle(
 controls.dark
 );
 
-}
-catch(e){}
+}catch(e){}
 
 }
 
 
 /* ================= ESC ================= */
 
-document.addEventListener(
-"keydown",
-e=>{
+document.addEventListener("keydown",e=>{
 
 if(e.key==="Escape"){
 
@@ -1978,43 +2487,7 @@ closeCurrentApp();
 
 });
 
-
-/* ================= LOCKSCREEN SWIPE ================= */
-
-let lockStartY=0;
-
-lockscreen.addEventListener(
-"touchstart",
-e=>{
-
-lockStartY=
-e.touches[0].clientY;
-
-},{
-passive:true
-});
-
-
-lockscreen.addEventListener(
-"touchend",
-e=>{
-
-const endY=
-e.changedTouches[0].clientY;
-
-if(
-lockStartY-endY>70
-){
-
-unlockPhone();
-
-}
-
-},{
-passive:true
-});
-
 </script>
 
 </body>
-</html>
+  </html>
