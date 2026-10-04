@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
 <title>ZoraOS</title>
 
@@ -14,18 +14,22 @@
 }
 
 html,body{
-  margin:0;
   width:100%;
   height:100%;
+  margin:0;
   overflow:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:#050505;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 body{
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+}
+
+button{
+  font-family:inherit;
 }
 
 .phone{
@@ -33,10 +37,10 @@ body{
   width:min(100vw,430px);
   height:min(100vh,900px);
   overflow:hidden;
-  background:#111827;
   color:white;
+  background:#111827;
   border-radius:28px;
-  box-shadow:0 0 40px rgba(0,0,0,.6);
+  box-shadow:0 0 45px rgba(0,0,0,.65);
 }
 
 /* ================= WALLPAPER ================= */
@@ -48,16 +52,16 @@ body{
     radial-gradient(circle at 20% 15%,#7c3aed 0%,transparent 35%),
     radial-gradient(circle at 85% 80%,#06b6d4 0%,transparent 38%),
     linear-gradient(145deg,#0f172a,#111827);
-  transition:.5s ease;
+  transition:background .5s ease;
 }
 
 .brightness-layer{
   position:absolute;
   inset:0;
+  z-index:20;
+  pointer-events:none;
   background:#000;
   opacity:0;
-  pointer-events:none;
-  z-index:20;
 }
 
 /* ================= STATUS BAR ================= */
@@ -73,14 +77,13 @@ body{
   justify-content:space-between;
   align-items:center;
   font-size:13px;
-  z-index:50;
+  z-index:60;
   pointer-events:none;
 }
 
 .status-icons{
   display:flex;
   gap:8px;
-  align-items:center;
 }
 
 /* ================= LOCKSCREEN ================= */
@@ -88,18 +91,21 @@ body{
 .lockscreen{
   position:absolute;
   inset:0;
-  z-index:40;
+  z-index:100;
   background:rgba(0,0,0,.08);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
-  transition:transform .55s cubic-bezier(.22,1,.36,1);
+
+  transform:translateY(0);
+  transition:
+    transform .58s cubic-bezier(.22,1,.36,1);
 }
 
 .lockscreen.unlocked{
   transform:translateY(-105%);
 }
 
-/* BIG CLOCK — completely separate */
+/* CLOCK */
 
 .lock-clock{
   position:absolute;
@@ -123,13 +129,14 @@ body{
   font-weight:500;
 }
 
-/* NOTIFICATIONS — separate from clock */
+/* NOTIFICATIONS */
 
 .lock-notifications{
   position:absolute;
   left:18px;
   right:18px;
   bottom:105px;
+
   display:flex;
   flex-direction:column;
   gap:10px;
@@ -138,10 +145,13 @@ body{
 .notification{
   padding:14px 16px;
   border-radius:20px;
+
   background:rgba(35,35,40,.72);
   border:1px solid rgba(255,255,255,.1);
+
   backdrop-filter:blur(25px);
   -webkit-backdrop-filter:blur(25px);
+
   box-shadow:0 8px 30px rgba(0,0,0,.18);
 }
 
@@ -149,6 +159,7 @@ body{
   display:flex;
   align-items:center;
   gap:9px;
+
   font-size:13px;
   opacity:.8;
   margin-bottom:4px;
@@ -158,9 +169,11 @@ body{
   width:25px;
   height:25px;
   border-radius:8px;
+
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+
   background:rgba(255,255,255,.15);
 }
 
@@ -170,33 +183,33 @@ body{
 }
 
 .notification-text{
+  margin-top:3px;
   font-size:14px;
   opacity:.8;
 }
 
-/* Unlock area */
+/* UNLOCK */
 
 .unlock-area{
   position:absolute;
-  bottom:25px;
   left:0;
   right:0;
+  bottom:25px;
   text-align:center;
 }
 
 .unlock-hint{
+  margin-bottom:9px;
   font-size:13px;
   opacity:.7;
-  margin-bottom:9px;
 }
 
 .home-indicator{
   width:115px;
   height:5px;
-  background:white;
-  border-radius:20px;
   margin:auto;
-  opacity:.9;
+  border-radius:20px;
+  background:white;
 }
 
 /* ================= HOME ================= */
@@ -205,14 +218,16 @@ body{
   position:absolute;
   inset:0;
   z-index:5;
+
   padding:65px 18px 100px;
   overflow:hidden;
 }
 
 .home-title{
+  margin:5px 0 20px;
+
   font-size:31px;
   font-weight:700;
-  margin:5px 0 20px;
   letter-spacing:-1px;
 }
 
@@ -231,20 +246,28 @@ body{
   width:60px;
   height:60px;
   margin:auto;
-  border-radius:18px;
+
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+
+  border-radius:18px;
+
   font-size:29px;
+
   background:rgba(255,255,255,.13);
   border:1px solid rgba(255,255,255,.12);
+
   box-shadow:0 10px 25px rgba(0,0,0,.18);
+
   backdrop-filter:blur(15px);
-  transition:.18s ease;
+
+  transition:
+    transform .18s cubic-bezier(.22,1,.36,1);
 }
 
 .icon:active{
-  transform:scale(.86);
+  transform:scale(.84);
 }
 
 .icon-name{
@@ -253,14 +276,39 @@ body{
   opacity:.9;
 }
 
-.call-icon{background:linear-gradient(145deg,#22c55e,#16a34a)}
-.message-icon{background:linear-gradient(145deg,#38bdf8,#2563eb)}
-.camera-icon{background:linear-gradient(145deg,#64748b,#111827)}
-.music-icon{background:linear-gradient(145deg,#ec4899,#8b5cf6)}
-.settings-icon{background:linear-gradient(145deg,#94a3b8,#475569)}
-.photos-icon{background:linear-gradient(145deg,#f97316,#eab308)}
-.notes-icon{background:linear-gradient(145deg,#facc15,#f59e0b)}
-.snake-icon{background:linear-gradient(145deg,#22c55e,#15803d)}
+/* ICON COLORS */
+
+.call-icon{
+  background:linear-gradient(145deg,#22c55e,#16a34a);
+}
+
+.message-icon{
+  background:linear-gradient(145deg,#38bdf8,#2563eb);
+}
+
+.camera-icon{
+  background:linear-gradient(145deg,#64748b,#111827);
+}
+
+.music-icon{
+  background:linear-gradient(145deg,#ec4899,#8b5cf6);
+}
+
+.settings-icon{
+  background:linear-gradient(145deg,#94a3b8,#475569);
+}
+
+.photos-icon{
+  background:linear-gradient(145deg,#f97316,#eab308);
+}
+
+.notes-icon{
+  background:linear-gradient(145deg,#facc15,#f59e0b);
+}
+
+.snake-icon{
+  background:linear-gradient(145deg,#22c55e,#15803d);
+}
 
 /* ================= DOCK ================= */
 
@@ -269,15 +317,21 @@ body{
   left:15px;
   right:15px;
   bottom:18px;
+
   height:72px;
+
   border-radius:25px;
+
   background:rgba(255,255,255,.12);
   border:1px solid rgba(255,255,255,.12);
+
   backdrop-filter:blur(25px);
   -webkit-backdrop-filter:blur(25px);
+
   display:flex;
-  justify-content:space-around;
   align-items:center;
+  justify-content:space-around;
+
   z-index:30;
 }
 
@@ -287,27 +341,73 @@ body{
   font-size:25px;
 }
 
-/* ================= APP WINDOW ================= */
+/* =====================================================
+   SUPER SMOOTH APP OPENING
+   ===================================================== */
 
 .app-window{
   position:absolute;
   inset:0;
-  z-index:100;
-  background:rgba(12,12,15,.96);
-  transform:translateY(105%);
+  z-index:200;
+
+  background:rgba(12,12,15,.97);
+
+  /*
+    IMPORTANT:
+    The app starts slightly smaller and lower.
+    This creates the smooth "growing out" effect.
+  */
+
+  transform:
+    translateY(65px)
+    scale(.82);
+
+  transform-origin:center bottom;
+
   opacity:0;
-  transition:.35s cubic-bezier(.22,1,.36,1);
+  visibility:hidden;
+
+  transition:
+    transform .46s cubic-bezier(.16,1,.3,1),
+    opacity .25s ease,
+    visibility 0s linear .46s;
+
+  will-change:transform,opacity;
+
   overflow:hidden;
 }
 
 .app-window.open{
-  transform:translateY(0);
+  transform:
+    translateY(0)
+    scale(1);
+
   opacity:1;
+  visibility:visible;
+
+  transition:
+    transform .46s cubic-bezier(.16,1,.3,1),
+    opacity .25s ease,
+    visibility 0s;
 }
+
+/*
+  Closing animation is faster.
+*/
+
+.app-window:not(.open){
+  transition:
+    transform .25s cubic-bezier(.4,0,1,1),
+    opacity .17s ease-in,
+    visibility 0s linear .25s;
+}
+
+/* APP HEADER */
 
 .app-header{
   height:70px;
   padding:30px 18px 0;
+
   display:flex;
   align-items:center;
   gap:12px;
@@ -316,11 +416,20 @@ body{
 .back-button{
   width:38px;
   height:38px;
-  border-radius:50%;
+
   border:0;
+  border-radius:50%;
+
   color:white;
   background:rgba(255,255,255,.12);
-  font-size:20px;
+
+  font-size:22px;
+
+  transition:transform .15s ease;
+}
+
+.back-button:active{
+  transform:scale(.85);
 }
 
 .app-title{
@@ -336,9 +445,10 @@ body{
 
 .fake-card{
   padding:20px;
+  margin-bottom:15px;
+
   border-radius:24px;
   background:rgba(255,255,255,.08);
-  margin-bottom:15px;
 }
 
 .fake-card h2{
@@ -353,22 +463,23 @@ body{
 /* ================= SETTINGS ================= */
 
 .settings-content{
+  height:calc(100% - 70px);
   padding:20px;
   overflow-y:auto;
-  height:calc(100% - 70px);
 }
 
 .setting-card{
   padding:17px;
+  margin-bottom:12px;
+
   border-radius:20px;
   background:rgba(255,255,255,.08);
-  margin-bottom:12px;
 }
 
 .setting-row{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
 }
 
 .setting-name{
@@ -376,29 +487,32 @@ body{
 }
 
 .setting-sub{
+  margin-top:4px;
   font-size:12px;
   opacity:.55;
-  margin-top:4px;
 }
 
 .switch{
   width:48px;
   height:28px;
+  padding:3px;
+
   border-radius:20px;
   background:#444;
-  padding:3px;
-}
-
-.switch.on{
-  background:#22c55e;
 }
 
 .switch-dot{
   width:22px;
   height:22px;
-  background:white;
+
   border-radius:50%;
+  background:white;
+
   transition:.2s;
+}
+
+.switch.on{
+  background:#22c55e;
 }
 
 .switch.on .switch-dot{
@@ -410,15 +524,23 @@ body{
 .control-centre{
   position:absolute;
   inset:0;
-  z-index:200;
-  transform:translateY(-105%);
-  opacity:0;
-  transition:.4s cubic-bezier(.22,1,.36,1);
+  z-index:300;
+
   padding:55px 18px 20px;
+
   background:rgba(15,15,20,.88);
+
   backdrop-filter:blur(35px);
   -webkit-backdrop-filter:blur(35px);
+
   overflow-y:auto;
+
+  transform:translateY(-105%);
+  opacity:0;
+
+  transition:
+    transform .45s cubic-bezier(.22,1,.36,1),
+    opacity .25s ease;
 }
 
 .control-centre.open{
@@ -427,9 +549,10 @@ body{
 }
 
 .cc-title{
+  margin-bottom:18px;
+
   font-size:30px;
   font-weight:700;
-  margin-bottom:18px;
 }
 
 .cc-grid{
@@ -441,9 +564,17 @@ body{
 .cc-tile{
   min-height:85px;
   padding:16px;
+
   border-radius:23px;
+
   background:rgba(255,255,255,.1);
   border:1px solid rgba(255,255,255,.08);
+
+  transition:.15s;
+}
+
+.cc-tile:active{
+  transform:scale(.95);
 }
 
 .cc-tile.active{
@@ -462,6 +593,7 @@ body{
 .slider-card{
   margin-top:12px;
   padding:18px;
+
   border-radius:23px;
   background:rgba(255,255,255,.1);
 }
@@ -477,18 +609,18 @@ input[type="range"]{
   accent-color:white;
 }
 
-/* ================= WALLPAPER ================= */
+/* ================= WALLPAPER OPTIONS ================= */
 
 .wallpapers{
   display:flex;
   gap:10px;
   overflow-x:auto;
-  padding-bottom:5px;
 }
 
 .wallpaper-option{
   flex:0 0 70px;
   height:100px;
+
   border-radius:15px;
   border:2px solid transparent;
 }
@@ -525,9 +657,13 @@ input[type="range"]{
 
 .snake-content{
   position:relative;
-  padding:15px;
-  text-align:center;
+
   height:calc(100% - 70px);
+
+  padding:15px;
+
+  text-align:center;
+
   overflow:hidden;
 }
 
@@ -535,6 +671,7 @@ input[type="range"]{
   display:flex;
   justify-content:space-between;
   align-items:center;
+
   margin-bottom:12px;
 }
 
@@ -545,17 +682,24 @@ input[type="range"]{
 
 .snake-score{
   padding:8px 12px;
+
   border-radius:14px;
+
   background:rgba(255,255,255,.1);
+
   font-size:13px;
 }
 
 #snakeCanvas{
   width:min(320px,85vw);
   height:min(320px,85vw);
+
   background:#07110b;
+
   border-radius:20px;
+
   border:2px solid rgba(255,255,255,.08);
+
   touch-action:none;
 }
 
@@ -563,21 +707,27 @@ input[type="range"]{
   display:flex;
   justify-content:center;
   gap:10px;
+
   margin-top:10px;
 }
 
 .snake-btn{
   width:55px;
   height:45px;
+
   border:0;
   border-radius:15px;
-  background:rgba(255,255,255,.1);
+
   color:white;
+  background:rgba(255,255,255,.1);
+
   font-size:20px;
+
+  transition:.12s;
 }
 
 .snake-btn:active{
-  transform:scale(.9);
+  transform:scale(.88);
 }
 
 .snake-hint{
@@ -588,13 +738,19 @@ input[type="range"]{
 
 .snake-gameover{
   position:absolute;
+
   left:25px;
   right:25px;
   top:180px;
+
   padding:25px;
+
   border-radius:25px;
+
   background:rgba(15,15,18,.94);
+
   backdrop-filter:blur(20px);
+
   display:none;
 }
 
@@ -612,23 +768,33 @@ input[type="range"]{
 }
 
 .snake-restart{
-  border:0;
   padding:12px 22px;
+
+  border:0;
   border-radius:15px;
+
   background:#22c55e;
   color:white;
+
   font-weight:700;
 }
 
-/* ================= GESTURE HINT ================= */
+/* ================= SWIPE INDICATOR ================= */
 
-.gesture-zone{
+.swipe-indicator{
   position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:55px;
-  z-index:70;
+  left:50%;
+  bottom:8px;
+
+  width:90px;
+  height:3px;
+
+  transform:translateX(-50%);
+
+  border-radius:10px;
+
+  background:white;
+  opacity:.45;
 }
 </style>
 </head>
@@ -638,106 +804,242 @@ input[type="range"]{
 <div class="phone" id="phone">
 
   <div class="wallpaper" id="wallpaper"></div>
-  <div class="brightness-layer" id="brightnessLayer"></div>
+
+  <div class="brightness-layer"
+       id="brightnessLayer"></div>
+
 
   <!-- STATUS BAR -->
+
   <div class="status-bar">
-    <span id="statusTime">10:00</span>
+
+    <span id="statusTime">
+      10:00
+    </span>
 
     <div class="status-icons">
       <span>📶</span>
       <span>📡</span>
       <span>🔋</span>
     </div>
+
   </div>
 
-  <!-- HOME -->
-  <main class="home" id="home">
 
-    <div class="home-title">ZoraOS</div>
+  <!-- HOME -->
+
+  <main class="home">
+
+    <div class="home-title">
+      ZoraOS
+    </div>
 
     <div class="app-grid">
 
-      <div class="icon-wrap" onclick="openApp('phone')">
-        <div class="icon call-icon">📞</div>
-        <div class="icon-name">Phone</div>
+      <div class="icon-wrap"
+           onclick="openApp('phone')">
+
+        <div class="icon call-icon">
+          📞
+        </div>
+
+        <div class="icon-name">
+          Phone
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('messages')">
-        <div class="icon message-icon">💬</div>
-        <div class="icon-name">Messages</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('messages')">
+
+        <div class="icon message-icon">
+          💬
+        </div>
+
+        <div class="icon-name">
+          Messages
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('camera')">
-        <div class="icon camera-icon">📷</div>
-        <div class="icon-name">Camera</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('camera')">
+
+        <div class="icon camera-icon">
+          📷
+        </div>
+
+        <div class="icon-name">
+          Camera
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('music')">
-        <div class="icon music-icon">🎵</div>
-        <div class="icon-name">Music</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('music')">
+
+        <div class="icon music-icon">
+          🎵
+        </div>
+
+        <div class="icon-name">
+          Music
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('photos')">
-        <div class="icon photos-icon">🌈</div>
-        <div class="icon-name">Photos</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('photos')">
+
+        <div class="icon photos-icon">
+          🌈
+        </div>
+
+        <div class="icon-name">
+          Photos
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('notes')">
-        <div class="icon notes-icon">📝</div>
-        <div class="icon-name">Notes</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('notes')">
+
+        <div class="icon notes-icon">
+          📝
+        </div>
+
+        <div class="icon-name">
+          Notes
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('settings')">
-        <div class="icon settings-icon">⚙️</div>
-        <div class="icon-name">Settings</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('settings')">
+
+        <div class="icon settings-icon">
+          ⚙️
+        </div>
+
+        <div class="icon-name">
+          Settings
+        </div>
+
       </div>
 
-      <div class="icon-wrap" onclick="openApp('snake')">
-        <div class="icon snake-icon">🐍</div>
-        <div class="icon-name">Snake</div>
+
+      <div class="icon-wrap"
+           onclick="openApp('snake')">
+
+        <div class="icon snake-icon">
+          🐍
+        </div>
+
+        <div class="icon-name">
+          Snake
+        </div>
+
       </div>
 
     </div>
+
   </main>
 
+
   <!-- DOCK -->
+
   <div class="dock">
 
-    <div class="icon-wrap" onclick="openApp('phone')">
-      <div class="icon call-icon">📞</div>
+    <div class="icon-wrap"
+         onclick="openApp('phone')">
+
+      <div class="icon call-icon">
+        📞
+      </div>
+
     </div>
 
-    <div class="icon-wrap" onclick="openApp('messages')">
-      <div class="icon message-icon">💬</div>
+
+    <div class="icon-wrap"
+         onclick="openApp('messages')">
+
+      <div class="icon message-icon">
+        💬
+      </div>
+
     </div>
 
-    <div class="icon-wrap" onclick="openApp('camera')">
-      <div class="icon camera-icon">📷</div>
+
+    <div class="icon-wrap"
+         onclick="openApp('camera')">
+
+      <div class="icon camera-icon">
+        📷
+      </div>
+
     </div>
 
-    <div class="icon-wrap" onclick="openApp('music')">
-      <div class="icon music-icon">🎵</div>
+
+    <div class="icon-wrap"
+         onclick="openApp('music')">
+
+      <div class="icon music-icon">
+        🎵
+      </div>
+
     </div>
 
   </div>
 
-  <!-- LOCKSCREEN -->
-  <div class="lockscreen" id="lockscreen">
 
-    <!-- CLOCK IS NOW COMPLETELY SEPARATE -->
+  <!-- ==================================================
+       LOCKSCREEN
+       ================================================== -->
+
+  <div class="lockscreen"
+       id="lockscreen">
+
+
+    <!-- BIG CLOCK -->
+
     <div class="lock-clock">
-      <div class="lock-time" id="lockTime">10:00</div>
-      <div class="lock-date" id="lockDate">Sunday, October 4</div>
+
+      <div class="lock-time"
+           id="lockTime">
+        10:00
+      </div>
+
+      <div class="lock-date"
+           id="lockDate">
+        Sunday, October 4
+      </div>
+
     </div>
 
-    <!-- NOTIFICATIONS ARE THEIR OWN AREA -->
+
+    <!-- SEPARATE NOTIFICATIONS -->
+
     <div class="lock-notifications">
 
+
       <div class="notification">
+
         <div class="notification-top">
-          <div class="notification-icon">💬</div>
-          <span>Messages</span>
+
+          <div class="notification-icon">
+            💬
+          </div>
+
+          <span>
+            Messages
+          </span>
+
         </div>
 
         <div class="notification-title">
@@ -747,12 +1049,22 @@ input[type="range"]{
         <div class="notification-text">
           Your world. Your OS.
         </div>
+
       </div>
 
+
       <div class="notification">
+
         <div class="notification-top">
-          <div class="notification-icon">🐍</div>
-          <span>ZoraOS</span>
+
+          <div class="notification-icon">
+            🐍
+          </div>
+
+          <span>
+            ZoraOS
+          </span>
+
         </div>
 
         <div class="notification-title">
@@ -762,93 +1074,199 @@ input[type="range"]{
         <div class="notification-text">
           Try to beat your high score!
         </div>
+
       </div>
 
     </div>
 
+
     <div class="unlock-area">
-      <div class="unlock-hint">Swipe up to unlock</div>
+
+      <div class="unlock-hint">
+        Swipe up to unlock
+      </div>
+
       <div class="home-indicator"></div>
+
     </div>
 
   </div>
 
-  <!-- GENERIC APP -->
-  <div class="app-window" id="genericApp">
+
+  <!-- ==================================================
+       GENERIC APP
+       ================================================== -->
+
+  <div class="app-window"
+       id="genericApp">
 
     <div class="app-header">
-      <button class="back-button" onclick="closeApp()">‹</button>
-      <div class="app-title" id="genericTitle">App</div>
+
+      <button class="back-button"
+              onclick="closeApp()">
+        ‹
+      </button>
+
+      <div class="app-title"
+           id="genericTitle">
+        App
+      </div>
+
     </div>
 
-    <div class="generic-content" id="genericContent"></div>
+    <div class="generic-content"
+         id="genericContent">
+    </div>
 
   </div>
 
-  <!-- SETTINGS -->
-  <div class="app-window" id="settingsApp">
+
+  <!-- ==================================================
+       SETTINGS
+       ================================================== -->
+
+  <div class="app-window"
+       id="settingsApp">
 
     <div class="app-header">
-      <button class="back-button" onclick="closeApp()">‹</button>
-      <div class="app-title">Settings</div>
+
+      <button class="back-button"
+              onclick="closeApp()">
+        ‹
+      </button>
+
+      <div class="app-title">
+        Settings
+      </div>
+
     </div>
+
 
     <div class="settings-content">
 
+
       <div class="setting-card">
+
         <div class="setting-row">
+
           <div>
-            <div class="setting-name">Dark Mode</div>
-            <div class="setting-sub">ZoraOS appearance</div>
+
+            <div class="setting-name">
+              Dark Mode
+            </div>
+
+            <div class="setting-sub">
+              ZoraOS appearance
+            </div>
+
           </div>
 
           <div class="switch on">
+
             <div class="switch-dot"></div>
+
           </div>
+
         </div>
+
       </div>
 
-      <div class="setting-card">
-        <div class="setting-row">
-          <div>
-            <div class="setting-name">ZoraOS</div>
-            <div class="setting-sub">Your world. Your OS.</div>
-          </div>
-          <span>✨</span>
-        </div>
-      </div>
 
       <div class="setting-card">
+
         <div class="setting-row">
+
           <div>
-            <div class="setting-name">Version</div>
-            <div class="setting-sub">ZoraOS Web 1.3</div>
+
+            <div class="setting-name">
+              ZoraOS
+            </div>
+
+            <div class="setting-sub">
+              Your world. Your OS.
+            </div>
+
           </div>
-          <span>1.3</span>
+
+          <span>
+            ✨
+          </span>
+
         </div>
+
       </div>
+
+
+      <div class="setting-card">
+
+        <div class="setting-row">
+
+          <div>
+
+            <div class="setting-name">
+              Version
+            </div>
+
+            <div class="setting-sub">
+              ZoraOS Web 1.3
+            </div>
+
+          </div>
+
+          <span>
+            1.3
+          </span>
+
+        </div>
+
+      </div>
+
 
     </div>
+
   </div>
 
-  <!-- SNAKE -->
-  <div class="app-window" id="snakeApp">
+
+  <!-- ==================================================
+       SNAKE
+       ================================================== -->
+
+  <div class="app-window"
+       id="snakeApp">
 
     <div class="app-header">
-      <button class="back-button" onclick="closeApp()">‹</button>
-      <div class="app-title">Zora Snake</div>
+
+      <button class="back-button"
+              onclick="closeApp()">
+        ‹
+      </button>
+
+      <div class="app-title">
+        Zora Snake
+      </div>
+
     </div>
+
 
     <div class="snake-content">
 
       <div class="snake-top">
-        <div class="snake-title">🐍 Zora Snake</div>
+
+        <div class="snake-title">
+          🐍 Zora Snake
+        </div>
 
         <div class="snake-score">
+
           Score:
-          <span id="snakeScore">0</span>
+          <span id="snakeScore">
+            0
+          </span>
+
         </div>
+
       </div>
+
 
       <canvas
         id="snakeCanvas"
@@ -856,12 +1274,16 @@ input[type="range"]{
         height="320">
       </canvas>
 
+
       <div class="snake-controls">
+
         <button class="snake-btn"
                 onclick="changeSnakeDirection('up')">
           ▲
         </button>
+
       </div>
+
 
       <div class="snake-controls">
 
@@ -882,78 +1304,151 @@ input[type="range"]{
 
       </div>
 
+
       <div class="snake-hint">
         Swipe on the game • Arrow keys also work
       </div>
 
-      <div class="snake-gameover" id="snakeGameOver">
 
-        <h2>Game Over 🐍</h2>
+      <div class="snake-gameover"
+           id="snakeGameOver">
+
+        <h2>
+          Game Over 🐍
+        </h2>
 
         <div class="snake-final-score">
+
           Score:
-          <span id="snakeFinalScore">0</span>
+          <span id="snakeFinalScore">
+            0
+          </span>
+
         </div>
 
-        <button
-          class="snake-restart"
-          onclick="startSnake()">
+        <button class="snake-restart"
+                onclick="startSnake()">
           Play Again
         </button>
 
       </div>
 
     </div>
+
   </div>
 
-  <!-- CONTROL CENTRE -->
-  <div class="control-centre" id="controlCentre">
 
-    <div class="cc-title">Control Centre</div>
+  <!-- ==================================================
+       CONTROL CENTRE
+       ================================================== -->
+
+  <div class="control-centre"
+       id="controlCentre">
+
+    <div class="cc-title">
+      Control Centre
+    </div>
+
 
     <div class="cc-grid">
 
-      <div class="cc-tile" id="wifiTile"
+
+      <div class="cc-tile"
+           id="wifiTile"
            onclick="toggleCC('wifiTile')">
-        <div class="cc-icon">📶</div>
-        <div class="cc-name">Wi-Fi</div>
+
+        <div class="cc-icon">
+          📶
+        </div>
+
+        <div class="cc-name">
+          Wi-Fi
+        </div>
+
       </div>
 
-      <div class="cc-tile" id="bluetoothTile"
+
+      <div class="cc-tile"
+           id="bluetoothTile"
            onclick="toggleCC('bluetoothTile')">
-        <div class="cc-icon">ᛒ</div>
-        <div class="cc-name">Bluetooth</div>
+
+        <div class="cc-icon">
+          ᛒ
+        </div>
+
+        <div class="cc-name">
+          Bluetooth
+        </div>
+
       </div>
 
-      <div class="cc-tile" id="darkTile"
+
+      <div class="cc-tile"
+           id="darkTile"
            onclick="toggleCC('darkTile')">
-        <div class="cc-icon">🌙</div>
-        <div class="cc-name">Dark Mode</div>
+
+        <div class="cc-icon">
+          🌙
+        </div>
+
+        <div class="cc-name">
+          Dark Mode
+        </div>
+
       </div>
 
-      <div class="cc-tile" id="airplaneTile"
+
+      <div class="cc-tile"
+           id="airplaneTile"
            onclick="toggleCC('airplaneTile')">
-        <div class="cc-icon">✈️</div>
-        <div class="cc-name">Airplane</div>
+
+        <div class="cc-icon">
+          ✈️
+        </div>
+
+        <div class="cc-name">
+          Airplane
+        </div>
+
       </div>
 
-      <div class="cc-tile" id="rotationTile"
+
+      <div class="cc-tile"
+           id="rotationTile"
            onclick="toggleCC('rotationTile')">
-        <div class="cc-icon">🔄</div>
-        <div class="cc-name">Rotation Lock</div>
+
+        <div class="cc-icon">
+          🔄
+        </div>
+
+        <div class="cc-name">
+          Rotation Lock
+        </div>
+
       </div>
+
 
       <div class="cc-tile"
            onclick="closeControlCentre()">
-        <div class="cc-icon">✕</div>
-        <div class="cc-name">Close</div>
+
+        <div class="cc-icon">
+          ✕
+        </div>
+
+        <div class="cc-name">
+          Close
+        </div>
+
       </div>
 
     </div>
 
+
     <div class="slider-card">
 
-      <label>☀️ Brightness</label>
+      <label>
+        ☀️ Brightness
+      </label>
 
       <input
         id="brightnessSlider"
@@ -965,9 +1460,12 @@ input[type="range"]{
 
     </div>
 
+
     <div class="slider-card">
 
-      <label>🔊 Volume</label>
+      <label>
+        🔊 Volume
+      </label>
 
       <input
         id="volumeSlider"
@@ -978,29 +1476,38 @@ input[type="range"]{
 
     </div>
 
+
     <div class="slider-card">
 
-      <label>Wallpaper</label>
+      <label>
+        Wallpaper
+      </label>
 
       <div class="wallpapers">
 
         <div class="wallpaper-option wp1"
-             onclick="setWallpaper(1)"></div>
+             onclick="setWallpaper(1)">
+        </div>
 
         <div class="wallpaper-option wp2"
-             onclick="setWallpaper(2)"></div>
+             onclick="setWallpaper(2)">
+        </div>
 
         <div class="wallpaper-option wp3"
-             onclick="setWallpaper(3)"></div>
+             onclick="setWallpaper(3)">
+        </div>
 
         <div class="wallpaper-option wp4"
-             onclick="setWallpaper(4)"></div>
+             onclick="setWallpaper(4)">
+        </div>
 
         <div class="wallpaper-option wp5"
-             onclick="setWallpaper(5)"></div>
+             onclick="setWallpaper(5)">
+        </div>
 
         <div class="wallpaper-option wp6"
-             onclick="setWallpaper(6)"></div>
+             onclick="setWallpaper(6)">
+        </div>
 
       </div>
 
@@ -1008,26 +1515,35 @@ input[type="range"]{
 
   </div>
 
-  <!-- TOP GESTURE AREA -->
-  <div class="gesture-zone" id="gestureZone"></div>
-
 </div>
 
 
 <script>
 
 /* =========================================================
-   ZORAOS
+   ZORAOS CORE
    ========================================================= */
 
-const phone = document.getElementById("phone");
-const lockscreen = document.getElementById("lockscreen");
-const controlCentre = document.getElementById("controlCentre");
-const genericApp = document.getElementById("genericApp");
-const settingsApp = document.getElementById("settingsApp");
-const snakeApp = document.getElementById("snakeApp");
-const wallpaper = document.getElementById("wallpaper");
-const brightnessLayer = document.getElementById("brightnessLayer");
+const lockscreen =
+document.getElementById("lockscreen");
+
+const controlCentre =
+document.getElementById("controlCentre");
+
+const genericApp =
+document.getElementById("genericApp");
+
+const settingsApp =
+document.getElementById("settingsApp");
+
+const snakeApp =
+document.getElementById("snakeApp");
+
+const wallpaper =
+document.getElementById("wallpaper");
+
+const brightnessLayer =
+document.getElementById("brightnessLayer");
 
 let currentApp = null;
 
@@ -1041,58 +1557,76 @@ function updateClock(){
   const now = new Date();
 
   let hours = now.getHours();
-  let minutes = now.getMinutes();
 
-  minutes = String(minutes).padStart(2,"0");
+  const minutes =
+    String(now.getMinutes()).padStart(2,"0");
 
-  const time = `${hours}:${minutes}`;
+  const time =
+    `${hours}:${minutes}`;
 
-  document.getElementById("lockTime").textContent = time;
-  document.getElementById("statusTime").textContent = time;
+  document.getElementById(
+    "lockTime"
+  ).textContent = time;
 
-  const date = now.toLocaleDateString("en-US",{
-    weekday:"long",
-    month:"long",
-    day:"numeric"
-  });
+  document.getElementById(
+    "statusTime"
+  ).textContent = time;
 
-  document.getElementById("lockDate").textContent = date;
+  document.getElementById(
+    "lockDate"
+  ).textContent =
+    now.toLocaleDateString(
+      "en-US",
+      {
+        weekday:"long",
+        month:"long",
+        day:"numeric"
+      }
+    );
 }
 
 updateClock();
+
 setInterval(updateClock,1000);
 
 
 /* =========================================================
-   UNLOCK GESTURE
+   LOCKSCREEN SWIPE
    ========================================================= */
 
-let touchStartY = 0;
-let touchStartX = 0;
+let lockStartY = 0;
 
-lockscreen.addEventListener("touchstart",e=>{
+lockscreen.addEventListener(
+  "touchstart",
+  e=>{
 
-  const t = e.touches[0];
+    lockStartY =
+      e.touches[0].clientY;
 
-  touchStartY = t.clientY;
-  touchStartX = t.clientX;
+  },
+  {passive:true}
+);
 
-},{passive:true});
+lockscreen.addEventListener(
+  "touchend",
+  e=>{
 
+    const endY =
+      e.changedTouches[0].clientY;
 
-lockscreen.addEventListener("touchend",e=>{
+    if(
+      lockStartY - endY > 70
+    ){
 
-  const t = e.changedTouches[0];
+      lockscreen.classList.add(
+        "unlocked"
+      );
 
-  const dy = t.clientY - touchStartY;
+    }
 
-  if(dy < -70){
-
-    lockscreen.classList.add("unlocked");
-
-  }
-
-});
+  },
+  {passive:true}
+);
 
 
 /* =========================================================
@@ -1101,36 +1635,48 @@ lockscreen.addEventListener("touchend",e=>{
 
 let ccStartY = 0;
 
-phone.addEventListener("touchstart",e=>{
+document
+  .getElementById("phone")
+  .addEventListener(
+    "touchstart",
+    e=>{
 
-  if(e.touches.length !== 1) return;
+      ccStartY =
+        e.touches[0].clientY;
 
-  ccStartY = e.touches[0].clientY;
+    },
+    {passive:true}
+  );
 
-},{passive:true});
 
+document
+  .getElementById("phone")
+  .addEventListener(
+    "touchend",
+    e=>{
 
-phone.addEventListener("touchend",e=>{
+      const endY =
+        e.changedTouches[0].clientY;
 
-  const y = e.changedTouches[0].clientY;
-  const diff = y - ccStartY;
+      const difference =
+        endY - ccStartY;
 
-  /*
-    Only open Control Centre from the top.
-  */
+      if(
+        ccStartY < 60 &&
+        difference > 70 &&
+        !currentApp &&
+        lockscreen.classList.contains(
+          "unlocked"
+        )
+      ){
 
-  if(
-    ccStartY < 70 &&
-    diff > 70 &&
-    !currentApp &&
-    lockscreen.classList.contains("unlocked")
-  ){
+        openControlCentre();
 
-    openControlCentre();
+      }
 
-  }
-
-});
+    },
+    {passive:true}
+  );
 
 
 function openControlCentre(){
@@ -1148,12 +1694,13 @@ function closeControlCentre(){
 
 
 /* =========================================================
-   CONTROL CENTRE TOGGLES
+   CC TOGGLES
    ========================================================= */
 
 function toggleCC(id){
 
-  const tile = document.getElementById(id);
+  const tile =
+    document.getElementById(id);
 
   tile.classList.toggle("active");
 
@@ -1165,29 +1712,25 @@ function toggleCC(id){
 }
 
 
-function loadToggles(){
+[
+  "wifiTile",
+  "bluetoothTile",
+  "darkTile",
+  "airplaneTile",
+  "rotationTile"
+].forEach(id=>{
 
-  [
-    "wifiTile",
-    "bluetoothTile",
-    "darkTile",
-    "airplaneTile",
-    "rotationTile"
-  ].forEach(id=>{
+  if(
+    localStorage.getItem(id)==="true"
+  ){
 
-    if(localStorage.getItem(id)==="true"){
+    document
+      .getElementById(id)
+      .classList.add("active");
 
-      document
-        .getElementById(id)
-        .classList.add("active");
+  }
 
-    }
-
-  });
-
-}
-
-loadToggles();
+});
 
 
 /* =========================================================
@@ -1196,10 +1739,11 @@ loadToggles();
 
 function setBrightness(value){
 
-  const opacity = 1 - (value / 100);
+  const opacity =
+    1 - Number(value)/100;
 
   brightnessLayer.style.opacity =
-    Math.max(0,opacity * .75);
+    Math.max(0,opacity*.75);
 
   localStorage.setItem(
     "brightness",
@@ -1210,7 +1754,7 @@ function setBrightness(value){
 
 
 const savedBrightness =
-  localStorage.getItem("brightness");
+localStorage.getItem("brightness");
 
 if(savedBrightness){
 
@@ -1227,7 +1771,7 @@ if(savedBrightness){
    WALLPAPERS
    ========================================================= */
 
-const wallpaperStyles = {
+const wallpapers = {
 
   1:
   "radial-gradient(circle at 20% 15%,#7c3aed 0%,transparent 35%),radial-gradient(circle at 85% 80%,#06b6d4 0%,transparent 38%),linear-gradient(145deg,#0f172a,#111827)",
@@ -1253,7 +1797,7 @@ const wallpaperStyles = {
 function setWallpaper(number){
 
   wallpaper.style.background =
-    wallpaperStyles[number];
+    wallpapers[number];
 
   localStorage.setItem(
     "wallpaper",
@@ -1261,8 +1805,12 @@ function setWallpaper(number){
   );
 
   document
-    .querySelectorAll(".wallpaper-option")
-    .forEach(x=>x.classList.remove("selected"));
+    .querySelectorAll(
+      ".wallpaper-option"
+    )
+    .forEach(
+      x=>x.classList.remove("selected")
+    );
 
   const selected =
     document.querySelector(
@@ -1270,15 +1818,18 @@ function setWallpaper(number){
     );
 
   if(selected)
-    selected.classList.add("selected");
+    selected.classList.add(
+      "selected"
+    );
 
 }
 
 
-const savedWallpaper =
-  localStorage.getItem("wallpaper") || "1";
-
-setWallpaper(savedWallpaper);
+setWallpaper(
+  localStorage.getItem(
+    "wallpaper"
+  ) || 1
+);
 
 
 /* =========================================================
@@ -1355,59 +1906,87 @@ const apps = {
 };
 
 
+/* =========================================================
+   OPEN APP
+   ========================================================= */
+
 function openApp(name){
 
   closeControlCentre();
 
   currentApp = name;
 
-  if(name === "settings"){
+  if(name==="settings"){
 
     settingsApp.classList.add("open");
+
     return;
 
   }
 
-  if(name === "snake"){
+
+  if(name==="snake"){
 
     snakeApp.classList.add("open");
 
-    setTimeout(()=>{
-      startSnake();
-    },200);
+    setTimeout(
+      startSnake,
+      260
+    );
 
     return;
 
   }
 
+
   const app = apps[name];
 
-  if(!app) return;
+  if(!app)
+    return;
 
   document.getElementById(
     "genericTitle"
-  ).textContent = app.title;
+  ).textContent =
+    app.title;
 
   document.getElementById(
     "genericContent"
-  ).innerHTML = app.content;
+  ).innerHTML =
+    app.content;
 
-  genericApp.classList.add("open");
+  genericApp.classList.add(
+    "open"
+  );
 
 }
 
 
+/* =========================================================
+   CLOSE APP
+   ========================================================= */
+
 function closeApp(){
 
-  genericApp.classList.remove("open");
-  settingsApp.classList.remove("open");
-  snakeApp.classList.remove("open");
+  genericApp.classList.remove(
+    "open"
+  );
+
+  settingsApp.classList.remove(
+    "open"
+  );
+
+  snakeApp.classList.remove(
+    "open"
+  );
 
   currentApp = null;
 
   if(snakeLoop){
 
-    clearInterval(snakeLoop);
+    clearInterval(
+      snakeLoop
+    );
+
     snakeLoop = null;
 
   }
@@ -1416,33 +1995,51 @@ function closeApp(){
 
 
 /* =========================================================
-   SWIPE UP TO CLOSE APPS
+   SWIPE UP TO CLOSE APP
    ========================================================= */
 
 let appStartY = 0;
 
-phone.addEventListener("touchstart",e=>{
+document
+  .getElementById("phone")
+  .addEventListener(
+    "touchstart",
+    e=>{
 
-  if(!currentApp) return;
+      if(!currentApp)
+        return;
 
-  appStartY = e.touches[0].clientY;
+      appStartY =
+        e.touches[0].clientY;
 
-},{passive:true});
+    },
+    {passive:true}
+  );
 
 
-phone.addEventListener("touchend",e=>{
+document
+  .getElementById("phone")
+  .addEventListener(
+    "touchend",
+    e=>{
 
-  if(!currentApp) return;
+      if(!currentApp)
+        return;
 
-  const endY = e.changedTouches[0].clientY;
+      const endY =
+        e.changedTouches[0].clientY;
 
-  if(appStartY - endY > 100){
+      if(
+        appStartY - endY > 100
+      ){
 
-    closeApp();
+        closeApp();
 
-  }
+      }
 
-});
+    },
+    {passive:true}
+  );
 
 
 /* =========================================================
@@ -1450,6 +2047,7 @@ phone.addEventListener("touchend",e=>{
    ========================================================= */
 
 let snake = [];
+
 let snakeFood = {
   x:10,
   y:10
@@ -1466,25 +2064,36 @@ let nextSnakeDirection = {
 };
 
 let snakeScore = 0;
+
 let snakeLoop = null;
 
 const snakeGrid = 20;
-const canvas = document.getElementById("snakeCanvas");
-const ctx = canvas.getContext("2d");
+
+const canvas =
+document.getElementById(
+  "snakeCanvas"
+);
+
+const ctx =
+canvas.getContext("2d");
 
 
 function startSnake(){
 
   if(snakeLoop){
 
-    clearInterval(snakeLoop);
+    clearInterval(
+      snakeLoop
+    );
 
   }
 
   snake = [
+
     {x:10,y:10},
     {x:9,y:10},
     {x:8,y:10}
+
   ];
 
   snakeDirection = {
@@ -1505,19 +2114,24 @@ function startSnake(){
 
   document.getElementById(
     "snakeGameOver"
-  ).classList.remove("show");
+  ).classList.remove(
+    "show"
+  );
 
   spawnSnakeFood();
+
   drawSnake();
 
   /*
-    200ms = slower, more relaxed gameplay.
+    Slower gameplay:
+    200 milliseconds.
   */
 
-  snakeLoop = setInterval(
-    runSnake,
-    200
-  );
+  snakeLoop =
+    setInterval(
+      runSnake,
+      200
+    );
 
 }
 
@@ -1527,20 +2141,24 @@ function spawnSnakeFood(){
   do{
 
     snakeFood = {
-      x:Math.floor(
+
+      x:
+      Math.floor(
         Math.random()*snakeGrid
       ),
 
-      y:Math.floor(
+      y:
+      Math.floor(
         Math.random()*snakeGrid
       )
+
     };
 
   }while(
     snake.some(
-      part =>
-      part.x === snakeFood.x &&
-      part.y === snakeFood.y
+      p=>
+        p.x===snakeFood.x &&
+        p.y===snakeFood.y
     )
   );
 
@@ -1553,64 +2171,65 @@ function runSnake(){
     nextSnakeDirection;
 
   const head = {
+
     x:
-      snake[0].x +
-      snakeDirection.x,
+    snake[0].x +
+    snakeDirection.x,
 
     y:
-      snake[0].y +
-      snakeDirection.y
+    snake[0].y +
+    snakeDirection.y
+
   };
 
-  /*
-    Wall collision
-  */
 
   if(
-    head.x < 0 ||
-    head.x >= snakeGrid ||
-    head.y < 0 ||
-    head.y >= snakeGrid
+
+    head.x<0 ||
+    head.x>=snakeGrid ||
+    head.y<0 ||
+    head.y>=snakeGrid
+
   ){
 
     endSnake();
+
     return;
 
   }
 
-  /*
-    Body collision
-  */
 
   if(
     snake.some(
-      part =>
-      part.x === head.x &&
-      part.y === head.y
+      p=>
+        p.x===head.x &&
+        p.y===head.y
     )
   ){
 
     endSnake();
+
     return;
 
   }
 
+
   snake.unshift(head);
 
-  /*
-    Food
-  */
 
   if(
-    head.x === snakeFood.x &&
-    head.y === snakeFood.y
+
+    head.x===snakeFood.x &&
+    head.y===snakeFood.y
+
   ){
 
     snakeScore++;
 
     document.getElementById(
       "snakeScore"
-    ).textContent = snakeScore;
+    ).textContent =
+      snakeScore;
 
     spawnSnakeFood();
 
@@ -1620,6 +2239,7 @@ function runSnake(){
 
   }
 
+
   drawSnake();
 
 }
@@ -1628,9 +2248,11 @@ function runSnake(){
 function drawSnake(){
 
   const size =
-    canvas.width / snakeGrid;
+    canvas.width/snakeGrid;
 
-  ctx.fillStyle = "#07110b";
+
+  ctx.fillStyle =
+    "#07110b";
 
   ctx.fillRect(
     0,
@@ -1639,70 +2261,90 @@ function drawSnake(){
     canvas.height
   );
 
-  /*
-    Food
-  */
 
-  ctx.fillStyle = "#ef4444";
+  /* FOOD */
+
+  ctx.fillStyle =
+    "#ef4444";
 
   ctx.beginPath();
 
   ctx.arc(
-    snakeFood.x * size + size/2,
-    snakeFood.y * size + size/2,
+
+    snakeFood.x*size+
+    size/2,
+
+    snakeFood.y*size+
+    size/2,
+
     size*.35,
+
     0,
     Math.PI*2
+
   );
 
   ctx.fill();
 
-  /*
-    Snake
-  */
+
+  /* SNAKE */
 
   snake.forEach(
     (part,index)=>{
 
       ctx.fillStyle =
-        index === 0
+        index===0
         ? "#86efac"
         : "#22c55e";
 
       ctx.fillRect(
-        part.x * size + 1,
-        part.y * size + 1,
-        size - 2,
-        size - 2
+
+        part.x*size+1,
+        part.y*size+1,
+
+        size-2,
+        size-2
+
       );
 
     }
   );
 
-  /*
-    Eyes
-  */
 
-  const head = snake[0];
+  /* EYES */
+
+  const head =
+    snake[0];
 
   if(head){
 
-    ctx.fillStyle = "#052e16";
-
-    const eyeSize = 3;
+    ctx.fillStyle =
+      "#052e16";
 
     ctx.fillRect(
-      head.x * size + size*.62,
-      head.y * size + size*.25,
-      eyeSize,
-      eyeSize
+
+      head.x*size+
+      size*.62,
+
+      head.y*size+
+      size*.25,
+
+      3,
+      3
+
     );
 
     ctx.fillRect(
-      head.x * size + size*.62,
-      head.y * size + size*.62,
-      eyeSize,
-      eyeSize
+
+      head.x*size+
+      size*.62,
+
+      head.y*size+
+      size*.62,
+
+      3,
+      3
+
     );
 
   }
@@ -1710,13 +2352,15 @@ function drawSnake(){
 }
 
 
-function changeSnakeDirection(direction){
+function changeSnakeDirection(
+  direction
+){
 
-  if(direction === "up"){
+  if(direction==="up"){
 
-    if(snakeDirection.y !== 1){
+    if(snakeDirection.y!==1){
 
-      nextSnakeDirection = {
+      nextSnakeDirection={
         x:0,
         y:-1
       };
@@ -1725,11 +2369,12 @@ function changeSnakeDirection(direction){
 
   }
 
-  if(direction === "down"){
 
-    if(snakeDirection.y !== -1){
+  if(direction==="down"){
 
-      nextSnakeDirection = {
+    if(snakeDirection.y!==-1){
+
+      nextSnakeDirection={
         x:0,
         y:1
       };
@@ -1738,11 +2383,12 @@ function changeSnakeDirection(direction){
 
   }
 
-  if(direction === "left"){
 
-    if(snakeDirection.x !== 1){
+  if(direction==="left"){
 
-      nextSnakeDirection = {
+    if(snakeDirection.x!==1){
+
+      nextSnakeDirection={
         x:-1,
         y:0
       };
@@ -1751,11 +2397,12 @@ function changeSnakeDirection(direction){
 
   }
 
-  if(direction === "right"){
 
-    if(snakeDirection.x !== -1){
+  if(direction==="right"){
 
-      nextSnakeDirection = {
+    if(snakeDirection.x!==-1){
+
+      nextSnakeDirection={
         x:1,
         y:0
       };
@@ -1771,37 +2418,47 @@ function endSnake(){
 
   if(snakeLoop){
 
-    clearInterval(snakeLoop);
-    snakeLoop = null;
+    clearInterval(
+      snakeLoop
+    );
+
+    snakeLoop=null;
 
   }
 
   document.getElementById(
     "snakeFinalScore"
-  ).textContent = snakeScore;
+  ).textContent =
+    snakeScore;
 
   document.getElementById(
     "snakeGameOver"
-  ).classList.add("show");
+  ).classList.add(
+    "show"
+  );
 
 }
 
 
 /* =========================================================
-   SNAKE SWIPE CONTROLS
+   SNAKE TOUCH CONTROLS
    ========================================================= */
 
-let snakeTouchX = 0;
-let snakeTouchY = 0;
+let snakeTouchX=0;
+let snakeTouchY=0;
 
 canvas.addEventListener(
   "touchstart",
   e=>{
 
-    const touch = e.touches[0];
+    const t =
+      e.touches[0];
 
-    snakeTouchX = touch.clientX;
-    snakeTouchY = touch.clientY;
+    snakeTouchX =
+      t.clientX;
+
+    snakeTouchY =
+      t.clientY;
 
   },
   {passive:true}
@@ -1812,37 +2469,47 @@ canvas.addEventListener(
   "touchend",
   e=>{
 
-    const touch = e.changedTouches[0];
+    const t =
+      e.changedTouches[0];
 
     const dx =
-      touch.clientX - snakeTouchX;
+      t.clientX-snakeTouchX;
 
     const dy =
-      touch.clientY - snakeTouchY;
+      t.clientY-snakeTouchY;
+
 
     if(
-      Math.abs(dx) <
-      20 &&
-      Math.abs(dy) <
-      20
-    ) return;
+      Math.abs(dx)<20 &&
+      Math.abs(dy)<20
+    )
+      return;
+
 
     if(
-      Math.abs(dx) >
+      Math.abs(dx)>
       Math.abs(dy)
     ){
 
-      if(dx > 0)
-        changeSnakeDirection("right");
+      if(dx>0)
+        changeSnakeDirection(
+          "right"
+        );
       else
-        changeSnakeDirection("left");
+        changeSnakeDirection(
+          "left"
+        );
 
     }else{
 
-      if(dy > 0)
-        changeSnakeDirection("down");
+      if(dy>0)
+        changeSnakeDirection(
+          "down"
+        );
       else
-        changeSnakeDirection("up");
+        changeSnakeDirection(
+          "up"
+        );
 
     }
 
@@ -1859,43 +2526,19 @@ document.addEventListener(
   "keydown",
   e=>{
 
-    if(!currentApp) return;
-
-    if(e.key === "ArrowUp")
+    if(e.key==="ArrowUp")
       changeSnakeDirection("up");
 
-    if(e.key === "ArrowDown")
+    if(e.key==="ArrowDown")
       changeSnakeDirection("down");
 
-    if(e.key === "ArrowLeft")
+    if(e.key==="ArrowLeft")
       changeSnakeDirection("left");
 
-    if(e.key === "ArrowRight")
+    if(e.key==="ArrowRight")
       changeSnakeDirection("right");
 
   }
-);
-
-
-/* =========================================================
-   PREVENT PAGE SCROLL
-   ========================================================= */
-
-document.addEventListener(
-  "touchmove",
-  e=>{
-
-    if(
-      currentApp ||
-      controlCentre.classList.contains("open")
-    ){
-
-      e.preventDefault();
-
-    }
-
-  },
-  {passive:false}
 );
 
 </script>
