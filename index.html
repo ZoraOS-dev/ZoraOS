@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>ZoraOS</title>
 
@@ -11,7 +11,6 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
-  user-select:none;
 }
 
 html,body{
@@ -19,44 +18,37 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#000;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#050505;
 }
 
-:root{
-  --icon-radius:20px;
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .phone{
   position:relative;
-  width:100%;
-  height:100dvh;
+  width:min(100vw,430px);
+  height:min(100vh,900px);
   overflow:hidden;
-  background:#080b13;
+  background:#111827;
+  color:white;
+  border-radius:28px;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
 }
 
-/* WALLPAPER */
+/* ================= WALLPAPER ================= */
 
 .wallpaper{
   position:absolute;
-  inset:-5%;
-  width:110%;
-  height:110%;
-
+  inset:0;
   background:
-    radial-gradient(circle at 20% 20%,#5472ff 0%,transparent 30%),
-    radial-gradient(circle at 80% 35%,#9f4cff 0%,transparent 35%),
-    radial-gradient(circle at 50% 85%,#07162f 0%,transparent 45%),
-    linear-gradient(145deg,#07101f,#10182c 50%,#040711);
-
-  transition:
-    transform .55s cubic-bezier(.2,.8,.2,1),
-    filter .55s ease;
-}
-
-.phone.app-open .wallpaper{
-  transform:scale(1.1);
-  filter:blur(8px) brightness(.75);
+    radial-gradient(circle at 20% 15%,#7c3aed 0%,transparent 35%),
+    radial-gradient(circle at 85% 80%,#06b6d4 0%,transparent 38%),
+    linear-gradient(145deg,#0f172a,#111827);
+  transition:.5s ease;
 }
 
 .brightness-layer{
@@ -65,102 +57,190 @@ html,body{
   background:#000;
   opacity:0;
   pointer-events:none;
-  z-index:900;
+  z-index:20;
 }
 
-/* STATUS */
+/* ================= STATUS BAR ================= */
 
-.statusbar{
+.status-bar{
   position:absolute;
   top:0;
   left:0;
-  width:100%;
-  height:46px;
-  padding:12px 18px;
+  right:0;
+  height:35px;
+  padding:9px 18px 0;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  color:white;
-  z-index:30;
-  font-size:14px;
-  font-weight:600;
+  font-size:13px;
+  z-index:50;
+  pointer-events:none;
 }
 
-.status-right{
+.status-icons{
   display:flex;
-  gap:7px;
+  gap:8px;
   align-items:center;
 }
 
-/* HOME */
+/* ================= LOCKSCREEN ================= */
+
+.lockscreen{
+  position:absolute;
+  inset:0;
+  z-index:40;
+  background:rgba(0,0,0,.08);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
+}
+
+.lockscreen.unlocked{
+  transform:translateY(-105%);
+}
+
+/* BIG CLOCK — completely separate */
+
+.lock-clock{
+  position:absolute;
+  top:105px;
+  left:0;
+  right:0;
+  text-align:center;
+}
+
+.lock-time{
+  font-size:76px;
+  line-height:.95;
+  font-weight:300;
+  letter-spacing:-4px;
+  text-shadow:0 5px 25px rgba(0,0,0,.3);
+}
+
+.lock-date{
+  margin-top:12px;
+  font-size:18px;
+  font-weight:500;
+}
+
+/* NOTIFICATIONS — separate from clock */
+
+.lock-notifications{
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:105px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.notification{
+  padding:14px 16px;
+  border-radius:20px;
+  background:rgba(35,35,40,.72);
+  border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
+  box-shadow:0 8px 30px rgba(0,0,0,.18);
+}
+
+.notification-top{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:13px;
+  opacity:.8;
+  margin-bottom:4px;
+}
+
+.notification-icon{
+  width:25px;
+  height:25px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.15);
+}
+
+.notification-title{
+  font-size:15px;
+  font-weight:600;
+}
+
+.notification-text{
+  font-size:14px;
+  opacity:.8;
+}
+
+/* Unlock area */
+
+.unlock-area{
+  position:absolute;
+  bottom:25px;
+  left:0;
+  right:0;
+  text-align:center;
+}
+
+.unlock-hint{
+  font-size:13px;
+  opacity:.7;
+  margin-bottom:9px;
+}
+
+.home-indicator{
+  width:115px;
+  height:5px;
+  background:white;
+  border-radius:20px;
+  margin:auto;
+  opacity:.9;
+}
+
+/* ================= HOME ================= */
 
 .home{
   position:absolute;
   inset:0;
   z-index:5;
-  padding:72px 18px 115px;
-  transition:.45s cubic-bezier(.2,.8,.2,1);
+  padding:65px 18px 100px;
+  overflow:hidden;
 }
 
-.phone.app-open .home{
-  transform:scale(.93);
-  filter:blur(3px);
-  opacity:.35;
-}
-
-.hero{
-  margin-bottom:30px;
-}
-
-.hero-time{
-  font-size:54px;
-  color:white;
-  font-weight:300;
-  letter-spacing:-3px;
-}
-
-.hero-date{
-  color:rgba(255,255,255,.7);
-  font-size:15px;
-  margin-top:4px;
+.home-title{
+  font-size:31px;
+  font-weight:700;
+  margin:5px 0 20px;
+  letter-spacing:-1px;
 }
 
 .app-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:25px 14px;
+  gap:24px 12px;
 }
 
 .icon-wrap{
   text-align:center;
-  color:white;
-  font-size:12px;
+  cursor:pointer;
 }
 
 .icon{
-  width:62px;
-  height:62px;
+  width:60px;
+  height:60px;
   margin:auto;
-
-  border-radius:var(--icon-radius);
-
+  border-radius:18px;
   display:flex;
-  align-items:center;
   justify-content:center;
-
+  align-items:center;
   font-size:29px;
-
-  background:rgba(255,255,255,.16);
-
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.35),
-    0 8px 20px rgba(0,0,0,.22);
-
-  backdrop-filter:blur(20px);
-
-  transition:
-    transform .18s ease,
-    border-radius .35s ease;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
+  backdrop-filter:blur(15px);
+  transition:.18s ease;
 }
 
 .icon:active{
@@ -169,616 +249,352 @@ html,body{
 
 .icon-name{
   margin-top:7px;
-  text-shadow:0 1px 5px #000;
+  font-size:12px;
+  opacity:.9;
 }
 
-body[data-icons="round"]{
-  --icon-radius:50%;
-}
+.call-icon{background:linear-gradient(145deg,#22c55e,#16a34a)}
+.message-icon{background:linear-gradient(145deg,#38bdf8,#2563eb)}
+.camera-icon{background:linear-gradient(145deg,#64748b,#111827)}
+.music-icon{background:linear-gradient(145deg,#ec4899,#8b5cf6)}
+.settings-icon{background:linear-gradient(145deg,#94a3b8,#475569)}
+.photos-icon{background:linear-gradient(145deg,#f97316,#eab308)}
+.notes-icon{background:linear-gradient(145deg,#facc15,#f59e0b)}
+.snake-icon{background:linear-gradient(145deg,#22c55e,#15803d)}
 
-body[data-icons="squircle"]{
-  --icon-radius:18px;
-}
-
-body[data-icons="soft"]{
-  --icon-radius:27px;
-}
-
-/* SNAKE ICON */
-
-.snake-icon{
-  background:
-    linear-gradient(145deg,#49ff77,#08a947);
-  box-shadow:
-    0 8px 22px rgba(0,255,100,.25);
-}
-
-/* DOCK */
+/* ================= DOCK ================= */
 
 .dock{
   position:absolute;
-  left:16px;
-  right:16px;
+  left:15px;
+  right:15px;
   bottom:18px;
-  height:84px;
-
-  border-radius:29px;
-
-  background:rgba(255,255,255,.13);
-  backdrop-filter:blur(28px);
-
+  height:72px;
+  border-radius:25px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
   display:flex;
   justify-content:space-around;
   align-items:center;
-
-  border:1px solid rgba(255,255,255,.12);
-
-  z-index:12;
-
-  transition:.4s;
+  z-index:30;
 }
 
-.phone.app-open .dock{
-  transform:translateY(120px);
+.dock .icon{
+  width:53px;
+  height:53px;
+  font-size:25px;
 }
 
-/* APP WINDOW */
+/* ================= APP WINDOW ================= */
 
 .app-window{
   position:absolute;
   inset:0;
-
-  background:#f5f5f7;
-
   z-index:100;
-
-  transform:
-    translateY(40px)
-    scale(.2);
-
+  background:rgba(12,12,15,.96);
+  transform:translateY(105%);
   opacity:0;
-  pointer-events:none;
-
-  border-radius:36px;
+  transition:.35s cubic-bezier(.22,1,.36,1);
   overflow:hidden;
-
-  transition:
-    transform .55s cubic-bezier(.2,.85,.25,1.12),
-    opacity .25s,
-    border-radius .55s;
-
-  transform-origin:center 70%;
 }
 
 .app-window.open{
-  transform:translateY(0) scale(1);
+  transform:translateY(0);
   opacity:1;
-  pointer-events:auto;
-}
-
-.app-window.closing{
-  transform:translateY(105%) scale(.82);
-  opacity:.5;
 }
 
 .app-header{
-  height:95px;
-  padding:52px 20px 10px;
-
-  background:rgba(255,255,255,.9);
-
-  font-weight:bold;
-  font-size:24px;
-}
-
-.app-content{
-  height:calc(100% - 95px);
-  overflow-y:auto;
-  padding:18px;
-}
-
-.gesture-area{
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:100%;
-  height:35px;
-
+  height:70px;
+  padding:30px 18px 0;
   display:flex;
-  justify-content:center;
   align-items:center;
-
-  z-index:200;
+  gap:12px;
 }
 
-.gesture-bar{
-  width:125px;
-  height:5px;
+.back-button{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:0;
+  color:white;
+  background:rgba(255,255,255,.12);
+  font-size:20px;
+}
+
+.app-title{
+  font-size:20px;
+  font-weight:700;
+}
+
+/* ================= GENERIC APPS ================= */
+
+.generic-content{
+  padding:30px 20px;
+}
+
+.fake-card{
+  padding:20px;
+  border-radius:24px;
+  background:rgba(255,255,255,.08);
+  margin-bottom:15px;
+}
+
+.fake-card h2{
+  margin:0 0 8px;
+}
+
+.fake-card p{
+  margin:0;
+  opacity:.65;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings-content{
+  padding:20px;
+  overflow-y:auto;
+  height:calc(100% - 70px);
+}
+
+.setting-card{
+  padding:17px;
   border-radius:20px;
-  background:#111;
-}
-
-/* CARDS */
-
-.card{
-  background:white;
-  padding:18px;
-  margin-bottom:13px;
-  border-radius:22px;
-  box-shadow:0 5px 20px rgba(0,0,0,.05);
-}
-
-.card h3{
-  margin:0 0 7px;
+  background:rgba(255,255,255,.08);
+  margin-bottom:12px;
 }
 
 .setting-row{
-  background:white;
-  border-radius:20px;
-  padding:15px 16px;
-  margin-bottom:12px;
-
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 
-.theme-options{
-  display:flex;
-  gap:12px;
+.setting-name{
+  font-size:16px;
 }
 
-.theme-button{
-  width:58px;
-  height:58px;
-
-  border:none;
-  border-radius:18px;
-
-  font-size:25px;
-  background:#eee;
+.setting-sub{
+  font-size:12px;
+  opacity:.55;
+  margin-top:4px;
 }
 
-.theme-button.active{
-  outline:3px solid #4b7cff;
+.switch{
+  width:48px;
+  height:28px;
+  border-radius:20px;
+  background:#444;
+  padding:3px;
 }
 
-/* CONTROL CENTRE */
+.switch.on{
+  background:#22c55e;
+}
+
+.switch-dot{
+  width:22px;
+  height:22px;
+  background:white;
+  border-radius:50%;
+  transition:.2s;
+}
+
+.switch.on .switch-dot{
+  transform:translateX(20px);
+}
+
+/* ================= CONTROL CENTRE ================= */
 
 .control-centre{
   position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:100%;
-
-  z-index:400;
-
-  background:rgba(8,12,25,.55);
-  backdrop-filter:blur(35px);
-
+  inset:0;
+  z-index:200;
   transform:translateY(-105%);
   opacity:0;
-  pointer-events:none;
-
-  transition:
-    transform .55s cubic-bezier(.2,.85,.25,1),
-    opacity .3s;
+  transition:.4s cubic-bezier(.22,1,.36,1);
+  padding:55px 18px 20px;
+  background:rgba(15,15,20,.88);
+  backdrop-filter:blur(35px);
+  -webkit-backdrop-filter:blur(35px);
+  overflow-y:auto;
 }
 
 .control-centre.open{
   transform:translateY(0);
   opacity:1;
-  pointer-events:auto;
-}
-
-.cc-panel{
-  padding:55px 18px 30px;
-  height:100%;
-  overflow-y:auto;
-}
-
-.cc-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  color:white;
-  margin-bottom:20px;
 }
 
 .cc-title{
-  font-size:29px;
+  font-size:30px;
   font-weight:700;
-}
-
-.cc-subtitle{
-  font-size:13px;
-  opacity:.65;
-  margin-top:3px;
-}
-
-.cc-close{
-  width:42px;
-  height:42px;
-
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.15);
-
-  background:rgba(255,255,255,.12);
-  color:white;
-  font-size:20px;
+  margin-bottom:18px;
 }
 
 .cc-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:13px;
+  gap:12px;
 }
 
 .cc-tile{
-  min-height:105px;
+  min-height:85px;
   padding:16px;
-
-  border-radius:26px;
-
-  background:rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.1);
-
-  color:white;
-
-  backdrop-filter:blur(25px);
-
-  transition:.2s;
-}
-
-.cc-tile:active{
-  transform:scale(.95);
+  border-radius:23px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .cc-tile.active{
-  background:rgba(90,120,255,.65);
+  background:rgba(255,255,255,.25);
 }
 
 .cc-icon{
-  font-size:28px;
-  margin-bottom:13px;
+  font-size:23px;
 }
 
 .cc-name{
-  font-size:14px;
-  font-weight:bold;
-}
-
-.cc-state{
-  font-size:11px;
-  opacity:.65;
-  margin-top:4px;
+  margin-top:10px;
+  font-size:13px;
 }
 
 .slider-card{
-  margin-top:13px;
+  margin-top:12px;
   padding:18px;
-
-  border-radius:26px;
-
-  background:rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.1);
-
-  color:white;
+  border-radius:23px;
+  background:rgba(255,255,255,.1);
 }
 
-.slider-label{
-  display:flex;
-  justify-content:space-between;
+.slider-card label{
+  display:block;
   margin-bottom:10px;
-  font-size:14px;
+  font-size:13px;
 }
 
 input[type="range"]{
   width:100%;
-  accent-color:#fff;
+  accent-color:white;
 }
 
-.wallpaper-picker{
-  margin-top:13px;
-  padding:18px;
+/* ================= WALLPAPER ================= */
 
-  border-radius:26px;
-
-  background:rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.1);
-
-  color:white;
-}
-
-.wallpaper-title{
-  font-size:16px;
-  font-weight:bold;
-  margin-bottom:13px;
-}
-
-.wallpaper-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
+.wallpapers{
+  display:flex;
   gap:10px;
+  overflow-x:auto;
+  padding-bottom:5px;
 }
 
-.wall-option{
+.wallpaper-option{
+  flex:0 0 70px;
   height:100px;
-  border-radius:18px;
+  border-radius:15px;
   border:2px solid transparent;
 }
 
-.wall-option.active{
+.wallpaper-option.selected{
   border-color:white;
 }
 
-.wall-1{
-  background:
-  radial-gradient(circle at 20% 20%,#5472ff,transparent 35%),
-  radial-gradient(circle at 80% 40%,#b53cff,transparent 40%),
-  linear-gradient(145deg,#07101f,#111a38);
+.wp1{
+  background:linear-gradient(145deg,#0f172a,#7c3aed,#06b6d4);
 }
 
-.wall-2{
-  background:
-  radial-gradient(circle at 80% 20%,#00eaff,transparent 35%),
-  radial-gradient(circle at 20% 80%,#0066ff,transparent 40%),
-  linear-gradient(145deg,#00131c,#071d40);
+.wp2{
+  background:linear-gradient(145deg,#020617,#1d4ed8,#06b6d4);
 }
 
-.wall-3{
-  background:
-  radial-gradient(circle at 50% 20%,#ff4fd8,transparent 35%),
-  radial-gradient(circle at 20% 80%,#ff7b39,transparent 40%),
-  linear-gradient(145deg,#220018,#321007);
+.wp3{
+  background:linear-gradient(145deg,#1e1b4b,#7e22ce,#ec4899);
 }
 
-.wall-4{
-  background:
-  radial-gradient(circle at 20% 30%,#66ff99,transparent 35%),
-  radial-gradient(circle at 80% 70%,#00aaff,transparent 40%),
-  linear-gradient(145deg,#001c14,#00172c);
+.wp4{
+  background:linear-gradient(145deg,#052e16,#16a34a,#22d3ee);
 }
 
-.wall-5{
-  background:
-  radial-gradient(circle at 70% 20%,#fff,transparent 20%),
-  radial-gradient(circle at 20% 70%,#777,transparent 35%),
-  linear-gradient(145deg,#080808,#333);
+.wp5{
+  background:linear-gradient(145deg,#450a0a,#dc2626,#f97316);
 }
 
-.wall-6{
-  background:
-  radial-gradient(circle at 50% 50%,#9c5cff,transparent 30%),
-  linear-gradient(145deg,#090020,#160035,#000);
+.wp6{
+  background:linear-gradient(145deg,#111827,#374151,#000);
 }
 
-/* LOCKSCREEN */
-
-.lockscreen{
-  position:absolute;
-  inset:0;
-
-  z-index:500;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  color:white;
-
-  background:
-    radial-gradient(circle at 50% 70%,rgba(60,75,255,.4),transparent 40%),
-    linear-gradient(160deg,rgba(7,10,24,.25),rgba(0,0,0,.6));
-
-  backdrop-filter:blur(2px);
-
-  transition:
-    transform .65s cubic-bezier(.2,.8,.2,1),
-    opacity .5s;
-}
-
-.lockscreen.hidden{
-  transform:translateY(-105%);
-  opacity:0;
-  pointer-events:none;
-}
-
-.lock-date{
-  margin-top:95px;
-  font-size:17px;
-  opacity:.8;
-}
-
-.lock-time{
-  font-size:82px;
-  font-weight:200;
-  letter-spacing:-6px;
-  margin-top:5px;
-}
-
-.lock-fingerprint{
-  position:absolute;
-  bottom:100px;
-
-  width:68px;
-  height:68px;
-
-  border-radius:50%;
-
-  background:rgba(255,255,255,.12);
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  font-size:31px;
-
-  backdrop-filter:blur(20px);
-}
-
-.lock-hint{
-  position:absolute;
-  bottom:40px;
-  font-size:13px;
-  opacity:.7;
-}
-
-.notification{
-  position:absolute;
-  top:145px;
-  left:20px;
-  right:20px;
-
-  padding:16px;
-
-  border-radius:22px;
-
-  background:rgba(255,255,255,.15);
-
-  backdrop-filter:blur(20px);
-
-  color:white;
-
-  display:flex;
-  gap:13px;
-}
-
-/* ZORA */
-
-.zora-orb{
-  width:90px;
-  height:90px;
-
-  border-radius:30px;
-  margin:30px auto;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-size:42px;
-  color:white;
-
-  background:linear-gradient(145deg,#446cff,#ac42ff);
-
-  box-shadow:
-    0 15px 50px rgba(86,85,255,.35);
-}
-
-/* ================= SNAKE GAME ================= */
+/* ================= SNAKE ================= */
 
 .snake-content{
-  background:#080b10;
-  padding:12px !important;
-  color:white;
-  overflow:hidden !important;
+  position:relative;
+  padding:15px;
+  text-align:center;
+  height:calc(100% - 70px);
+  overflow:hidden;
 }
 
 .snake-top{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
-  padding:5px 5px 12px;
+  margin-bottom:12px;
 }
 
 .snake-title{
   font-size:20px;
-  font-weight:bold;
+  font-weight:700;
 }
 
 .snake-score{
+  padding:8px 12px;
+  border-radius:14px;
   background:rgba(255,255,255,.1);
-  padding:8px 13px;
-  border-radius:15px;
   font-size:13px;
 }
 
 #snakeCanvas{
-  display:block;
-  width:100%;
-  aspect-ratio:1/1;
-
-  max-height:62vh;
-
-  background:
-    linear-gradient(
-      rgba(255,255,255,.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.025) 1px,
-      transparent 1px
-    ),
-    #07100c;
-
-  background-size:20px 20px;
-
-  border-radius:25px;
-
-  box-shadow:
-    inset 0 0 30px rgba(0,0,0,.5),
-    0 10px 35px rgba(0,0,0,.35);
+  width:min(320px,85vw);
+  height:min(320px,85vw);
+  background:#07110b;
+  border-radius:20px;
+  border:2px solid rgba(255,255,255,.08);
+  touch-action:none;
 }
 
 .snake-controls{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin-top:13px;
+  margin-top:10px;
 }
 
 .snake-btn{
-  width:54px;
-  height:44px;
-
+  width:55px;
+  height:45px;
   border:0;
   border-radius:15px;
-
-  background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.1);
   color:white;
-
   font-size:20px;
 }
 
 .snake-btn:active{
   transform:scale(.9);
-  background:rgba(90,255,130,.3);
 }
 
 .snake-hint{
-  text-align:center;
+  margin-top:10px;
   font-size:11px;
-  opacity:.5;
-  margin-top:8px;
+  opacity:.45;
 }
 
 .snake-gameover{
   position:absolute;
-  left:50%;
-  top:50%;
-
-  transform:translate(-50%,-50%);
-
-  width:80%;
-
+  left:25px;
+  right:25px;
+  top:180px;
   padding:25px;
-
-  text-align:center;
-
-  border-radius:27px;
-
-  background:rgba(10,15,18,.92);
-
+  border-radius:25px;
+  background:rgba(15,15,18,.94);
   backdrop-filter:blur(20px);
-
-  color:white;
-
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-
   display:none;
 }
 
@@ -787,1707 +603,1302 @@ input[type="range"]{
 }
 
 .snake-gameover h2{
-  margin:0 0 8px;
-  font-size:28px;
+  margin:0 0 10px;
 }
 
 .snake-final-score{
-  opacity:.7;
   margin-bottom:18px;
+  opacity:.7;
 }
 
 .snake-restart{
   border:0;
-
-  padding:13px 24px;
-
-  border-radius:17px;
-
-  background:linear-gradient(135deg,#46ff76,#08a947);
-
+  padding:12px 22px;
+  border-radius:15px;
+  background:#22c55e;
   color:white;
-
-  font-weight:bold;
-  font-size:15px;
+  font-weight:700;
 }
 
-/* DARK MODE */
+/* ================= GESTURE HINT ================= */
 
-.phone.dark .app-window{
-  background:#101114;
-  color:white;
-}
-
-.phone.dark .app-header{
-  background:#18191d;
-  color:white;
-}
-
-.phone.dark .card,
-.phone.dark .setting-row{
-  background:#1b1c20;
-  color:white;
+.gesture-zone{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:55px;
+  z-index:70;
 }
 </style>
 </head>
 
-<body data-icons="squircle">
+<body>
 
 <div class="phone" id="phone">
 
-<div class="wallpaper" id="wallpaper"></div>
-<div class="brightness-layer" id="brightnessLayer"></div>
+  <div class="wallpaper" id="wallpaper"></div>
+  <div class="brightness-layer" id="brightnessLayer"></div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span id="statusTime">10:00</span>
+
+    <div class="status-icons">
+      <span>📶</span>
+      <span>📡</span>
+      <span>🔋</span>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <main class="home" id="home">
+
+    <div class="home-title">ZoraOS</div>
+
+    <div class="app-grid">
+
+      <div class="icon-wrap" onclick="openApp('phone')">
+        <div class="icon call-icon">📞</div>
+        <div class="icon-name">Phone</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('messages')">
+        <div class="icon message-icon">💬</div>
+        <div class="icon-name">Messages</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('camera')">
+        <div class="icon camera-icon">📷</div>
+        <div class="icon-name">Camera</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('music')">
+        <div class="icon music-icon">🎵</div>
+        <div class="icon-name">Music</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('photos')">
+        <div class="icon photos-icon">🌈</div>
+        <div class="icon-name">Photos</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('notes')">
+        <div class="icon notes-icon">📝</div>
+        <div class="icon-name">Notes</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('settings')">
+        <div class="icon settings-icon">⚙️</div>
+        <div class="icon-name">Settings</div>
+      </div>
+
+      <div class="icon-wrap" onclick="openApp('snake')">
+        <div class="icon snake-icon">🐍</div>
+        <div class="icon-name">Snake</div>
+      </div>
 
-<!-- STATUS -->
+    </div>
+  </main>
+
+  <!-- DOCK -->
+  <div class="dock">
+
+    <div class="icon-wrap" onclick="openApp('phone')">
+      <div class="icon call-icon">📞</div>
+    </div>
+
+    <div class="icon-wrap" onclick="openApp('messages')">
+      <div class="icon message-icon">💬</div>
+    </div>
+
+    <div class="icon-wrap" onclick="openApp('camera')">
+      <div class="icon camera-icon">📷</div>
+    </div>
+
+    <div class="icon-wrap" onclick="openApp('music')">
+      <div class="icon music-icon">🎵</div>
+    </div>
+
+  </div>
+
+  <!-- LOCKSCREEN -->
+  <div class="lockscreen" id="lockscreen">
+
+    <!-- CLOCK IS NOW COMPLETELY SEPARATE -->
+    <div class="lock-clock">
+      <div class="lock-time" id="lockTime">10:00</div>
+      <div class="lock-date" id="lockDate">Sunday, October 4</div>
+    </div>
+
+    <!-- NOTIFICATIONS ARE THEIR OWN AREA -->
+    <div class="lock-notifications">
+
+      <div class="notification">
+        <div class="notification-top">
+          <div class="notification-icon">💬</div>
+          <span>Messages</span>
+        </div>
+
+        <div class="notification-title">
+          Welcome to ZoraOS
+        </div>
+
+        <div class="notification-text">
+          Your world. Your OS.
+        </div>
+      </div>
+
+      <div class="notification">
+        <div class="notification-top">
+          <div class="notification-icon">🐍</div>
+          <span>ZoraOS</span>
+        </div>
+
+        <div class="notification-title">
+          Snake is ready
+        </div>
+
+        <div class="notification-text">
+          Try to beat your high score!
+        </div>
+      </div>
+
+    </div>
+
+    <div class="unlock-area">
+      <div class="unlock-hint">Swipe up to unlock</div>
+      <div class="home-indicator"></div>
+    </div>
+
+  </div>
+
+  <!-- GENERIC APP -->
+  <div class="app-window" id="genericApp">
+
+    <div class="app-header">
+      <button class="back-button" onclick="closeApp()">‹</button>
+      <div class="app-title" id="genericTitle">App</div>
+    </div>
+
+    <div class="generic-content" id="genericContent"></div>
+
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="app-window" id="settingsApp">
+
+    <div class="app-header">
+      <button class="back-button" onclick="closeApp()">‹</button>
+      <div class="app-title">Settings</div>
+    </div>
+
+    <div class="settings-content">
+
+      <div class="setting-card">
+        <div class="setting-row">
+          <div>
+            <div class="setting-name">Dark Mode</div>
+            <div class="setting-sub">ZoraOS appearance</div>
+          </div>
+
+          <div class="switch on">
+            <div class="switch-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-row">
+          <div>
+            <div class="setting-name">ZoraOS</div>
+            <div class="setting-sub">Your world. Your OS.</div>
+          </div>
+          <span>✨</span>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-row">
+          <div>
+            <div class="setting-name">Version</div>
+            <div class="setting-sub">ZoraOS Web 1.3</div>
+          </div>
+          <span>1.3</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SNAKE -->
+  <div class="app-window" id="snakeApp">
+
+    <div class="app-header">
+      <button class="back-button" onclick="closeApp()">‹</button>
+      <div class="app-title">Zora Snake</div>
+    </div>
+
+    <div class="snake-content">
+
+      <div class="snake-top">
+        <div class="snake-title">🐍 Zora Snake</div>
+
+        <div class="snake-score">
+          Score:
+          <span id="snakeScore">0</span>
+        </div>
+      </div>
+
+      <canvas
+        id="snakeCanvas"
+        width="320"
+        height="320">
+      </canvas>
+
+      <div class="snake-controls">
+        <button class="snake-btn"
+                onclick="changeSnakeDirection('up')">
+          ▲
+        </button>
+      </div>
+
+      <div class="snake-controls">
+
+        <button class="snake-btn"
+                onclick="changeSnakeDirection('left')">
+          ◀
+        </button>
+
+        <button class="snake-btn"
+                onclick="changeSnakeDirection('down')">
+          ▼
+        </button>
+
+        <button class="snake-btn"
+                onclick="changeSnakeDirection('right')">
+          ▶
+        </button>
+
+      </div>
+
+      <div class="snake-hint">
+        Swipe on the game • Arrow keys also work
+      </div>
+
+      <div class="snake-gameover" id="snakeGameOver">
+
+        <h2>Game Over 🐍</h2>
+
+        <div class="snake-final-score">
+          Score:
+          <span id="snakeFinalScore">0</span>
+        </div>
+
+        <button
+          class="snake-restart"
+          onclick="startSnake()">
+          Play Again
+        </button>
 
-<div class="statusbar">
+      </div>
 
-<span id="statusTime">10:30</span>
+    </div>
+  </div>
 
-<div class="status-right">
-<span>▮▮▮</span>
-<span>⌁</span>
-<span>87%</span>
-<span>▰</span>
-</div>
-
-</div>
-
-<!-- HOME -->
-
-<main class="home">
-
-<div class="hero">
-
-<div class="hero-time" id="homeTime">
-10:30
-</div>
-
-<div class="hero-date" id="homeDate">
-Sunday, October 4
-</div>
-
-</div>
-
-<div class="app-grid">
-
-<div class="icon-wrap" onclick="openApp('zora')">
-<div class="icon">⚡</div>
-<div class="icon-name">Zora</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('messages')">
-<div class="icon">💬</div>
-<div class="icon-name">Messages</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('gallery')">
-<div class="icon">🖼️</div>
-<div class="icon-name">Gallery</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('settings')">
-<div class="icon">⚙️</div>
-<div class="icon-name">Settings</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('music')">
-<div class="icon">🎵</div>
-<div class="icon-name">Music</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('camera')">
-<div class="icon">📷</div>
-<div class="icon-name">Camera</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('files')">
-<div class="icon">📁</div>
-<div class="icon-name">Files</div>
-</div>
-
-<div class="icon-wrap" onclick="openApp('snake')">
-
-<div class="icon snake-icon">
-🐍
-</div>
-
-<div class="icon-name">
-Snake
-</div>
-
-</div>
-
-</div>
-</main>
-
-<!-- DOCK -->
-
-<div class="dock">
-
-<div onclick="openApp('phone')">
-<div class="icon">📞</div>
-</div>
-
-<div onclick="openApp('messages')">
-<div class="icon">💬</div>
-</div>
-
-<div onclick="openApp('browser')">
-<div class="icon">🌐</div>
-</div>
-
-<div onclick="openApp('camera')">
-<div class="icon">📷</div>
-</div>
-
-</div>
-
-<!-- GENERIC APP -->
-
-<section class="app-window" id="genericApp">
-
-<div class="app-header" id="genericTitle">
-App
-</div>
-
-<div class="app-content" id="genericContent"></div>
-
-<div class="gesture-area">
-<div class="gesture-bar"></div>
-</div>
-
-</section>
-
-<!-- SETTINGS -->
-
-<section class="app-window" id="settingsApp">
-
-<div class="app-header">
-Settings
-</div>
-
-<div class="app-content">
-
-<div class="card">
-<h3>ZoraOS</h3>
-<p>Your world. Your OS.</p>
-</div>
-
-<div class="setting-row">
-<div>
-<b>Icon Style</b>
-<div style="font-size:12px;color:#777">
-Choose your ZoraOS icon shape
-</div>
-</div>
-</div>
-
-<div class="theme-options">
-
-<button id="squircleBtn"
-class="theme-button"
-onclick="setIconTheme('squircle')">
-▣
-</button>
-
-<button id="softBtn"
-class="theme-button"
-onclick="setIconTheme('soft')">
-◼
-</button>
-
-<button id="roundBtn"
-class="theme-button"
-onclick="setIconTheme('round')">
-●
-</button>
-
-</div>
+  <!-- CONTROL CENTRE -->
+  <div class="control-centre" id="controlCentre">
 
-<br>
+    <div class="cc-title">Control Centre</div>
 
-<div class="setting-row">
-<span>Animations</span>
-<b>Fluid</b>
-</div>
-
-<div class="setting-row">
-<span>Version</span>
-<span>ZoraOS Web 1.2</span>
-</div>
-
-<div class="setting-row">
-<span>Game</span>
-<span>Zora Snake</span>
-</div>
-
-<div class="setting-row">
-<span>Developer</span>
-<span>ZoraOS-dev</span>
-</div>
-
-</div>
-
-<div class="gesture-area">
-<div class="gesture-bar"></div>
-</div>
-
-</section>
-
-<!-- CONTROL CENTRE -->
-
-<section class="control-centre" id="controlCentre">
-
-<div class="cc-panel">
-
-<div class="cc-top">
-
-<div>
-<div class="cc-title">
-Control Centre
-</div>
-
-<div class="cc-subtitle">
-ZoraOS Quick Controls
-</div>
-</div>
-
-<button class="cc-close"
-onclick="closeControlCentre()">
-×
-</button>
-
-</div>
-
-<div class="cc-grid">
-
-<div class="cc-tile active"
-id="wifiTile"
-onclick="toggleControl('wifi')">
-
-<div class="cc-icon">📶</div>
-<div class="cc-name">Wi-Fi</div>
-<div class="cc-state" id="wifiState">Connected</div>
-
-</div>
-
-<div class="cc-tile"
-id="bluetoothTile"
-onclick="toggleControl('bluetooth')">
-
-<div class="cc-icon">🔵</div>
-<div class="cc-name">Bluetooth</div>
-<div class="cc-state" id="bluetoothState">Off</div>
-
-</div>
-
-<div class="cc-tile"
-id="darkTile"
-onclick="toggleControl('dark')">
-
-<div class="cc-icon">🌙</div>
-<div class="cc-name">Dark Mode</div>
-<div class="cc-state" id="darkState">Off</div>
+    <div class="cc-grid">
 
-</div>
-
-<div class="cc-tile"
-id="airplaneTile"
-onclick="toggleControl('airplane')">
-
-<div class="cc-icon">✈️</div>
-<div class="cc-name">Airplane Mode</div>
-<div class="cc-state" id="airplaneState">Off</div>
-
-</div>
-
-<div class="cc-tile"
-id="rotationTile"
-onclick="toggleControl('rotation')">
-
-<div class="cc-icon">🔒</div>
-<div class="cc-name">Rotation Lock</div>
-<div class="cc-state" id="rotationState">Off</div>
-
-</div>
-
-<div class="cc-tile"
-onclick="openWallpaperPicker()">
-
-<div class="cc-icon">🖼️</div>
-<div class="cc-name">Wallpaper</div>
-<div class="cc-state">Customize</div>
-
-</div>
-
-</div>
-
-<div class="slider-card">
-
-<div class="slider-label">
-<span>🔆 Brightness</span>
-<span id="brightnessValue">100%</span>
-</div>
+      <div class="cc-tile" id="wifiTile"
+           onclick="toggleCC('wifiTile')">
+        <div class="cc-icon">📶</div>
+        <div class="cc-name">Wi-Fi</div>
+      </div>
 
-<input
-id="brightnessSlider"
-type="range"
-min="20"
-max="100"
-value="100">
+      <div class="cc-tile" id="bluetoothTile"
+           onclick="toggleCC('bluetoothTile')">
+        <div class="cc-icon">ᛒ</div>
+        <div class="cc-name">Bluetooth</div>
+      </div>
 
-</div>
-
-<div class="slider-card">
-
-<div class="slider-label">
-<span>🔊 Volume</span>
-<span id="volumeValue">70%</span>
-</div>
+      <div class="cc-tile" id="darkTile"
+           onclick="toggleCC('darkTile')">
+        <div class="cc-icon">🌙</div>
+        <div class="cc-name">Dark Mode</div>
+      </div>
 
-<input
-id="volumeSlider"
-type="range"
-min="0"
-max="100"
-value="70">
+      <div class="cc-tile" id="airplaneTile"
+           onclick="toggleCC('airplaneTile')">
+        <div class="cc-icon">✈️</div>
+        <div class="cc-name">Airplane</div>
+      </div>
 
-</div>
+      <div class="cc-tile" id="rotationTile"
+           onclick="toggleCC('rotationTile')">
+        <div class="cc-icon">🔄</div>
+        <div class="cc-name">Rotation Lock</div>
+      </div>
 
-<div class="wallpaper-picker">
+      <div class="cc-tile"
+           onclick="closeControlCentre()">
+        <div class="cc-icon">✕</div>
+        <div class="cc-name">Close</div>
+      </div>
 
-<div class="wallpaper-title">
-ZoraOS Wallpapers
-</div>
+    </div>
 
-<div class="wallpaper-grid">
+    <div class="slider-card">
 
-<div class="wall-option wall-1"
-onclick="setWallpaper(1)"></div>
+      <label>☀️ Brightness</label>
 
-<div class="wall-option wall-2"
-onclick="setWallpaper(2)"></div>
+      <input
+        id="brightnessSlider"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+        oninput="setBrightness(this.value)">
 
-<div class="wall-option wall-3"
-onclick="setWallpaper(3)"></div>
+    </div>
 
-<div class="wall-option wall-4"
-onclick="setWallpaper(4)"></div>
+    <div class="slider-card">
 
-<div class="wall-option wall-5"
-onclick="setWallpaper(5)"></div>
+      <label>🔊 Volume</label>
 
-<div class="wall-option wall-6"
-onclick="setWallpaper(6)"></div>
+      <input
+        id="volumeSlider"
+        type="range"
+        min="0"
+        max="100"
+        value="70">
 
-</div>
+    </div>
 
-</div>
+    <div class="slider-card">
 
-</div>
-</section>
+      <label>Wallpaper</label>
 
-<!-- LOCKSCREEN -->
+      <div class="wallpapers">
 
-<div class="lockscreen" id="lockscreen">
+        <div class="wallpaper-option wp1"
+             onclick="setWallpaper(1)"></div>
 
-<div class="lock-date" id="lockDate">
-Sunday, October 4
-</div>
+        <div class="wallpaper-option wp2"
+             onclick="setWallpaper(2)"></div>
 
-<div class="lock-time" id="lockTime">
-10:30
-</div>
+        <div class="wallpaper-option wp3"
+             onclick="setWallpaper(3)"></div>
 
-<div class="notification">
+        <div class="wallpaper-option wp4"
+             onclick="setWallpaper(4)"></div>
 
-<div style="font-size:27px">
-⚡
-</div>
+        <div class="wallpaper-option wp5"
+             onclick="setWallpaper(5)"></div>
 
-<div>
-<b>ZoraOS</b>
+        <div class="wallpaper-option wp6"
+             onclick="setWallpaper(6)"></div>
 
-<div style="font-size:13px;margin-top:3px">
-Welcome back to your world.
-</div>
-</div>
+      </div>
 
-</div>
+    </div>
 
-<div class="lock-fingerprint"
-onclick="unlockPhone()">
-◉
-</div>
+  </div>
 
-<div class="lock-hint">
-Swipe up to unlock
-</div>
+  <!-- TOP GESTURE AREA -->
+  <div class="gesture-zone" id="gestureZone"></div>
 
 </div>
 
-</div>
 
 <script>
 
-/* ================= BASIC ================= */
+/* =========================================================
+   ZORAOS
+   ========================================================= */
 
-const phone =
-document.getElementById("phone");
+const phone = document.getElementById("phone");
+const lockscreen = document.getElementById("lockscreen");
+const controlCentre = document.getElementById("controlCentre");
+const genericApp = document.getElementById("genericApp");
+const settingsApp = document.getElementById("settingsApp");
+const snakeApp = document.getElementById("snakeApp");
+const wallpaper = document.getElementById("wallpaper");
+const brightnessLayer = document.getElementById("brightnessLayer");
 
-const lockscreen =
-document.getElementById("lockscreen");
-
-const genericApp =
-document.getElementById("genericApp");
-
-const settingsApp =
-document.getElementById("settingsApp");
-
-const genericTitle =
-document.getElementById("genericTitle");
-
-const genericContent =
-document.getElementById("genericContent");
-
-const controlCentre =
-document.getElementById("controlCentre");
-
-const wallpaper =
-document.getElementById("wallpaper");
-
-const brightnessLayer =
-document.getElementById("brightnessLayer");
-
-let currentApp=null;
+let currentApp = null;
 
 
-/* ================= CLOCK ================= */
+/* =========================================================
+   CLOCK
+   ========================================================= */
 
 function updateClock(){
 
-const now=new Date();
+  const now = new Date();
 
-const time=now.toLocaleTimeString([],{
-hour:"2-digit",
-minute:"2-digit"
-});
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
 
-const date=now.toLocaleDateString([],{
-weekday:"long",
-month:"long",
-day:"numeric"
-});
+  minutes = String(minutes).padStart(2,"0");
 
-document.getElementById("statusTime").textContent=time;
-document.getElementById("homeTime").textContent=time;
-document.getElementById("lockTime").textContent=time;
-document.getElementById("homeDate").textContent=date;
-document.getElementById("lockDate").textContent=date;
+  const time = `${hours}:${minutes}`;
 
+  document.getElementById("lockTime").textContent = time;
+  document.getElementById("statusTime").textContent = time;
+
+  const date = now.toLocaleDateString("en-US",{
+    weekday:"long",
+    month:"long",
+    day:"numeric"
+  });
+
+  document.getElementById("lockDate").textContent = date;
 }
 
 updateClock();
-setInterval(updateClock,10000);
+setInterval(updateClock,1000);
 
 
-/* ================= LOCKSCREEN ================= */
+/* =========================================================
+   UNLOCK GESTURE
+   ========================================================= */
 
-function unlockPhone(){
-
-lockscreen.classList.add("hidden");
-
-localStorage.setItem(
-"zoraUnlocked",
-"true"
-);
-
-}
-
-let lockStartY=0;
+let touchStartY = 0;
+let touchStartX = 0;
 
 lockscreen.addEventListener("touchstart",e=>{
-lockStartY=e.touches[0].clientY;
+
+  const t = e.touches[0];
+
+  touchStartY = t.clientY;
+  touchStartX = t.clientX;
+
 },{passive:true});
+
 
 lockscreen.addEventListener("touchend",e=>{
 
-const endY=e.changedTouches[0].clientY;
+  const t = e.changedTouches[0];
 
-if(lockStartY-endY>70){
-unlockPhone();
-}
+  const dy = t.clientY - touchStartY;
 
-},{passive:true});
+  if(dy < -70){
+
+    lockscreen.classList.add("unlocked");
+
+  }
+
+});
 
 
-/* ================= CONTROL CENTRE ================= */
+/* =========================================================
+   CONTROL CENTRE
+   ========================================================= */
 
-function openControlCentre(){
-
-if(currentApp)return;
-
-controlCentre.classList.add("open");
-
-}
-
-function closeControlCentre(){
-
-controlCentre.classList.remove("open");
-
-}
-
-let ccStartY=0;
+let ccStartY = 0;
 
 phone.addEventListener("touchstart",e=>{
-ccStartY=e.touches[0].clientY;
+
+  if(e.touches.length !== 1) return;
+
+  ccStartY = e.touches[0].clientY;
+
 },{passive:true});
+
 
 phone.addEventListener("touchend",e=>{
 
-const endY=e.changedTouches[0].clientY;
+  const y = e.changedTouches[0].clientY;
+  const diff = y - ccStartY;
 
-if(
-ccStartY<80 &&
-endY-ccStartY>80 &&
-!currentApp &&
-lockscreen.classList.contains("hidden")
-){
-openControlCentre();
-}
+  /*
+    Only open Control Centre from the top.
+  */
 
-},{passive:true});
+  if(
+    ccStartY < 70 &&
+    diff > 70 &&
+    !currentApp &&
+    lockscreen.classList.contains("unlocked")
+  ){
 
+    openControlCentre();
 
-/* ================= CONTROLS ================= */
-
-let controls={
-wifi:true,
-bluetooth:false,
-dark:false,
-airplane:false,
-rotation:false
-};
-
-function toggleControl(type){
-
-controls[type]=!controls[type];
-
-const tile=document.getElementById(type+"Tile");
-const state=document.getElementById(type+"State");
-
-tile.classList.toggle(
-"active",
-controls[type]
-);
-
-state.textContent=
-controls[type] ?
-(type==="wifi"?"Connected":"On") :
-"Off";
-
-if(type==="dark"){
-
-phone.classList.toggle(
-"dark",
-controls.dark
-);
-
-}
-
-if(type==="airplane" && controls.airplane){
-
-controls.wifi=false;
-
-document.getElementById("wifiTile")
-.classList.remove("active");
-
-document.getElementById("wifiState")
-.textContent="Off";
-
-}
-
-localStorage.setItem(
-"zoraControls",
-JSON.stringify(controls)
-);
-
-}
-
-
-/* ================= BRIGHTNESS ================= */
-
-const brightnessSlider=
-document.getElementById("brightnessSlider");
-
-brightnessSlider.addEventListener("input",()=>{
-
-const value=
-Number(brightnessSlider.value);
-
-brightnessLayer.style.opacity=
-(100-value)/100;
-
-document.getElementById(
-"brightnessValue"
-).textContent=value+"%";
-
-localStorage.setItem(
-"zoraBrightness",
-value
-);
+  }
 
 });
 
 
-/* ================= VOLUME ================= */
+function openControlCentre(){
 
-const volumeSlider=
-document.getElementById("volumeSlider");
-
-volumeSlider.addEventListener("input",()=>{
-
-const value=volumeSlider.value;
-
-document.getElementById(
-"volumeValue"
-).textContent=value+"%";
-
-localStorage.setItem(
-"zoraVolume",
-value
-);
-
-});
-
-
-/* ================= WALLPAPERS ================= */
-
-const wallpapers={
-
-1:`
-radial-gradient(circle at 20% 20%,#5472ff 0%,transparent 30%),
-radial-gradient(circle at 80% 35%,#9f4cff 0%,transparent 35%),
-radial-gradient(circle at 50% 85%,#07162f 0%,transparent 45%),
-linear-gradient(145deg,#07101f,#10182c 50%,#040711)
-`,
-
-2:`
-radial-gradient(circle at 80% 20%,#00eaff,transparent 35%),
-radial-gradient(circle at 20% 80%,#0066ff,transparent 40%),
-linear-gradient(145deg,#00131c,#071d40)
-`,
-
-3:`
-radial-gradient(circle at 50% 20%,#ff4fd8,transparent 35%),
-radial-gradient(circle at 20% 80%,#ff7b39,transparent 40%),
-linear-gradient(145deg,#220018,#321007)
-`,
-
-4:`
-radial-gradient(circle at 20% 30%,#66ff99,transparent 35%),
-radial-gradient(circle at 80% 70%,#00aaff,transparent 40%),
-linear-gradient(145deg,#001c14,#00172c)
-`,
-
-5:`
-radial-gradient(circle at 70% 20%,#ffffff,transparent 20%),
-radial-gradient(circle at 20% 70%,#777,transparent 35%),
-linear-gradient(145deg,#080808,#333)
-`,
-
-6:`
-radial-gradient(circle at 50% 50%,#9c5cff,transparent 30%),
-linear-gradient(145deg,#090020,#160035,#000)
-`
-
-};
-
-function setWallpaper(number){
-
-wallpaper.style.background=
-wallpapers[number];
-
-localStorage.setItem(
-"zoraWallpaper",
-number
-);
-
-document.querySelectorAll(
-".wall-option"
-).forEach(x=>{
-x.classList.remove("active");
-});
-
-const options=
-document.querySelectorAll(".wall-option");
-
-if(options[number-1])
-options[number-1].classList.add("active");
-
-}
-
-function openWallpaperPicker(){
-
-controlCentre.scrollTo({
-top:controlCentre.scrollHeight,
-behavior:"smooth"
-});
+  controlCentre.classList.add("open");
 
 }
 
 
-/* ================= APP DATA ================= */
+function closeControlCentre(){
 
-const appData={
-
-zora:{
-title:"Zora AI",
-html:`
-<div class="zora-orb">⚡</div>
-
-<div class="card">
-<h3>Hey.</h3>
-<p>I'm Zora, your assistant inside ZoraOS.</p>
-</div>
-
-<div class="card">
-Ask Zora anything.
-</div>
-`
-},
-
-messages:{
-title:"Messages",
-html:`
-<div class="card">
-<h3>Zora Team</h3>
-Welcome to ZoraOS 🚀
-</div>
-
-<div class="card">
-<h3>System</h3>
-Your apps are ready.
-</div>
-`
-},
-
-gallery:{
-title:"Gallery",
-html:`
-<div class="card">
-🖼️ Your photos will appear here.
-</div>
-`
-},
-
-music:{
-title:"Music",
-html:`
-<div class="card">
-<h3>Now Playing</h3>
-No music playing
-</div>
-`
-},
-
-camera:{
-title:"Camera",
-html:`
-<div style="
-height:70vh;
-border-radius:28px;
-background:#111;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:18px;">
-📷 Camera Preview
-</div>
-`
-},
-
-files:{
-title:"Files",
-html:`
-<div class="card">📁 Downloads</div>
-<div class="card">📁 Pictures</div>
-<div class="card">📁 ZoraOS</div>
-`
-},
-
-phone:{
-title:"Phone",
-html:`
-<div class="card">📞 Recent Calls</div>
-<div class="card">Dial Pad</div>
-`
-},
-
-browser:{
-title:"Zora Browser",
-html:`
-<div class="card">🌐 Search the web</div>
-<div class="card">ZoraOS Start Page</div>
-`
-},
-
-/* SNAKE */
-
-snake:{
-title:"Zora Snake",
-html:`
-
-<div class="snake-content">
-
-<div class="snake-top">
-
-<div class="snake-title">
-🐍 Zora Snake
-</div>
-
-<div class="snake-score">
-Score: <span id="snakeScore">0</span>
-</div>
-
-</div>
-
-<canvas id="snakeCanvas"
-width="320"
-height="320">
-</canvas>
-
-<div class="snake-controls">
-
-<button class="snake-btn"
-onclick="changeSnakeDirection('up')">
-▲
-</button>
-
-</div>
-
-<div class="snake-controls">
-
-<button class="snake-btn"
-onclick="changeSnakeDirection('left')">
-◀
-</button>
-
-<button class="snake-btn"
-onclick="changeSnakeDirection('down')">
-▼
-</button>
-
-<button class="snake-btn"
-onclick="changeSnakeDirection('right')">
-▶
-</button>
-
-</div>
-
-<div class="snake-hint">
-Swipe on the game • Arrow keys also work
-</div>
-
-<div class="snake-gameover"
-id="snakeGameOver">
-
-<h2>Game Over 🐍</h2>
-
-<div class="snake-final-score">
-Score: <span id="snakeFinalScore">0</span>
-</div>
-
-<button class="snake-restart"
-onclick="startSnake()">
-Play Again
-</button>
-
-</div>
-
-</div>
-`
-}
-
-};
-
-
-/* ================= OPEN APP ================= */
-
-function openApp(name){
-
-closeControlCentre();
-
-if(name==="settings"){
-
-currentApp=settingsApp;
-
-phone.classList.add("app-open");
-
-requestAnimationFrame(()=>{
-currentApp.classList.add("open");
-});
-
-return;
-
-}
-
-const data=appData[name];
-
-if(!data)return;
-
-genericTitle.textContent=data.title;
-
-genericContent.innerHTML=data.html;
-
-currentApp=genericApp;
-
-phone.classList.add("app-open");
-
-requestAnimationFrame(()=>{
-
-currentApp.classList.add("open");
-
-if(name==="snake"){
-
-setTimeout(startSnake,200);
-
-}
-
-});
+  controlCentre.classList.remove("open");
 
 }
 
 
-/* ================= CLOSE APP ================= */
+/* =========================================================
+   CONTROL CENTRE TOGGLES
+   ========================================================= */
 
-function closeCurrentApp(){
+function toggleCC(id){
 
-if(!currentApp)return;
+  const tile = document.getElementById(id);
 
-const appToClose=currentApp;
+  tile.classList.toggle("active");
 
-appToClose.classList.add("closing");
-appToClose.classList.remove("open");
-
-phone.classList.remove("app-open");
-
-setTimeout(()=>{
-
-appToClose.classList.remove("closing");
-
-currentApp=null;
-
-},450);
+  localStorage.setItem(
+    id,
+    tile.classList.contains("active")
+  );
 
 }
 
 
-/* ================= APP SWIPE ================= */
+function loadToggles(){
 
-let appStartY=0;
-let appCurrentY=0;
+  [
+    "wifiTile",
+    "bluetoothTile",
+    "darkTile",
+    "airplaneTile",
+    "rotationTile"
+  ].forEach(id=>{
 
-document.querySelectorAll(".app-window")
-.forEach(app=>{
+    if(localStorage.getItem(id)==="true"){
 
-app.addEventListener("touchstart",e=>{
+      document
+        .getElementById(id)
+        .classList.add("active");
 
-appStartY=e.touches[0].clientY;
-appCurrentY=appStartY;
+    }
 
-},{passive:true});
-
-app.addEventListener("touchmove",e=>{
-
-appCurrentY=e.touches[0].clientY;
-
-const distance=
-appStartY-appCurrentY;
-
-if(
-appStartY>
-window.innerHeight-130 &&
-distance>0
-){
-
-const scale=
-Math.max(.78,1-distance/900);
-
-app.style.transition="none";
-
-app.style.transform=
-`translateY(${-distance*.25}px)
-scale(${scale})`;
-
-app.style.borderRadius=
-`${Math.min(distance/3,35)}px`;
+  });
 
 }
 
-},{passive:true});
-
-app.addEventListener("touchend",()=>{
-
-const distance=
-appStartY-appCurrentY;
-
-app.style.transition="";
-app.style.transform="";
-app.style.borderRadius="";
-
-if(
-appStartY>
-window.innerHeight-130 &&
-distance>80
-){
-
-closeCurrentApp();
-
-}
-
-});
-
-});
+loadToggles();
 
 
-/* ================================================= */
-/*                     SNAKE GAME                     */
-/* ================================================= */
+/* =========================================================
+   BRIGHTNESS
+   ========================================================= */
 
-let snake=[];
-let snakeFood={x:10,y:10};
+function setBrightness(value){
 
-let snakeDirection={
-x:1,
-y:0
-};
+  const opacity = 1 - (value / 100);
 
-let nextSnakeDirection={
-x:1,
-y:0
-};
+  brightnessLayer.style.opacity =
+    Math.max(0,opacity * .75);
 
-let snakeScore=0;
-let snakeLoop=null;
-
-const snakeSize=16;
-const snakeGrid=20;
-
-
-/* START */
-
-function startSnake(){
-
-const canvas=
-document.getElementById("snakeCanvas");
-
-if(!canvas)return;
-
-const gameOver=
-document.getElementById("snakeGameOver");
-
-gameOver.classList.remove("show");
-
-snake=[
-{x:10,y:10},
-{x:9,y:10},
-{x:8,y:10}
-];
-
-snakeDirection={
-x:1,
-y:0
-};
-
-nextSnakeDirection={
-x:1,
-y:0
-};
-
-snakeScore=0;
-
-placeSnakeFood();
-
-updateSnakeScore();
-
-clearInterval(snakeLoop);
-
-snakeLoop=
-setInterval(
-runSnake,
-120
-);
-
-drawSnake();
+  localStorage.setItem(
+    "brightness",
+    value
+  );
 
 }
 
 
-/* GAME LOOP */
-
-function runSnake(){
-
-if(!document.getElementById("snakeCanvas")){
-
-clearInterval(snakeLoop);
-return;
-
-}
-
-snakeDirection=
-nextSnakeDirection;
-
-const head={
-x:snake[0].x+snakeDirection.x,
-y:snake[0].y+snakeDirection.y
-};
-
-
-/* WALL COLLISION */
-
-if(
-head.x<0 ||
-head.x>=snakeGrid ||
-head.y<0 ||
-head.y>=snakeGrid
-){
-
-endSnake();
-return;
-
-}
-
-
-/* BODY COLLISION */
-
-for(let i=0;i<snake.length;i++){
-
-if(
-head.x===snake[i].x &&
-head.y===snake[i].y
-){
-
-endSnake();
-return;
-
-}
-
-}
-
-
-snake.unshift(head);
-
-
-/* FOOD */
-
-if(
-head.x===snakeFood.x &&
-head.y===snakeFood.y
-){
-
-snakeScore++;
-
-updateSnakeScore();
-
-placeSnakeFood();
-
-}else{
-
-snake.pop();
-
-}
-
-drawSnake();
-
-}
-
-
-/* FOOD */
-
-function placeSnakeFood(){
-
-let valid=false;
-
-while(!valid){
-
-snakeFood={
-x:Math.floor(Math.random()*snakeGrid),
-y:Math.floor(Math.random()*snakeGrid)
-};
-
-valid=true;
-
-for(const part of snake){
-
-if(
-part.x===snakeFood.x &&
-part.y===snakeFood.y
-){
-
-valid=false;
-break;
-
-}
-
-}
-
-}
-
-}
-
-
-/* DRAW */
-
-function drawSnake(){
-
-const canvas=
-document.getElementById("snakeCanvas");
-
-if(!canvas)return;
-
-const ctx=
-canvas.getContext("2d");
-
-const size=
-canvas.width/snakeGrid;
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-/* FOOD */
-
-ctx.fillStyle="#ff405d";
-
-ctx.beginPath();
-
-ctx.arc(
-snakeFood.x*size+size/2,
-snakeFood.y*size+size/2,
-size*.34,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-
-/* SNAKE */
-
-snake.forEach((part,index)=>{
-
-ctx.fillStyle=
-index===0
-?"#6cff8b"
-:"#21d95b";
-
-const padding=1.5;
-
-ctx.beginPath();
-
-ctx.roundRect(
-part.x*size+padding,
-part.y*size+padding,
-size-padding*2,
-size-padding*2,
-5
-);
-
-ctx.fill();
-
-});
-
-
-/* EYES */
-
-const head=snake[0];
-
-if(head){
-
-ctx.fillStyle="#07100c";
-
-const eyeSize=2.5;
-
-let eye1;
-let eye2;
-
-if(snakeDirection.x!==0){
-
-const eyeX=
-head.x*size+
-(snakeDirection.x>0?size*.68:size*.32);
-
-eye1={
-x:eyeX,
-y:head.y*size+size*.32
-};
-
-eye2={
-x:eyeX,
-y:head.y*size+size*.68
-};
-
-}else{
-
-const eyeY=
-head.y*size+
-(snakeDirection.y>0?size*.68:size*.32);
-
-eye1={
-x:head.x*size+size*.32,
-y:eyeY
-};
-
-eye2={
-x:head.x*size+size*.68,
-y:eyeY
-};
-
-}
-
-ctx.beginPath();
-ctx.arc(
-eye1.x,
-eye1.y,
-eyeSize,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-ctx.beginPath();
-ctx.arc(
-eye2.x,
-eye2.y,
-eyeSize,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-}
-
-}
-
-
-/* DIRECTION */
-
-function changeSnakeDirection(direction){
-
-if(direction==="up" && snakeDirection.y!==1){
-
-nextSnakeDirection={
-x:0,
-y:-1
-};
-
-}
-
-if(direction==="down" && snakeDirection.y!==-1){
-
-nextSnakeDirection={
-x:0,
-y:1
-};
-
-}
-
-if(direction==="left" && snakeDirection.x!==1){
-
-nextSnakeDirection={
-x:-1,
-y:0
-};
-
-}
-
-if(direction==="right" && snakeDirection.x!==-1){
-
-nextSnakeDirection={
-x:1,
-y:0
-};
-
-}
-
-}
-
-
-/* KEYBOARD */
-
-document.addEventListener("keydown",e=>{
-
-if(!currentApp)return;
-
-if(e.key==="ArrowUp"){
-changeSnakeDirection("up");
-}
-
-if(e.key==="ArrowDown"){
-changeSnakeDirection("down");
-}
-
-if(e.key==="ArrowLeft"){
-changeSnakeDirection("left");
-}
-
-if(e.key==="ArrowRight"){
-changeSnakeDirection("right");
-}
-
-});
-
-
-/* TOUCH SWIPE */
-
-let snakeTouchX=0;
-let snakeTouchY=0;
-
-document.addEventListener("touchstart",e=>{
-
-if(!e.target.closest("#snakeCanvas"))
-return;
-
-snakeTouchX=e.touches[0].clientX;
-snakeTouchY=e.touches[0].clientY;
-
-},{passive:true});
-
-
-document.addEventListener("touchend",e=>{
-
-if(!e.target.closest("#snakeCanvas"))
-return;
-
-const dx=
-e.changedTouches[0].clientX-snakeTouchX;
-
-const dy=
-e.changedTouches[0].clientY-snakeTouchY;
-
-if(Math.max(
-Math.abs(dx),
-Math.abs(dy)
-)<25)return;
-
-if(Math.abs(dx)>Math.abs(dy)){
-
-if(dx>0)
-changeSnakeDirection("right");
-else
-changeSnakeDirection("left");
-
-}else{
-
-if(dy>0)
-changeSnakeDirection("down");
-else
-changeSnakeDirection("up");
-
-}
-
-},{passive:true});
-
-
-/* SCORE */
-
-function updateSnakeScore(){
-
-const score=
-document.getElementById("snakeScore");
-
-if(score)
-score.textContent=snakeScore;
-
-}
-
-
-/* GAME OVER */
-
-function endSnake(){
-
-clearInterval(snakeLoop);
-
-const gameOver=
-document.getElementById("snakeGameOver");
-
-const finalScore=
-document.getElementById("snakeFinalScore");
-
-if(finalScore)
-finalScore.textContent=snakeScore;
-
-if(gameOver)
-gameOver.classList.add("show");
-
-}
-
-
-/* ================= ICON THEMES ================= */
-
-function setIconTheme(theme){
-
-document.body.setAttribute(
-"data-icons",
-theme
-);
-
-localStorage.setItem(
-"zoraIconTheme",
-theme
-);
-
-updateThemeButtons();
-
-}
-
-function updateThemeButtons(){
-
-const theme=
-document.body.getAttribute(
-"data-icons"
-);
-
-document.querySelectorAll(
-".theme-button"
-)
-.forEach(button=>{
-button.classList.remove("active");
-});
-
-const button=
-document.getElementById(
-theme+"Btn"
-);
-
-if(button)
-button.classList.add("active");
-
-}
-
-const savedTheme=
-localStorage.getItem("zoraIconTheme");
-
-if(savedTheme){
-
-document.body.setAttribute(
-"data-icons",
-savedTheme
-);
-
-}
-
-updateThemeButtons();
-
-
-/* ================= RESTORE ================= */
-
-const savedWallpaper=
-localStorage.getItem("zoraWallpaper");
-
-if(savedWallpaper)
-setWallpaper(Number(savedWallpaper));
-
-
-const savedBrightness=
-localStorage.getItem("zoraBrightness");
+const savedBrightness =
+  localStorage.getItem("brightness");
 
 if(savedBrightness){
 
-brightnessSlider.value=
-savedBrightness;
+  document.getElementById(
+    "brightnessSlider"
+  ).value = savedBrightness;
 
-brightnessLayer.style.opacity=
-(100-savedBrightness)/100;
-
-document.getElementById(
-"brightnessValue"
-).textContent=
-savedBrightness+"%";
+  setBrightness(savedBrightness);
 
 }
 
 
-const savedVolume=
-localStorage.getItem("zoraVolume");
+/* =========================================================
+   WALLPAPERS
+   ========================================================= */
 
-if(savedVolume){
+const wallpaperStyles = {
 
-volumeSlider.value=savedVolume;
+  1:
+  "radial-gradient(circle at 20% 15%,#7c3aed 0%,transparent 35%),radial-gradient(circle at 85% 80%,#06b6d4 0%,transparent 38%),linear-gradient(145deg,#0f172a,#111827)",
 
-document.getElementById(
-"volumeValue"
-).textContent=
-savedVolume+"%";
+  2:
+  "linear-gradient(145deg,#020617,#1d4ed8,#06b6d4)",
+
+  3:
+  "linear-gradient(145deg,#1e1b4b,#7e22ce,#ec4899)",
+
+  4:
+  "linear-gradient(145deg,#052e16,#16a34a,#22d3ee)",
+
+  5:
+  "linear-gradient(145deg,#450a0a,#dc2626,#f97316)",
+
+  6:
+  "linear-gradient(145deg,#111827,#374151,#000)"
+
+};
+
+
+function setWallpaper(number){
+
+  wallpaper.style.background =
+    wallpaperStyles[number];
+
+  localStorage.setItem(
+    "wallpaper",
+    number
+  );
+
+  document
+    .querySelectorAll(".wallpaper-option")
+    .forEach(x=>x.classList.remove("selected"));
+
+  const selected =
+    document.querySelector(
+      `.wp${number}`
+    );
+
+  if(selected)
+    selected.classList.add("selected");
 
 }
 
 
-const savedControls=
-localStorage.getItem("zoraControls");
+const savedWallpaper =
+  localStorage.getItem("wallpaper") || "1";
 
-if(savedControls){
+setWallpaper(savedWallpaper);
 
-try{
 
-controls=JSON.parse(savedControls);
+/* =========================================================
+   APPS
+   ========================================================= */
 
-Object.keys(controls).forEach(type=>{
+const apps = {
 
-const tile=
-document.getElementById(type+"Tile");
+  phone:{
+    title:"Phone",
+    content:`
+      <div class="fake-card">
+        <h2>📞 Phone</h2>
+        <p>Your recent calls will appear here.</p>
+      </div>
 
-const state=
-document.getElementById(type+"State");
+      <div class="fake-card">
+        <h2>Contacts</h2>
+        <p>ZoraOS contacts interface.</p>
+      </div>
+    `
+  },
 
-if(tile)
-tile.classList.toggle(
-"active",
-controls[type]
-);
+  messages:{
+    title:"Messages",
+    content:`
+      <div class="fake-card">
+        <h2>💬 Messages</h2>
+        <p>No new conversations.</p>
+      </div>
+    `
+  },
 
-if(state)
-state.textContent=
-controls[type]
-?(type==="wifi"?"Connected":"On")
-:"Off";
+  camera:{
+    title:"Camera",
+    content:`
+      <div class="fake-card">
+        <h2>📷 Zora Camera</h2>
+        <p>Camera simulator coming soon.</p>
+      </div>
+    `
+  },
+
+  music:{
+    title:"Music",
+    content:`
+      <div class="fake-card">
+        <h2>🎵 Zora Music</h2>
+        <p>Your music player interface.</p>
+      </div>
+    `
+  },
+
+  photos:{
+    title:"Photos",
+    content:`
+      <div class="fake-card">
+        <h2>🌈 Photos</h2>
+        <p>Your ZoraOS gallery.</p>
+      </div>
+    `
+  },
+
+  notes:{
+    title:"Notes",
+    content:`
+      <div class="fake-card">
+        <h2>📝 Notes</h2>
+        <p>Write something in ZoraOS.</p>
+      </div>
+    `
+  }
+
+};
+
+
+function openApp(name){
+
+  closeControlCentre();
+
+  currentApp = name;
+
+  if(name === "settings"){
+
+    settingsApp.classList.add("open");
+    return;
+
+  }
+
+  if(name === "snake"){
+
+    snakeApp.classList.add("open");
+
+    setTimeout(()=>{
+      startSnake();
+    },200);
+
+    return;
+
+  }
+
+  const app = apps[name];
+
+  if(!app) return;
+
+  document.getElementById(
+    "genericTitle"
+  ).textContent = app.title;
+
+  document.getElementById(
+    "genericContent"
+  ).innerHTML = app.content;
+
+  genericApp.classList.add("open");
+
+}
+
+
+function closeApp(){
+
+  genericApp.classList.remove("open");
+  settingsApp.classList.remove("open");
+  snakeApp.classList.remove("open");
+
+  currentApp = null;
+
+  if(snakeLoop){
+
+    clearInterval(snakeLoop);
+    snakeLoop = null;
+
+  }
+
+}
+
+
+/* =========================================================
+   SWIPE UP TO CLOSE APPS
+   ========================================================= */
+
+let appStartY = 0;
+
+phone.addEventListener("touchstart",e=>{
+
+  if(!currentApp) return;
+
+  appStartY = e.touches[0].clientY;
+
+},{passive:true});
+
+
+phone.addEventListener("touchend",e=>{
+
+  if(!currentApp) return;
+
+  const endY = e.changedTouches[0].clientY;
+
+  if(appStartY - endY > 100){
+
+    closeApp();
+
+  }
 
 });
 
-phone.classList.toggle(
-"dark",
-controls.dark
+
+/* =========================================================
+   SNAKE
+   ========================================================= */
+
+let snake = [];
+let snakeFood = {
+  x:10,
+  y:10
+};
+
+let snakeDirection = {
+  x:1,
+  y:0
+};
+
+let nextSnakeDirection = {
+  x:1,
+  y:0
+};
+
+let snakeScore = 0;
+let snakeLoop = null;
+
+const snakeGrid = 20;
+const canvas = document.getElementById("snakeCanvas");
+const ctx = canvas.getContext("2d");
+
+
+function startSnake(){
+
+  if(snakeLoop){
+
+    clearInterval(snakeLoop);
+
+  }
+
+  snake = [
+    {x:10,y:10},
+    {x:9,y:10},
+    {x:8,y:10}
+  ];
+
+  snakeDirection = {
+    x:1,
+    y:0
+  };
+
+  nextSnakeDirection = {
+    x:1,
+    y:0
+  };
+
+  snakeScore = 0;
+
+  document.getElementById(
+    "snakeScore"
+  ).textContent = "0";
+
+  document.getElementById(
+    "snakeGameOver"
+  ).classList.remove("show");
+
+  spawnSnakeFood();
+  drawSnake();
+
+  /*
+    200ms = slower, more relaxed gameplay.
+  */
+
+  snakeLoop = setInterval(
+    runSnake,
+    200
+  );
+
+}
+
+
+function spawnSnakeFood(){
+
+  do{
+
+    snakeFood = {
+      x:Math.floor(
+        Math.random()*snakeGrid
+      ),
+
+      y:Math.floor(
+        Math.random()*snakeGrid
+      )
+    };
+
+  }while(
+    snake.some(
+      part =>
+      part.x === snakeFood.x &&
+      part.y === snakeFood.y
+    )
+  );
+
+}
+
+
+function runSnake(){
+
+  snakeDirection =
+    nextSnakeDirection;
+
+  const head = {
+    x:
+      snake[0].x +
+      snakeDirection.x,
+
+    y:
+      snake[0].y +
+      snakeDirection.y
+  };
+
+  /*
+    Wall collision
+  */
+
+  if(
+    head.x < 0 ||
+    head.x >= snakeGrid ||
+    head.y < 0 ||
+    head.y >= snakeGrid
+  ){
+
+    endSnake();
+    return;
+
+  }
+
+  /*
+    Body collision
+  */
+
+  if(
+    snake.some(
+      part =>
+      part.x === head.x &&
+      part.y === head.y
+    )
+  ){
+
+    endSnake();
+    return;
+
+  }
+
+  snake.unshift(head);
+
+  /*
+    Food
+  */
+
+  if(
+    head.x === snakeFood.x &&
+    head.y === snakeFood.y
+  ){
+
+    snakeScore++;
+
+    document.getElementById(
+      "snakeScore"
+    ).textContent = snakeScore;
+
+    spawnSnakeFood();
+
+  }else{
+
+    snake.pop();
+
+  }
+
+  drawSnake();
+
+}
+
+
+function drawSnake(){
+
+  const size =
+    canvas.width / snakeGrid;
+
+  ctx.fillStyle = "#07110b";
+
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  /*
+    Food
+  */
+
+  ctx.fillStyle = "#ef4444";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    snakeFood.x * size + size/2,
+    snakeFood.y * size + size/2,
+    size*.35,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  /*
+    Snake
+  */
+
+  snake.forEach(
+    (part,index)=>{
+
+      ctx.fillStyle =
+        index === 0
+        ? "#86efac"
+        : "#22c55e";
+
+      ctx.fillRect(
+        part.x * size + 1,
+        part.y * size + 1,
+        size - 2,
+        size - 2
+      );
+
+    }
+  );
+
+  /*
+    Eyes
+  */
+
+  const head = snake[0];
+
+  if(head){
+
+    ctx.fillStyle = "#052e16";
+
+    const eyeSize = 3;
+
+    ctx.fillRect(
+      head.x * size + size*.62,
+      head.y * size + size*.25,
+      eyeSize,
+      eyeSize
+    );
+
+    ctx.fillRect(
+      head.x * size + size*.62,
+      head.y * size + size*.62,
+      eyeSize,
+      eyeSize
+    );
+
+  }
+
+}
+
+
+function changeSnakeDirection(direction){
+
+  if(direction === "up"){
+
+    if(snakeDirection.y !== 1){
+
+      nextSnakeDirection = {
+        x:0,
+        y:-1
+      };
+
+    }
+
+  }
+
+  if(direction === "down"){
+
+    if(snakeDirection.y !== -1){
+
+      nextSnakeDirection = {
+        x:0,
+        y:1
+      };
+
+    }
+
+  }
+
+  if(direction === "left"){
+
+    if(snakeDirection.x !== 1){
+
+      nextSnakeDirection = {
+        x:-1,
+        y:0
+      };
+
+    }
+
+  }
+
+  if(direction === "right"){
+
+    if(snakeDirection.x !== -1){
+
+      nextSnakeDirection = {
+        x:1,
+        y:0
+      };
+
+    }
+
+  }
+
+}
+
+
+function endSnake(){
+
+  if(snakeLoop){
+
+    clearInterval(snakeLoop);
+    snakeLoop = null;
+
+  }
+
+  document.getElementById(
+    "snakeFinalScore"
+  ).textContent = snakeScore;
+
+  document.getElementById(
+    "snakeGameOver"
+  ).classList.add("show");
+
+}
+
+
+/* =========================================================
+   SNAKE SWIPE CONTROLS
+   ========================================================= */
+
+let snakeTouchX = 0;
+let snakeTouchY = 0;
+
+canvas.addEventListener(
+  "touchstart",
+  e=>{
+
+    const touch = e.touches[0];
+
+    snakeTouchX = touch.clientX;
+    snakeTouchY = touch.clientY;
+
+  },
+  {passive:true}
 );
 
-}catch(e){}
 
-}
+canvas.addEventListener(
+  "touchend",
+  e=>{
+
+    const touch = e.changedTouches[0];
+
+    const dx =
+      touch.clientX - snakeTouchX;
+
+    const dy =
+      touch.clientY - snakeTouchY;
+
+    if(
+      Math.abs(dx) <
+      20 &&
+      Math.abs(dy) <
+      20
+    ) return;
+
+    if(
+      Math.abs(dx) >
+      Math.abs(dy)
+    ){
+
+      if(dx > 0)
+        changeSnakeDirection("right");
+      else
+        changeSnakeDirection("left");
+
+    }else{
+
+      if(dy > 0)
+        changeSnakeDirection("down");
+      else
+        changeSnakeDirection("up");
+
+    }
+
+  },
+  {passive:true}
+);
 
 
-/* ================= ESC ================= */
+/* =========================================================
+   KEYBOARD
+   ========================================================= */
 
-document.addEventListener("keydown",e=>{
+document.addEventListener(
+  "keydown",
+  e=>{
 
-if(e.key==="Escape"){
+    if(!currentApp) return;
 
-if(controlCentre.classList.contains("open"))
-closeControlCentre();
+    if(e.key === "ArrowUp")
+      changeSnakeDirection("up");
 
-else
-closeCurrentApp();
+    if(e.key === "ArrowDown")
+      changeSnakeDirection("down");
 
-}
+    if(e.key === "ArrowLeft")
+      changeSnakeDirection("left");
 
-});
+    if(e.key === "ArrowRight")
+      changeSnakeDirection("right");
+
+  }
+);
+
+
+/* =========================================================
+   PREVENT PAGE SCROLL
+   ========================================================= */
+
+document.addEventListener(
+  "touchmove",
+  e=>{
+
+    if(
+      currentApp ||
+      controlCentre.classList.contains("open")
+    ){
+
+      e.preventDefault();
+
+    }
+
+  },
+  {passive:false}
+);
 
 </script>
 
 </body>
-  </html>
+</html>
