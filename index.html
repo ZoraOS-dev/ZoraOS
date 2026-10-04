@@ -1,437 +1,1419 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>ZoraOS</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
 }
 
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    color: white;
-    background: #10182f;
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#000;
 }
 
-/* LOCK SCREEN */
-#lock {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 80px 20px 35px;
-
-    background: linear-gradient(160deg, #101b3d, #080b18);
-
-    transition: transform 0.5s ease;
+:root{
+  --radius:24px;
+  --icon-radius:23px;
 }
 
-#clock {
-    font-size: 70px;
-    font-weight: bold;
+.phone{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  overflow:hidden;
+  background:#080b13;
 }
 
-#date {
-    margin-top: 10px;
-    color: #b8c0d9;
-    text-align: center;
+/* WALLPAPER */
+
+.wallpaper{
+  position:absolute;
+  inset:-5%;
+  width:110%;
+  height:110%;
+  background:
+    radial-gradient(circle at 20% 20%,#5472ff 0%,transparent 30%),
+    radial-gradient(circle at 80% 35%,#9f4cff 0%,transparent 35%),
+    radial-gradient(circle at 50% 85%,#07162f 0%,transparent 45%),
+    linear-gradient(145deg,#07101f,#10182c 50%,#040711);
+  transition:
+    transform .55s cubic-bezier(.2,.8,.2,1),
+    filter .55s ease;
+  transform:scale(1);
 }
 
-#unlockText {
-    color: #cbd5e1;
-    margin-bottom: 15px;
+.phone.app-open .wallpaper{
+  transform:scale(1.1);
+  filter:blur(8px) brightness(.75);
 }
 
-#bar {
-    width: 140px;
-    height: 5px;
-    background: white;
-    border-radius: 20px;
+/* STATUS BAR */
+
+.statusbar{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:46px;
+  padding:12px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  z-index:30;
+  font-size:14px;
+  font-weight:600;
+}
+
+.status-right{
+  display:flex;
+  gap:7px;
+  align-items:center;
 }
 
 /* HOME */
-#home {
-    position: fixed;
-    inset: 0;
 
-    padding: 20px;
-
-    background:
-        radial-gradient(circle at 20% 10%, #334b91, transparent 30%),
-        radial-gradient(circle at 80% 80%, #253b78, transparent 30%),
-        #080d1c;
+.home{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  padding:72px 18px 115px;
+  transition:.45s cubic-bezier(.2,.8,.2,1);
 }
 
-#top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
+.phone.app-open .home{
+  transform:scale(.93);
+  filter:blur(3px);
+  opacity:.35;
 }
 
-#logo {
-    margin-bottom: 25px;
+.hero{
+  margin-bottom:30px;
 }
 
-#logo h1 {
-    margin: 0;
-    font-size: 40px;
+.hero-time{
+  font-size:54px;
+  color:white;
+  font-weight:300;
+  letter-spacing:-3px;
 }
 
-#logo p {
-    margin-top: 5px;
-    color: #9ca8c5;
+.hero-date{
+  color:rgba(255,255,255,.7);
+  font-size:15px;
+  margin-top:4px;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+/* APPS */
+
+.app-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px 14px;
 }
 
-.icon {
-    text-align: center;
-    cursor: pointer;
+.icon-wrap{
+  text-align:center;
+  color:white;
+  font-size:12px;
 }
 
-.iconBox {
-    width: 58px;
-    height: 58px;
-    margin: auto;
+.icon{
+  width:62px;
+  height:62px;
+  margin:auto;
+  border-radius:var(--icon-radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:29px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background:rgba(255,255,255,.16);
 
-    border-radius: 18px;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.35),
+    0 8px 20px rgba(0,0,0,.22);
 
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.12);
-
-    font-size: 28px;
+  backdrop-filter:blur(20px);
+  transition:
+    transform .18s ease,
+    border-radius .35s ease;
 }
 
-.name {
-    font-size: 11px;
-    margin-top: 7px;
+.icon:active{
+  transform:scale(.86);
 }
 
-.icon:active {
-    transform: scale(0.8);
+.icon-name{
+  margin-top:7px;
+  text-shadow:0 1px 5px #000;
+}
+
+/* icon themes */
+
+body[data-icons="round"]{
+  --icon-radius:50%;
+}
+
+body[data-icons="squircle"]{
+  --icon-radius:18px;
+}
+
+body[data-icons="soft"]{
+  --icon-radius:27px;
 }
 
 /* DOCK */
-#dock {
-    position: absolute;
-    left: 15px;
-    right: 15px;
-    bottom: 18px;
 
-    height: 75px;
+.dock{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:18px;
+  height:84px;
 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  border-radius:29px;
 
-    border-radius: 25px;
+  background:rgba(255,255,255,.13);
+  backdrop-filter:blur(28px);
 
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.12);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+
+  border:1px solid rgba(255,255,255,.12);
+
+  z-index:12;
+
+  transition:.4s;
 }
 
-.dockIcon {
-    font-size: 28px;
-    cursor: pointer;
+.phone.app-open .dock{
+  transform:translateY(120px);
 }
 
-.dockIcon:active {
-    transform: scale(0.8);
+.dock .icon{
+  width:59px;
+  height:59px;
 }
 
-/* APP */
-#app {
-    position: fixed;
-    inset: 0;
-    z-index: 20;
+/* APP WINDOW */
 
-    display: none;
+.app-window{
+  position:absolute;
+  inset:0;
 
-    padding: 25px;
+  background:#f5f5f7;
 
-    background: linear-gradient(150deg, #101b3d, #070a15);
+  z-index:100;
+
+  transform:
+    translateY(40px)
+    scale(.2);
+
+  opacity:0;
+
+  pointer-events:none;
+
+  border-radius:36px;
+
+  overflow:hidden;
+
+  transition:
+    transform .55s cubic-bezier(.2,.85,.25,1.12),
+    opacity .25s,
+    border-radius .55s;
+
+  transform-origin:center 70%;
 }
 
-#app.open {
-    display: block;
+.app-window.open{
+  transform:translateY(0) scale(1);
+  opacity:1;
+  pointer-events:auto;
+  border-radius:0;
 }
 
-#back {
-    padding: 12px 18px;
-
-    border: none;
-    border-radius: 15px;
-
-    background: rgba(255,255,255,0.12);
-    color: white;
-
-    font-size: 15px;
+.app-window.closing{
+  transform:translateY(105%) scale(.82);
+  opacity:.5;
 }
 
-#appTitle {
-    font-size: 32px;
-    margin-top: 35px;
+.app-header{
+  height:95px;
+  padding:52px 20px 10px;
+
+  background:rgba(255,255,255,.9);
+
+  font-weight:bold;
+  font-size:24px;
 }
 
-#appText {
-    color: #b8c0d9;
+.app-content{
+  height:calc(100% - 95px);
+  overflow-y:auto;
+  padding:18px;
+}
+
+/* GESTURE BAR */
+
+.gesture-area{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:35px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  z-index:200;
+}
+
+.gesture-bar{
+  width:125px;
+  height:5px;
+
+  border-radius:20px;
+  background:#111;
+}
+
+/* APP CARDS */
+
+.card{
+  background:white;
+  padding:18px;
+  margin-bottom:13px;
+  border-radius:22px;
+  box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.card h3{
+  margin:0 0 7px;
+}
+
+/* SETTINGS */
+
+.setting-row{
+  background:white;
+
+  border-radius:20px;
+
+  padding:15px 16px;
+
+  margin-bottom:12px;
+
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+}
+
+.theme-options{
+  display:flex;
+  gap:12px;
+  margin-top:14px;
+}
+
+.theme-button{
+  width:58px;
+  height:58px;
+
+  border:none;
+  border-radius:18px;
+
+  font-size:25px;
+
+  background:#eee;
+}
+
+.theme-button.active{
+  outline:3px solid #4b7cff;
+}
+
+/* LOCKSCREEN */
+
+.lockscreen{
+  position:absolute;
+  inset:0;
+
+  z-index:500;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  color:white;
+
+  background:
+    radial-gradient(circle at 50% 70%,rgba(60,75,255,.4),transparent 40%),
+    linear-gradient(160deg,rgba(7,10,24,.25),rgba(0,0,0,.6));
+
+  backdrop-filter:blur(2px);
+
+  transition:
+    transform .65s cubic-bezier(.2,.8,.2,1),
+    opacity .5s;
+}
+
+.lockscreen.hidden{
+  transform:translateY(-105%);
+  opacity:0;
+  pointer-events:none;
+}
+
+.lock-date{
+  margin-top:95px;
+  font-size:17px;
+  opacity:.8;
+}
+
+.lock-time{
+  font-size:82px;
+  font-weight:200;
+  letter-spacing:-6px;
+  margin-top:5px;
+}
+
+.lock-fingerprint{
+  position:absolute;
+
+  bottom:100px;
+
+  width:68px;
+  height:68px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.12);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:31px;
+
+  backdrop-filter:blur(20px);
+}
+
+.lock-hint{
+  position:absolute;
+  bottom:40px;
+  font-size:13px;
+  opacity:.7;
+}
+
+/* NOTIFICATION */
+
+.notification{
+  position:absolute;
+
+  top:145px;
+  left:20px;
+  right:20px;
+
+  padding:16px;
+
+  border-radius:22px;
+
+  background:rgba(255,255,255,.15);
+
+  backdrop-filter:blur(20px);
+
+  color:white;
+
+  display:flex;
+  gap:13px;
+}
+
+.notification-icon{
+  font-size:27px;
+}
+
+/* ZORA AI */
+
+.zora-orb{
+  width:90px;
+  height:90px;
+
+  border-radius:30px;
+
+  margin:30px auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:42px;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      145deg,
+      #446cff,
+      #ac42ff
+    );
+
+  box-shadow:
+    0 15px 50px rgba(86,85,255,.35);
 }
 </style>
 </head>
 
-<body>
+<body data-icons="squircle">
 
-<!-- LOCK SCREEN -->
-<div id="lock">
+<div class="phone" id="phone">
 
-    <div>
-        <div id="clock">09:41</div>
-        <div id="date">Wednesday, 30 September</div>
+  <div class="wallpaper"></div>
+
+  <!-- STATUS BAR -->
+
+  <div class="statusbar">
+
+    <span id="statusTime">10:30</span>
+
+    <div class="status-right">
+      <span>▮▮▮</span>
+      <span>⌁</span>
+      <span>87%</span>
+      <span>▰</span>
     </div>
 
-    <div>
-        <div id="unlockText">Swipe up to unlock</div>
-        <div id="bar"></div>
+  </div>
+
+  <!-- HOME SCREEN -->
+
+  <main class="home">
+
+    <div class="hero">
+
+      <div
+        class="hero-time"
+        id="homeTime">
+        10:30
+      </div>
+
+      <div
+        class="hero-date"
+        id="homeDate">
+        Sunday, October 4
+      </div>
+
     </div>
 
-</div>
+    <div class="app-grid">
 
+      <div
+        class="icon-wrap"
+        onclick="openApp('zora')">
 
-<!-- HOME SCREEN -->
-<div id="home">
-
-    <div id="top">
-        <span id="homeClock">09:41</span>
-        <span>📶 🔋</span>
-    </div>
-
-    <div id="logo">
-        <h1>ZoraOS</h1>
-        <p>Your world. Your OS.</p>
-    </div>
-
-    <div class="grid">
-
-        <div class="icon" onclick="openApp('Browser')">
-            <div class="iconBox">🌐</div>
-            <div class="name">Browser</div>
+        <div class="icon">
+          ⚡
         </div>
 
-        <div class="icon" onclick="openApp('Settings')">
-            <div class="iconBox">⚙️</div>
-            <div class="name">Settings</div>
+        <div class="icon-name">
+          Zora
         </div>
 
-        <div class="icon" onclick="openApp('Gallery')">
-            <div class="iconBox">🖼️</div>
-            <div class="name">Gallery</div>
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('messages')">
+
+        <div class="icon">
+          💬
         </div>
 
-        <div class="icon" onclick="openApp('Zora')">
-            <div class="iconBox">✨</div>
-            <div class="name">Zora</div>
+        <div class="icon-name">
+          Messages
         </div>
+
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('gallery')">
+
+        <div class="icon">
+          🖼️
+        </div>
+
+        <div class="icon-name">
+          Gallery
+        </div>
+
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('settings')">
+
+        <div class="icon">
+          ⚙️
+        </div>
+
+        <div class="icon-name">
+          Settings
+        </div>
+
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('music')">
+
+        <div class="icon">
+          🎵
+        </div>
+
+        <div class="icon-name">
+          Music
+        </div>
+
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('camera')">
+
+        <div class="icon">
+          📷
+        </div>
+
+        <div class="icon-name">
+          Camera
+        </div>
+
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('files')">
+
+        <div class="icon">
+          📁
+        </div>
+
+        <div class="icon-name">
+          Files
+        </div>
+
+      </div>
+
+      <div
+        class="icon-wrap"
+        onclick="openApp('clock')">
+
+        <div class="icon">
+          🕐
+        </div>
+
+        <div class="icon-name">
+          Clock
+        </div>
+
+      </div>
 
     </div>
 
+  </main>
 
-    <div id="dock">
+  <!-- DOCK -->
 
-        <div class="dockIcon" onclick="openApp('Phone')">📞</div>
-        <div class="dockIcon" onclick="openApp('Messages')">💬</div>
-        <div class="dockIcon" onclick="openApp('Camera')">📷</div>
-        <div class="dockIcon" onclick="openApp('Music')">🎵</div>
+  <div class="dock">
+
+    <div onclick="openApp('phone')">
+      <div class="icon">📞</div>
+    </div>
+
+    <div onclick="openApp('messages')">
+      <div class="icon">💬</div>
+    </div>
+
+    <div onclick="openApp('browser')">
+      <div class="icon">🌐</div>
+    </div>
+
+    <div onclick="openApp('camera')">
+      <div class="icon">📷</div>
+    </div>
+
+  </div>
+
+
+  <!-- GENERIC APP -->
+
+  <section
+    class="app-window"
+    id="genericApp">
+
+    <div
+      class="app-header"
+      id="genericTitle">
+      App
+    </div>
+
+    <div
+      class="app-content"
+      id="genericContent">
+    </div>
+
+    <div class="gesture-area">
+
+      <div
+        class="gesture-bar">
+      </div>
 
     </div>
 
-</div>
+  </section>
 
 
-<!-- APP SCREEN -->
-<div id="app">
+  <!-- SETTINGS -->
 
-    <button id="back" onclick="closeApp()">← Home</button>
+  <section
+    class="app-window"
+    id="settingsApp">
 
-    <h1 id="appTitle">App</h1>
+    <div class="app-header">
+      Settings
+    </div>
 
-    <p id="appText">
-        Welcome to ZoraOS.
-    </p>
+    <div class="app-content">
+
+      <div class="card">
+
+        <h3>ZoraOS</h3>
+
+        <p>
+          Your world. Your OS.
+        </p>
+
+      </div>
+
+      <div class="setting-row">
+
+        <div>
+          <b>Icon Style</b>
+
+          <div style="font-size:12px;color:#777;">
+            Choose your ZoraOS icon shape
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="theme-options">
+
+        <button
+          id="squircleBtn"
+          class="theme-button"
+          onclick="setIconTheme('squircle')">
+          ▣
+        </button>
+
+        <button
+          id="softBtn"
+          class="theme-button"
+          onclick="setIconTheme('soft')">
+          ◼
+        </button>
+
+        <button
+          id="roundBtn"
+          class="theme-button"
+          onclick="setIconTheme('round')">
+          ●
+        </button>
+
+      </div>
+
+      <br>
+
+      <div class="setting-row">
+
+        <span>Animations</span>
+
+        <b>Fluid</b>
+
+      </div>
+
+      <div class="setting-row">
+
+        <span>Version</span>
+
+        <span>ZoraOS Web 1.0</span>
+
+      </div>
+
+      <div class="setting-row">
+
+        <span>Developer</span>
+
+        <span>ZoraOS-dev</span>
+
+      </div>
+
+    </div>
+
+    <div class="gesture-area">
+      <div class="gesture-bar"></div>
+    </div>
+
+  </section>
+
+
+  <!-- LOCKSCREEN -->
+
+  <div
+    class="lockscreen"
+    id="lockscreen">
+
+    <div
+      class="lock-date"
+      id="lockDate">
+      Sunday, October 4
+    </div>
+
+    <div
+      class="lock-time"
+      id="lockTime">
+      10:30
+    </div>
+
+    <div class="notification">
+
+      <div class="notification-icon">
+        ⚡
+      </div>
+
+      <div>
+        <b>ZoraOS</b>
+
+        <div style="font-size:13px;margin-top:3px;">
+          Welcome back to your world.
+        </div>
+      </div>
+
+    </div>
+
+    <div
+      class="lock-fingerprint"
+      onclick="unlockPhone()">
+      ◉
+    </div>
+
+    <div class="lock-hint">
+      Swipe up to unlock
+    </div>
+
+  </div>
 
 </div>
 
 
 <script>
 
-const lock = document.getElementById("lock");
-const clock = document.getElementById("clock");
-const homeClock = document.getElementById("homeClock");
-const date = document.getElementById("date");
+/* =========================
+   ZORAOS CORE
+========================= */
 
-function updateTime() {
+const phone =
+  document.getElementById("phone");
 
-    const now = new Date();
+const lockscreen =
+  document.getElementById("lockscreen");
 
-    const time = now.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+const genericApp =
+  document.getElementById("genericApp");
 
-    const day = now.toLocaleDateString([], {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    });
+const settingsApp =
+  document.getElementById("settingsApp");
 
-    clock.innerText = time;
-    homeClock.innerText = time;
-    date.innerText = day;
+const genericTitle =
+  document.getElementById("genericTitle");
+
+const genericContent =
+  document.getElementById("genericContent");
+
+let currentApp = null;
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const time =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  const date =
+    now.toLocaleDateString(
+      [],
+      {
+        weekday:"long",
+        month:"long",
+        day:"numeric"
+      }
+    );
+
+  document.getElementById(
+    "statusTime"
+  ).textContent = time;
+
+  document.getElementById(
+    "homeTime"
+  ).textContent = time;
+
+  document.getElementById(
+    "lockTime"
+  ).textContent = time;
+
+  document.getElementById(
+    "homeDate"
+  ).textContent = date;
+
+  document.getElementById(
+    "lockDate"
+  ).textContent = date;
+
 }
 
-updateTime();
-setInterval(updateTime, 1000);
+updateClock();
+
+setInterval(
+  updateClock,
+  10000
+);
 
 
-/* SWIPE UNLOCK */
+/* =========================
+   LOCKSCREEN
+========================= */
 
-let startY = 0;
+function unlockPhone(){
 
-lock.addEventListener("touchstart", function(e) {
-    startY = e.touches[0].clientY;
-});
+  lockscreen.classList.add(
+    "hidden"
+  );
 
-lock.addEventListener("touchend", function(e) {
+  localStorage.setItem(
+    "zoraUnlocked",
+    "true"
+  );
 
-    let endY = e.changedTouches[0].clientY;
+}
 
-    if (startY - endY > 50) {
-        lock.style.transform = "translateY(-100%)";
+
+/* swipe lockscreen */
+
+let lockStartY = 0;
+
+lockscreen.addEventListener(
+  "touchstart",
+  e => {
+
+    lockStartY =
+      e.touches[0].clientY;
+
+  },
+  {
+    passive:true
+  }
+);
+
+lockscreen.addEventListener(
+  "touchend",
+  e => {
+
+    const endY =
+      e.changedTouches[0].clientY;
+
+    if(
+      lockStartY - endY > 70
+    ){
+
+      unlockPhone();
+
     }
 
-});
+  }
+);
 
 
-/* APPS */
+/* =========================
+   APP CONTENT
+========================= */
 
-function openApp(name) {
+const appData = {
 
-    document.getElementById("appTitle").innerText = name;
+  zora:{
+    title:"Zora AI",
 
-    document.getElementById("appText").innerText =
-        "Welcome to " + name + " on ZoraOS.";
+    html:`
+      <div class="zora-orb">
+        ⚡
+      </div>
 
-    document.getElementById("app").classList.add("open");
+      <div class="card">
+        <h3>Hey.</h3>
+
+        <p>
+          I'm Zora, your assistant
+          inside ZoraOS.
+        </p>
+      </div>
+
+      <div class="card">
+        Ask Zora anything.
+      </div>
+    `
+  },
+
+  messages:{
+    title:"Messages",
+
+    html:`
+      <div class="card">
+        <h3>Zora Team</h3>
+        Welcome to ZoraOS 🚀
+      </div>
+
+      <div class="card">
+        <h3>System</h3>
+        Your apps are ready.
+      </div>
+    `
+  },
+
+  gallery:{
+    title:"Gallery",
+
+    html:`
+      <div class="card">
+        🖼️ Your photos will appear here.
+      </div>
+    `
+  },
+
+  music:{
+    title:"Music",
+
+    html:`
+      <div class="card">
+        <h3>Now Playing</h3>
+        No music playing
+      </div>
+
+      <div class="card">
+        ▶️ Play
+      </div>
+    `
+  },
+
+  camera:{
+    title:"Camera",
+
+    html:`
+      <div
+        style="
+          height:70vh;
+          border-radius:28px;
+          background:#111;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          color:white;
+          font-size:18px;
+        ">
+        📷 Camera Preview
+      </div>
+    `
+  },
+
+  files:{
+    title:"Files",
+
+    html:`
+      <div class="card">
+        📁 Downloads
+      </div>
+
+      <div class="card">
+        📁 Pictures
+      </div>
+
+      <div class="card">
+        📁 ZoraOS
+      </div>
+    `
+  },
+
+  clock:{
+    title:"Clock",
+
+    html:`
+      <div
+        style="
+          font-size:65px;
+          text-align:center;
+          margin-top:80px;
+        ">
+        🕐
+      </div>
+    `
+  },
+
+  phone:{
+    title:"Phone",
+
+    html:`
+      <div class="card">
+        📞 Recent Calls
+      </div>
+
+      <div class="card">
+        Dial Pad
+      </div>
+    `
+  },
+
+  browser:{
+    title:"Zora Browser",
+
+    html:`
+      <div class="card">
+        🌐 Search the web
+      </div>
+
+      <div class="card">
+        ZoraOS Start Page
+      </div>
+    `
+  }
+
+};
+
+
+/* =========================
+   OPEN APP
+========================= */
+
+function openApp(name){
+
+  if(name === "settings"){
+
+    currentApp =
+      settingsApp;
+
+  }
+
+  else{
+
+    const data =
+      appData[name];
+
+    if(!data)
+      return;
+
+    genericTitle.textContent =
+      data.title;
+
+    genericContent.innerHTML =
+      data.html;
+
+    currentApp =
+      genericApp;
+
+  }
+
+  phone.classList.add(
+    "app-open"
+  );
+
+  requestAnimationFrame(
+    () => {
+
+      currentApp.classList.add(
+        "open"
+      );
+
+    }
+  );
+
 }
 
 
-function closeApp() {
+/* =========================
+   CLOSE APP
+========================= */
 
-    document.getElementById("app").classList.remove("open");
+function closeCurrentApp(){
+
+  if(!currentApp)
+    return;
+
+  const appToClose =
+    currentApp;
+
+  appToClose.classList.add(
+    "closing"
+  );
+
+  appToClose.classList.remove(
+    "open"
+  );
+
+  phone.classList.remove(
+    "app-open"
+  );
+
+  setTimeout(
+    () => {
+
+      appToClose.classList.remove(
+        "closing"
+      );
+
+      currentApp = null;
+
+    },
+    450
+  );
 
 }
-/* SWIPE DOWN TO CLOSE APP */
 
-const app = document.getElementById("app");
+
+/* =========================
+   SWIPE UP TO CLOSE APPS
+========================= */
 
 let appStartY = 0;
+
 let appCurrentY = 0;
-let appSwiping = false;
 
-app.addEventListener("touchstart", function(e) {
-    appStartY = e.touches[0].clientY;
-    appCurrentY = appStartY;
-    appSwiping = true;
-});
+document.querySelectorAll(
+  ".app-window"
+).forEach(app => {
 
-app.addEventListener("touchmove", function(e) {
+  app.addEventListener(
+    "touchstart",
+    e => {
 
-    if (!appSwiping) return;
+      appStartY =
+        e.touches[0].clientY;
 
-    appCurrentY = e.touches[0].clientY;
+      appCurrentY =
+        appStartY;
 
-    const distance = appCurrentY - appStartY;
-
-    /* Only allow downward movement */
-    if (distance > 0) {
-
-        app.style.transform =
-            "translateY(" + distance + "px) scale(" +
-            (1 - Math.min(distance / 1500, 0.08)) +
-            ")";
-
-        app.style.opacity =
-            1 - Math.min(distance / 500, 0.35);
+    },
+    {
+      passive:true
     }
+  );
 
-});
 
-app.addEventListener("touchend", function() {
+  app.addEventListener(
+    "touchmove",
+    e => {
 
-    if (!appSwiping) return;
+      appCurrentY =
+        e.touches[0].clientY;
 
-    const distance = appCurrentY - appStartY;
+      const distance =
+        appStartY -
+        appCurrentY;
 
-    appSwiping = false;
+      /*
+       Only activate from
+       near the bottom.
+      */
 
-    if (distance > 100) {
+      if(
+        appStartY >
+        window.innerHeight - 130
+        &&
+        distance > 0
+      ){
 
-        /* Close app */
+        const scale =
+          Math.max(
+            .78,
+            1 - distance / 900
+          );
 
         app.style.transition =
-            "transform 0.3s ease, opacity 0.3s ease";
+          "none";
 
         app.style.transform =
-            "translateY(100%) scale(0.9)";
+          `translateY(${-distance * .25}px)
+           scale(${scale})`;
 
-        app.style.opacity = "0";
+        app.style.borderRadius =
+          `${Math.min(
+            distance / 3,
+            35
+          )}px`;
 
-        setTimeout(function() {
+      }
 
-            app.classList.remove("open");
-
-            app.style.transform = "";
-            app.style.opacity = "";
-            app.style.transition = "";
-
-        }, 300);
-
-    } else {
-
-        /* Snap back */
-
-        app.style.transition =
-            "transform 0.25s ease, opacity 0.25s ease";
-
-        app.style.transform = "";
-        app.style.opacity = "";
-
-        setTimeout(function() {
-            app.style.transition = "";
-        }, 250);
+    },
+    {
+      passive:true
     }
+  );
+
+
+  app.addEventListener(
+    "touchend",
+    () => {
+
+      const distance =
+        appStartY -
+        appCurrentY;
+
+      app.style.transition = "";
+
+      app.style.transform = "";
+
+      app.style.borderRadius = "";
+
+      if(
+        appStartY >
+        window.innerHeight - 130
+        &&
+        distance > 80
+      ){
+
+        closeCurrentApp();
+
+      }
+
+    }
+  );
 
 });
+
+
+/* =========================
+   ICON THEMES
+========================= */
+
+function setIconTheme(theme){
+
+  document.body.setAttribute(
+    "data-icons",
+    theme
+  );
+
+  localStorage.setItem(
+    "zoraIconTheme",
+    theme
+  );
+
+  updateThemeButtons();
+
+}
+
+
+function updateThemeButtons(){
+
+  const theme =
+    document.body.getAttribute(
+      "data-icons"
+    );
+
+  document.querySelectorAll(
+    ".theme-button"
+  ).forEach(button => {
+
+    button.classList.remove(
+      "active"
+    );
+
+  });
+
+  const id =
+    theme + "Btn";
+
+  const button =
+    document.getElementById(id);
+
+  if(button){
+
+    button.classList.add(
+      "active"
+    );
+
+  }
+
+}
+
+
+/* restore saved theme */
+
+const savedTheme =
+  localStorage.getItem(
+    "zoraIconTheme"
+  );
+
+if(savedTheme){
+
+  document.body.setAttribute(
+    "data-icons",
+    savedTheme
+  );
+
+}
+
+updateThemeButtons();
+
+
+/* =========================
+   ESCAPE FOR DESKTOP TESTING
+========================= */
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if(
+      e.key === "Escape"
+    ){
+
+      closeCurrentApp();
+
+    }
+
+  }
+);
+
 </script>
 
 </body>
-</html>
+      </html>
