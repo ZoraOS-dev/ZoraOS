@@ -1,2547 +1,1497 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 
 <title>ZoraOS</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+
+:root {
+    --text: #ffffff;
+    --muted: #c9d2e3;
 }
 
-html,body{
-  width:100%;
-  height:100%;
-  margin:0;
-  overflow:hidden;
-  background:#050505;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background: #000;
+    color: white;
+
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-button{
-  font-family:inherit;
+button {
+    font: inherit;
 }
 
-.phone{
-  position:relative;
-  width:min(100vw,430px);
-  height:min(100vh,900px);
-  overflow:hidden;
-  color:white;
-  background:#111827;
-  border-radius:28px;
-  box-shadow:0 0 45px rgba(0,0,0,.65);
+
+/* =========================
+   LOCK SCREEN
+========================= */
+
+#lockScreen {
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    padding:
+        72px
+        22px
+        calc(28px + env(safe-area-inset-bottom));
+
+    background:
+
+        radial-gradient(
+            circle at 20% 15%,
+            rgba(137, 53, 255, .85),
+            transparent 31%
+        ),
+
+        radial-gradient(
+            circle at 76% 82%,
+            rgba(0, 218, 235, .55),
+            transparent 38%
+        ),
+
+        linear-gradient(
+            150deg,
+            #081321 0%,
+            #0a1020 60%,
+            #06111f 100%
+        );
+
+    transition:
+        transform .48s cubic-bezier(.2,.8,.2,1),
+        opacity .35s ease;
 }
 
-/* ================= WALLPAPER ================= */
+.lockClock {
+    text-align: center;
 
-.wallpaper{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 15%,#7c3aed 0%,transparent 35%),
-    radial-gradient(circle at 85% 80%,#06b6d4 0%,transparent 38%),
-    linear-gradient(145deg,#0f172a,#111827);
-  transition:background .5s ease;
+    text-shadow:
+        0 4px 24px rgba(0,0,0,.25);
 }
 
-.brightness-layer{
-  position:absolute;
-  inset:0;
-  z-index:20;
-  pointer-events:none;
-  background:#000;
-  opacity:0;
+#lockTime {
+
+    font-size: 72px;
+
+    line-height: .95;
+
+    font-weight: 700;
+
+    letter-spacing: -4px;
 }
 
-/* ================= STATUS BAR ================= */
+#lockDate {
 
-.status-bar{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:35px;
-  padding:9px 18px 0;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:13px;
-  z-index:60;
-  pointer-events:none;
+    margin-top: 12px;
+
+    font-size: 15px;
+
+    color: #e6ebf3;
 }
 
-.status-icons{
-  display:flex;
-  gap:8px;
+.lockHint {
+    text-align: center;
 }
 
-/* ================= LOCKSCREEN ================= */
+.lockHint p {
 
-.lockscreen{
-  position:absolute;
-  inset:0;
-  z-index:100;
-  background:rgba(0,0,0,.08);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+    margin: 0 0 14px;
 
-  transform:translateY(0);
-  transition:
-    transform .58s cubic-bezier(.22,1,.36,1);
+    color: #e7edf7;
+
+    font-size: 14px;
 }
 
-.lockscreen.unlocked{
-  transform:translateY(-105%);
+.homeBar {
+
+    width: 138px;
+    height: 5px;
+
+    border-radius: 99px;
+
+    background: white;
+
+    margin: auto;
 }
 
-/* CLOCK */
 
-.lock-clock{
-  position:absolute;
-  top:105px;
-  left:0;
-  right:0;
-  text-align:center;
+/* =========================
+   HOME SCREEN
+========================= */
+
+#homeScreen {
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1;
+
+    padding:
+        calc(18px + env(safe-area-inset-top))
+        20px
+        calc(132px + env(safe-area-inset-bottom));
+
+    background:
+
+        radial-gradient(
+            circle at 17% 17%,
+            rgba(142,43,255,.92),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 82% 82%,
+            rgba(0,221,238,.72),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            160deg,
+            #0b1020 0%,
+            #10192d 50%,
+            #061522 100%
+        );
 }
 
-.lock-time{
-  font-size:76px;
-  line-height:.95;
-  font-weight:300;
-  letter-spacing:-4px;
-  text-shadow:0 5px 25px rgba(0,0,0,.3);
+
+/* STATUS BAR */
+
+.statusBar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 14px;
+
+    font-weight: 700;
 }
 
-.lock-date{
-  margin-top:12px;
-  font-size:18px;
-  font-weight:500;
+
+/* BRAND */
+
+.brand {
+
+    margin-top: 30px;
+
+    margin-bottom: 34px;
 }
 
-/* NOTIFICATIONS */
+.brand h1 {
 
-.lock-notifications{
-  position:absolute;
-  left:18px;
-  right:18px;
-  bottom:105px;
+    margin: 0;
 
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+    font-size: 44px;
+
+    letter-spacing: -1.6px;
 }
 
-.notification{
-  padding:14px 16px;
-  border-radius:20px;
+.brand p {
 
-  background:rgba(35,35,40,.72);
-  border:1px solid rgba(255,255,255,.1);
+    margin: 7px 0 0;
 
-  backdrop-filter:blur(25px);
-  -webkit-backdrop-filter:blur(25px);
+    color: var(--muted);
 
-  box-shadow:0 8px 30px rgba(0,0,0,.18);
+    font-size: 14px;
 }
 
-.notification-top{
-  display:flex;
-  align-items:center;
-  gap:9px;
 
-  font-size:13px;
-  opacity:.8;
-  margin-bottom:4px;
+/* =========================
+   APP GRID
+========================= */
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    column-gap: 16px;
+
+    row-gap: 28px;
 }
 
-.notification-icon{
-  width:25px;
-  height:25px;
-  border-radius:8px;
+.appIcon {
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
+    display: flex;
 
-  background:rgba(255,255,255,.15);
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    user-select: none;
+
+    cursor: pointer;
+
+    transition:
+        transform .13s ease;
 }
 
-.notification-title{
-  font-size:15px;
-  font-weight:600;
+.appIcon:active {
+
+    transform: scale(.84);
 }
 
-.notification-text{
-  margin-top:3px;
-  font-size:14px;
-  opacity:.8;
+
+/* REAL ICONS */
+
+.appIcon img {
+
+    width: 68px;
+    height: 68px;
+
+    object-fit: contain;
+
+    border-radius: 22px;
+
+    filter:
+        drop-shadow(
+            0 9px 16px rgba(0,0,0,.28)
+        );
 }
 
-/* UNLOCK */
 
-.unlock-area{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:25px;
-  text-align:center;
+/* SNAKE */
+
+.snakeIcon {
+
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 38px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #16b85d,
+            #0b8846
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.22);
+
+    box-shadow:
+
+        inset
+        0 1px 2px
+        rgba(255,255,255,.24),
+
+        0 9px 16px
+        rgba(0,0,0,.28);
 }
 
-.unlock-hint{
-  margin-bottom:9px;
-  font-size:13px;
-  opacity:.7;
+.appLabel {
+
+    font-size: 12px;
+
+    color: white;
+
+    text-shadow:
+        0 2px 8px rgba(0,0,0,.4);
+
+    white-space: nowrap;
 }
 
-.home-indicator{
-  width:115px;
-  height:5px;
-  margin:auto;
-  border-radius:20px;
-  background:white;
+
+/* =========================
+   DOCK
+========================= */
+
+#dock {
+
+    position: absolute;
+
+    left: 18px;
+    right: 18px;
+
+    /* RAISED DOCK */
+    bottom:
+        calc(
+            30px +
+            env(safe-area-inset-bottom)
+        );
+
+    height: 92px;
+
+    border-radius: 34px;
+
+    background:
+        rgba(255,255,255,.13);
+
+    border:
+        1px solid
+        rgba(255,255,255,.17);
+
+    backdrop-filter:
+        blur(24px);
+
+    -webkit-backdrop-filter:
+        blur(24px);
+
+    box-shadow:
+
+        0 16px 35px
+        rgba(0,0,0,.30),
+
+        inset
+        0 1px 1px
+        rgba(255,255,255,.1);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-around;
+
+    padding: 0 10px;
 }
 
-/* ================= HOME ================= */
+.dockApp {
 
-.home{
-  position:absolute;
-  inset:0;
-  z-index:5;
+    cursor: pointer;
 
-  padding:65px 18px 100px;
-  overflow:hidden;
+    transition:
+        transform .13s ease;
 }
 
-.home-title{
-  margin:5px 0 20px;
+.dockApp:active {
 
-  font-size:31px;
-  font-weight:700;
-  letter-spacing:-1px;
+    transform: scale(.82);
 }
 
-.app-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:24px 12px;
+.dockApp img {
+
+    width: 68px;
+    height: 68px;
+
+    object-fit: contain;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 8px 14px
+            rgba(0,0,0,.28)
+        );
 }
 
-.icon-wrap{
-  text-align:center;
-  cursor:pointer;
+
+/* =========================
+   APP SCREEN
+========================= */
+
+#appScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 50;
+
+    display: none;
+
+    background:
+
+        radial-gradient(
+            circle at 70% 5%,
+            rgba(70,113,255,.35),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            160deg,
+            #0b1425,
+            #060b13 70%
+        );
+
+    transform:
+        translateY(18px)
+        scale(.94);
+
+    opacity: 0;
+
+    transition:
+
+        transform .34s cubic-bezier(.2,.8,.2,1),
+
+        opacity .25s ease,
+
+        border-radius .34s ease;
+
+    border-radius: 30px;
+
+    overflow: hidden;
+
+    touch-action: none;
 }
 
-.icon{
-  width:60px;
-  height:60px;
-  margin:auto;
+#appScreen.open {
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:18px;
-
-  font-size:29px;
-
-  background:rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.12);
-
-  box-shadow:0 10px 25px rgba(0,0,0,.18);
-
-  backdrop-filter:blur(15px);
-
-  transition:
-    transform .18s cubic-bezier(.22,1,.36,1);
+    display: block;
 }
 
-.icon:active{
-  transform:scale(.84);
+#appScreen.visible {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    opacity: 1;
+
+    border-radius: 0;
 }
 
-.icon-name{
-  margin-top:7px;
-  font-size:12px;
-  opacity:.9;
-}
-
-/* ICON COLORS */
-
-.call-icon{
-  background:linear-gradient(145deg,#22c55e,#16a34a);
-}
-
-.message-icon{
-  background:linear-gradient(145deg,#38bdf8,#2563eb);
-}
-
-.camera-icon{
-  background:linear-gradient(145deg,#64748b,#111827);
-}
-
-.music-icon{
-  background:linear-gradient(145deg,#ec4899,#8b5cf6);
-}
-
-.settings-icon{
-  background:linear-gradient(145deg,#94a3b8,#475569);
-}
-
-.photos-icon{
-  background:linear-gradient(145deg,#f97316,#eab308);
-}
-
-.notes-icon{
-  background:linear-gradient(145deg,#facc15,#f59e0b);
-}
-
-.snake-icon{
-  background:linear-gradient(145deg,#22c55e,#15803d);
-}
-
-/* ================= DOCK ================= */
-
-.dock{
-  position:absolute;
-  left:15px;
-  right:15px;
-  bottom:18px;
-
-  height:72px;
-
-  border-radius:25px;
-
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.12);
-
-  backdrop-filter:blur(25px);
-  -webkit-backdrop-filter:blur(25px);
-
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
-
-  z-index:30;
-}
-
-.dock .icon{
-  width:53px;
-  height:53px;
-  font-size:25px;
-}
-
-/* =====================================================
-   SUPER SMOOTH APP OPENING
-   ===================================================== */
-
-.app-window{
-  position:absolute;
-  inset:0;
-  z-index:200;
-
-  background:rgba(12,12,15,.97);
-
-  /*
-    IMPORTANT:
-    The app starts slightly smaller and lower.
-    This creates the smooth "growing out" effect.
-  */
-
-  transform:
-    translateY(65px)
-    scale(.82);
-
-  transform-origin:center bottom;
-
-  opacity:0;
-  visibility:hidden;
-
-  transition:
-    transform .46s cubic-bezier(.16,1,.3,1),
-    opacity .25s ease,
-    visibility 0s linear .46s;
-
-  will-change:transform,opacity;
-
-  overflow:hidden;
-}
-
-.app-window.open{
-  transform:
-    translateY(0)
-    scale(1);
-
-  opacity:1;
-  visibility:visible;
-
-  transition:
-    transform .46s cubic-bezier(.16,1,.3,1),
-    opacity .25s ease,
-    visibility 0s;
-}
-
-/*
-  Closing animation is faster.
-*/
-
-.app-window:not(.open){
-  transition:
-    transform .25s cubic-bezier(.4,0,1,1),
-    opacity .17s ease-in,
-    visibility 0s linear .25s;
-}
 
 /* APP HEADER */
 
-.app-header{
-  height:70px;
-  padding:30px 18px 0;
+.appTop {
 
-  display:flex;
-  align-items:center;
-  gap:12px;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        calc(
+            18px +
+            env(safe-area-inset-top)
+        )
+        18px
+        12px;
 }
 
-.back-button{
-  width:38px;
-  height:38px;
+.backBtn {
 
-  border:0;
-  border-radius:50%;
+    border: 0;
 
-  color:white;
-  background:rgba(255,255,255,.12);
+    color: white;
 
-  font-size:22px;
+    background:
+        rgba(255,255,255,.11);
 
-  transition:transform .15s ease;
+    padding: 10px 14px;
+
+    border-radius: 16px;
+
+    cursor: pointer;
 }
 
-.back-button:active{
-  transform:scale(.85);
+#appTitle {
+
+    font-size: 18px;
+
+    font-weight: 700;
 }
 
-.app-title{
-  font-size:20px;
-  font-weight:700;
+
+/* APP CONTENT */
+
+.appBody {
+
+    padding: 20px;
 }
 
-/* ================= GENERIC APPS ================= */
+.appCard {
 
-.generic-content{
-  padding:30px 20px;
+    margin-top: 10px;
+
+    padding: 24px;
+
+    border-radius: 26px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(16px);
+
+    -webkit-backdrop-filter:
+        blur(16px);
 }
 
-.fake-card{
-  padding:20px;
-  margin-bottom:15px;
+.bigAppIcon {
 
-  border-radius:24px;
-  background:rgba(255,255,255,.08);
+    width: 82px;
+    height: 82px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin-bottom: 18px;
 }
 
-.fake-card h2{
-  margin:0 0 8px;
+.appCard h2 {
+
+    margin: 0 0 8px;
+
+    font-size: 30px;
 }
 
-.fake-card p{
-  margin:0;
-  opacity:.65;
+.appCard p {
+
+    margin: 0;
+
+    color: #cbd5e1;
+
+    line-height: 1.45;
 }
 
-/* ================= SETTINGS ================= */
 
-.settings-content{
-  height:calc(100% - 70px);
-  padding:20px;
-  overflow-y:auto;
+/* APP HOME BAR */
+
+.gestureBar {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom:
+        calc(
+            10px +
+            env(safe-area-inset-bottom)
+        );
+
+    transform:
+        translateX(-50%);
+
+    width: 120px;
+
+    height: 5px;
+
+    border-radius: 99px;
+
+    background: white;
+
+    opacity: .9;
 }
 
-.setting-card{
-  padding:17px;
-  margin-bottom:12px;
-
-  border-radius:20px;
-  background:rgba(255,255,255,.08);
-}
-
-.setting-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.setting-name{
-  font-size:16px;
-}
-
-.setting-sub{
-  margin-top:4px;
-  font-size:12px;
-  opacity:.55;
-}
-
-.switch{
-  width:48px;
-  height:28px;
-  padding:3px;
-
-  border-radius:20px;
-  background:#444;
-}
-
-.switch-dot{
-  width:22px;
-  height:22px;
-
-  border-radius:50%;
-  background:white;
-
-  transition:.2s;
-}
-
-.switch.on{
-  background:#22c55e;
-}
-
-.switch.on .switch-dot{
-  transform:translateX(20px);
-}
-
-/* ================= CONTROL CENTRE ================= */
-
-.control-centre{
-  position:absolute;
-  inset:0;
-  z-index:300;
-
-  padding:55px 18px 20px;
-
-  background:rgba(15,15,20,.88);
-
-  backdrop-filter:blur(35px);
-  -webkit-backdrop-filter:blur(35px);
-
-  overflow-y:auto;
-
-  transform:translateY(-105%);
-  opacity:0;
-
-  transition:
-    transform .45s cubic-bezier(.22,1,.36,1),
-    opacity .25s ease;
-}
-
-.control-centre.open{
-  transform:translateY(0);
-  opacity:1;
-}
-
-.cc-title{
-  margin-bottom:18px;
-
-  font-size:30px;
-  font-weight:700;
-}
-
-.cc-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.cc-tile{
-  min-height:85px;
-  padding:16px;
-
-  border-radius:23px;
-
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.08);
-
-  transition:.15s;
-}
-
-.cc-tile:active{
-  transform:scale(.95);
-}
-
-.cc-tile.active{
-  background:rgba(255,255,255,.25);
-}
-
-.cc-icon{
-  font-size:23px;
-}
-
-.cc-name{
-  margin-top:10px;
-  font-size:13px;
-}
-
-.slider-card{
-  margin-top:12px;
-  padding:18px;
-
-  border-radius:23px;
-  background:rgba(255,255,255,.1);
-}
-
-.slider-card label{
-  display:block;
-  margin-bottom:10px;
-  font-size:13px;
-}
-
-input[type="range"]{
-  width:100%;
-  accent-color:white;
-}
-
-/* ================= WALLPAPER OPTIONS ================= */
-
-.wallpapers{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-}
-
-.wallpaper-option{
-  flex:0 0 70px;
-  height:100px;
-
-  border-radius:15px;
-  border:2px solid transparent;
-}
-
-.wallpaper-option.selected{
-  border-color:white;
-}
-
-.wp1{
-  background:linear-gradient(145deg,#0f172a,#7c3aed,#06b6d4);
-}
-
-.wp2{
-  background:linear-gradient(145deg,#020617,#1d4ed8,#06b6d4);
-}
-
-.wp3{
-  background:linear-gradient(145deg,#1e1b4b,#7e22ce,#ec4899);
-}
-
-.wp4{
-  background:linear-gradient(145deg,#052e16,#16a34a,#22d3ee);
-}
-
-.wp5{
-  background:linear-gradient(145deg,#450a0a,#dc2626,#f97316);
-}
-
-.wp6{
-  background:linear-gradient(145deg,#111827,#374151,#000);
-}
-
-/* ================= SNAKE ================= */
-
-.snake-content{
-  position:relative;
-
-  height:calc(100% - 70px);
-
-  padding:15px;
-
-  text-align:center;
-
-  overflow:hidden;
-}
-
-.snake-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  margin-bottom:12px;
-}
-
-.snake-title{
-  font-size:20px;
-  font-weight:700;
-}
-
-.snake-score{
-  padding:8px 12px;
-
-  border-radius:14px;
-
-  background:rgba(255,255,255,.1);
-
-  font-size:13px;
-}
-
-#snakeCanvas{
-  width:min(320px,85vw);
-  height:min(320px,85vw);
-
-  background:#07110b;
-
-  border-radius:20px;
-
-  border:2px solid rgba(255,255,255,.08);
-
-  touch-action:none;
-}
-
-.snake-controls{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-
-  margin-top:10px;
-}
-
-.snake-btn{
-  width:55px;
-  height:45px;
-
-  border:0;
-  border-radius:15px;
-
-  color:white;
-  background:rgba(255,255,255,.1);
-
-  font-size:20px;
-
-  transition:.12s;
-}
-
-.snake-btn:active{
-  transform:scale(.88);
-}
-
-.snake-hint{
-  margin-top:10px;
-  font-size:11px;
-  opacity:.45;
-}
-
-.snake-gameover{
-  position:absolute;
-
-  left:25px;
-  right:25px;
-  top:180px;
-
-  padding:25px;
-
-  border-radius:25px;
-
-  background:rgba(15,15,18,.94);
-
-  backdrop-filter:blur(20px);
-
-  display:none;
-}
-
-.snake-gameover.show{
-  display:block;
-}
-
-.snake-gameover h2{
-  margin:0 0 10px;
-}
-
-.snake-final-score{
-  margin-bottom:18px;
-  opacity:.7;
-}
-
-.snake-restart{
-  padding:12px 22px;
-
-  border:0;
-  border-radius:15px;
-
-  background:#22c55e;
-  color:white;
-
-  font-weight:700;
-}
-
-/* ================= SWIPE INDICATOR ================= */
-
-.swipe-indicator{
-  position:absolute;
-  left:50%;
-  bottom:8px;
-
-  width:90px;
-  height:3px;
-
-  transform:translateX(-50%);
-
-  border-radius:10px;
-
-  background:white;
-  opacity:.45;
-}
 </style>
 </head>
 
+
 <body>
 
-<div class="phone" id="phone">
 
-  <div class="wallpaper" id="wallpaper"></div>
+<!-- =========================
+     LOCK SCREEN
+========================= -->
 
-  <div class="brightness-layer"
-       id="brightnessLayer"></div>
+<div id="lockScreen">
 
+    <div class="lockClock">
 
-  <!-- STATUS BAR -->
-
-  <div class="status-bar">
-
-    <span id="statusTime">
-      10:00
-    </span>
-
-    <div class="status-icons">
-      <span>📶</span>
-      <span>📡</span>
-      <span>🔋</span>
-    </div>
-
-  </div>
-
-
-  <!-- HOME -->
-
-  <main class="home">
-
-    <div class="home-title">
-      ZoraOS
-    </div>
-
-    <div class="app-grid">
-
-      <div class="icon-wrap"
-           onclick="openApp('phone')">
-
-        <div class="icon call-icon">
-          📞
+        <div id="lockTime">
+            09:41
         </div>
 
-        <div class="icon-name">
-          Phone
+        <div id="lockDate">
+            Tuesday, 6 October
         </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('messages')">
-
-        <div class="icon message-icon">
-          💬
-        </div>
-
-        <div class="icon-name">
-          Messages
-        </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('camera')">
-
-        <div class="icon camera-icon">
-          📷
-        </div>
-
-        <div class="icon-name">
-          Camera
-        </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('music')">
-
-        <div class="icon music-icon">
-          🎵
-        </div>
-
-        <div class="icon-name">
-          Music
-        </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('photos')">
-
-        <div class="icon photos-icon">
-          🌈
-        </div>
-
-        <div class="icon-name">
-          Photos
-        </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('notes')">
-
-        <div class="icon notes-icon">
-          📝
-        </div>
-
-        <div class="icon-name">
-          Notes
-        </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('settings')">
-
-        <div class="icon settings-icon">
-          ⚙️
-        </div>
-
-        <div class="icon-name">
-          Settings
-        </div>
-
-      </div>
-
-
-      <div class="icon-wrap"
-           onclick="openApp('snake')">
-
-        <div class="icon snake-icon">
-          🐍
-        </div>
-
-        <div class="icon-name">
-          Snake
-        </div>
-
-      </div>
-
-    </div>
-
-  </main>
-
-
-  <!-- DOCK -->
-
-  <div class="dock">
-
-    <div class="icon-wrap"
-         onclick="openApp('phone')">
-
-      <div class="icon call-icon">
-        📞
-      </div>
 
     </div>
 
 
-    <div class="icon-wrap"
-         onclick="openApp('messages')">
+    <div class="lockHint">
 
-      <div class="icon message-icon">
-        💬
-      </div>
+        <p>
+            Swipe up to unlock
+        </p>
 
-    </div>
-
-
-    <div class="icon-wrap"
-         onclick="openApp('camera')">
-
-      <div class="icon camera-icon">
-        📷
-      </div>
+        <div class="homeBar"></div>
 
     </div>
-
-
-    <div class="icon-wrap"
-         onclick="openApp('music')">
-
-      <div class="icon music-icon">
-        🎵
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- ==================================================
-       LOCKSCREEN
-       ================================================== -->
-
-  <div class="lockscreen"
-       id="lockscreen">
-
-
-    <!-- BIG CLOCK -->
-
-    <div class="lock-clock">
-
-      <div class="lock-time"
-           id="lockTime">
-        10:00
-      </div>
-
-      <div class="lock-date"
-           id="lockDate">
-        Sunday, October 4
-      </div>
-
-    </div>
-
-
-    <!-- SEPARATE NOTIFICATIONS -->
-
-    <div class="lock-notifications">
-
-
-      <div class="notification">
-
-        <div class="notification-top">
-
-          <div class="notification-icon">
-            💬
-          </div>
-
-          <span>
-            Messages
-          </span>
-
-        </div>
-
-        <div class="notification-title">
-          Welcome to ZoraOS
-        </div>
-
-        <div class="notification-text">
-          Your world. Your OS.
-        </div>
-
-      </div>
-
-
-      <div class="notification">
-
-        <div class="notification-top">
-
-          <div class="notification-icon">
-            🐍
-          </div>
-
-          <span>
-            ZoraOS
-          </span>
-
-        </div>
-
-        <div class="notification-title">
-          Snake is ready
-        </div>
-
-        <div class="notification-text">
-          Try to beat your high score!
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="unlock-area">
-
-      <div class="unlock-hint">
-        Swipe up to unlock
-      </div>
-
-      <div class="home-indicator"></div>
-
-    </div>
-
-  </div>
-
-
-  <!-- ==================================================
-       GENERIC APP
-       ================================================== -->
-
-  <div class="app-window"
-       id="genericApp">
-
-    <div class="app-header">
-
-      <button class="back-button"
-              onclick="closeApp()">
-        ‹
-      </button>
-
-      <div class="app-title"
-           id="genericTitle">
-        App
-      </div>
-
-    </div>
-
-    <div class="generic-content"
-         id="genericContent">
-    </div>
-
-  </div>
-
-
-  <!-- ==================================================
-       SETTINGS
-       ================================================== -->
-
-  <div class="app-window"
-       id="settingsApp">
-
-    <div class="app-header">
-
-      <button class="back-button"
-              onclick="closeApp()">
-        ‹
-      </button>
-
-      <div class="app-title">
-        Settings
-      </div>
-
-    </div>
-
-
-    <div class="settings-content">
-
-
-      <div class="setting-card">
-
-        <div class="setting-row">
-
-          <div>
-
-            <div class="setting-name">
-              Dark Mode
-            </div>
-
-            <div class="setting-sub">
-              ZoraOS appearance
-            </div>
-
-          </div>
-
-          <div class="switch on">
-
-            <div class="switch-dot"></div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="setting-card">
-
-        <div class="setting-row">
-
-          <div>
-
-            <div class="setting-name">
-              ZoraOS
-            </div>
-
-            <div class="setting-sub">
-              Your world. Your OS.
-            </div>
-
-          </div>
-
-          <span>
-            ✨
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="setting-card">
-
-        <div class="setting-row">
-
-          <div>
-
-            <div class="setting-name">
-              Version
-            </div>
-
-            <div class="setting-sub">
-              ZoraOS Web 1.3
-            </div>
-
-          </div>
-
-          <span>
-            1.3
-          </span>
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-  </div>
-
-
-  <!-- ==================================================
-       SNAKE
-       ================================================== -->
-
-  <div class="app-window"
-       id="snakeApp">
-
-    <div class="app-header">
-
-      <button class="back-button"
-              onclick="closeApp()">
-        ‹
-      </button>
-
-      <div class="app-title">
-        Zora Snake
-      </div>
-
-    </div>
-
-
-    <div class="snake-content">
-
-      <div class="snake-top">
-
-        <div class="snake-title">
-          🐍 Zora Snake
-        </div>
-
-        <div class="snake-score">
-
-          Score:
-          <span id="snakeScore">
-            0
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <canvas
-        id="snakeCanvas"
-        width="320"
-        height="320">
-      </canvas>
-
-
-      <div class="snake-controls">
-
-        <button class="snake-btn"
-                onclick="changeSnakeDirection('up')">
-          ▲
-        </button>
-
-      </div>
-
-
-      <div class="snake-controls">
-
-        <button class="snake-btn"
-                onclick="changeSnakeDirection('left')">
-          ◀
-        </button>
-
-        <button class="snake-btn"
-                onclick="changeSnakeDirection('down')">
-          ▼
-        </button>
-
-        <button class="snake-btn"
-                onclick="changeSnakeDirection('right')">
-          ▶
-        </button>
-
-      </div>
-
-
-      <div class="snake-hint">
-        Swipe on the game • Arrow keys also work
-      </div>
-
-
-      <div class="snake-gameover"
-           id="snakeGameOver">
-
-        <h2>
-          Game Over 🐍
-        </h2>
-
-        <div class="snake-final-score">
-
-          Score:
-          <span id="snakeFinalScore">
-            0
-          </span>
-
-        </div>
-
-        <button class="snake-restart"
-                onclick="startSnake()">
-          Play Again
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- ==================================================
-       CONTROL CENTRE
-       ================================================== -->
-
-  <div class="control-centre"
-       id="controlCentre">
-
-    <div class="cc-title">
-      Control Centre
-    </div>
-
-
-    <div class="cc-grid">
-
-
-      <div class="cc-tile"
-           id="wifiTile"
-           onclick="toggleCC('wifiTile')">
-
-        <div class="cc-icon">
-          📶
-        </div>
-
-        <div class="cc-name">
-          Wi-Fi
-        </div>
-
-      </div>
-
-
-      <div class="cc-tile"
-           id="bluetoothTile"
-           onclick="toggleCC('bluetoothTile')">
-
-        <div class="cc-icon">
-          ᛒ
-        </div>
-
-        <div class="cc-name">
-          Bluetooth
-        </div>
-
-      </div>
-
-
-      <div class="cc-tile"
-           id="darkTile"
-           onclick="toggleCC('darkTile')">
-
-        <div class="cc-icon">
-          🌙
-        </div>
-
-        <div class="cc-name">
-          Dark Mode
-        </div>
-
-      </div>
-
-
-      <div class="cc-tile"
-           id="airplaneTile"
-           onclick="toggleCC('airplaneTile')">
-
-        <div class="cc-icon">
-          ✈️
-        </div>
-
-        <div class="cc-name">
-          Airplane
-        </div>
-
-      </div>
-
-
-      <div class="cc-tile"
-           id="rotationTile"
-           onclick="toggleCC('rotationTile')">
-
-        <div class="cc-icon">
-          🔄
-        </div>
-
-        <div class="cc-name">
-          Rotation Lock
-        </div>
-
-      </div>
-
-
-      <div class="cc-tile"
-           onclick="closeControlCentre()">
-
-        <div class="cc-icon">
-          ✕
-        </div>
-
-        <div class="cc-name">
-          Close
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="slider-card">
-
-      <label>
-        ☀️ Brightness
-      </label>
-
-      <input
-        id="brightnessSlider"
-        type="range"
-        min="0"
-        max="100"
-        value="100"
-        oninput="setBrightness(this.value)">
-
-    </div>
-
-
-    <div class="slider-card">
-
-      <label>
-        🔊 Volume
-      </label>
-
-      <input
-        id="volumeSlider"
-        type="range"
-        min="0"
-        max="100"
-        value="70">
-
-    </div>
-
-
-    <div class="slider-card">
-
-      <label>
-        Wallpaper
-      </label>
-
-      <div class="wallpapers">
-
-        <div class="wallpaper-option wp1"
-             onclick="setWallpaper(1)">
-        </div>
-
-        <div class="wallpaper-option wp2"
-             onclick="setWallpaper(2)">
-        </div>
-
-        <div class="wallpaper-option wp3"
-             onclick="setWallpaper(3)">
-        </div>
-
-        <div class="wallpaper-option wp4"
-             onclick="setWallpaper(4)">
-        </div>
-
-        <div class="wallpaper-option wp5"
-             onclick="setWallpaper(5)">
-        </div>
-
-        <div class="wallpaper-option wp6"
-             onclick="setWallpaper(6)">
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
 
 </div>
 
 
+
+<!-- =========================
+     HOME SCREEN
+========================= -->
+
+<div id="homeScreen">
+
+
+    <div class="statusBar">
+
+        <span id="homeTime">
+            09:41
+        </span>
+
+        <span>
+            ● Wi-Fi ▮▮▮ 🔋
+        </span>
+
+    </div>
+
+
+    <div class="brand">
+
+        <h1>
+            ZoraOS
+        </h1>
+
+        <p>
+            Your world. Your OS.
+        </p>
+
+    </div>
+
+
+
+    <div class="grid">
+
+
+        <!-- PHONE -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Phone',
+                'icons/phone.png'
+            )"
+        >
+
+            <img
+                src="icons/phone.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Phone
+            </div>
+
+        </div>
+
+
+        <!-- MESSAGES -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Messages',
+                'icons/messages.png'
+            )"
+        >
+
+            <img
+                src="icons/messages.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Messages
+            </div>
+
+        </div>
+
+
+        <!-- CAMERA -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Camera',
+                'icons/camera.png'
+            )"
+        >
+
+            <img
+                src="icons/camera.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Camera
+            </div>
+
+        </div>
+
+
+        <!-- MUSIC -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Music',
+                'icons/music.png'
+            )"
+        >
+
+            <img
+                src="icons/music.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Music
+            </div>
+
+        </div>
+
+
+        <!-- PHOTOS -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Photos',
+                'icons/photos.png'
+            )"
+        >
+
+            <img
+                src="icons/photos.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Photos
+            </div>
+
+        </div>
+
+
+        <!-- NOTES -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Notes',
+                'icons/notes.png'
+            )"
+        >
+
+            <img
+                src="icons/notes.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Notes
+            </div>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Settings',
+                'icons/settings.png'
+            )"
+        >
+
+            <img
+                src="icons/settings.png"
+                alt=""
+            >
+
+            <div class="appLabel">
+                Settings
+            </div>
+
+        </div>
+
+
+        <!-- SNAKE -->
+
+        <div
+            class="appIcon"
+            onclick="openApp(
+                'Snake',
+                'snake'
+            )"
+        >
+
+            <div class="snakeIcon">
+                🐍
+            </div>
+
+            <div class="appLabel">
+                Snake
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         DOCK
+    ========================= -->
+
+    <div id="dock">
+
+
+        <div
+            class="dockApp"
+            onclick="openApp(
+                'Phone',
+                'icons/phone.png'
+            )"
+        >
+
+            <img
+                src="icons/phone.png"
+                alt=""
+            >
+
+        </div>
+
+
+        <div
+            class="dockApp"
+            onclick="openApp(
+                'Messages',
+                'icons/messages.png'
+            )"
+        >
+
+            <img
+                src="icons/messages.png"
+                alt=""
+            >
+
+        </div>
+
+
+        <div
+            class="dockApp"
+            onclick="openApp(
+                'Camera',
+                'icons/camera.png'
+            )"
+        >
+
+            <img
+                src="icons/camera.png"
+                alt=""
+            >
+
+        </div>
+
+
+        <div
+            class="dockApp"
+            onclick="openApp(
+                'Music',
+                'icons/music.png'
+            )"
+        >
+
+            <img
+                src="icons/music.png"
+                alt=""
+            >
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     APP SCREEN
+========================= -->
+
+<div id="appScreen">
+
+
+    <div class="appTop">
+
+        <button
+            class="backBtn"
+            onclick="closeApp()"
+        >
+            ← Home
+        </button>
+
+        <div id="appTitle">
+            App
+        </div>
+
+        <div style="width:70px"></div>
+
+    </div>
+
+
+    <div class="appBody">
+
+        <div class="appCard">
+
+
+            <img
+                id="appIconImage"
+                class="bigAppIcon"
+                src="icons/phone.png"
+                alt=""
+            >
+
+
+            <div
+                id="snakeBig"
+                class="snakeIcon"
+                style="
+                    width:82px;
+                    height:82px;
+                    margin-bottom:18px;
+                    display:none;
+                "
+            >
+                🐍
+            </div>
+
+
+            <h2 id="appHeading">
+                App
+            </h2>
+
+
+            <p id="appDescription">
+                Welcome to ZoraOS.
+            </p>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="gestureBar"></div>
+
+</div>
+
+
+
 <script>
 
-/* =========================================================
-   ZORAOS CORE
-   ========================================================= */
 
-const lockscreen =
-document.getElementById("lockscreen");
+/* =========================
+   ELEMENTS
+========================= */
 
-const controlCentre =
-document.getElementById("controlCentre");
-
-const genericApp =
-document.getElementById("genericApp");
-
-const settingsApp =
-document.getElementById("settingsApp");
-
-const snakeApp =
-document.getElementById("snakeApp");
-
-const wallpaper =
-document.getElementById("wallpaper");
-
-const brightnessLayer =
-document.getElementById("brightnessLayer");
-
-let currentApp = null;
-
-
-/* =========================================================
-   CLOCK
-   ========================================================= */
-
-function updateClock(){
-
-  const now = new Date();
-
-  let hours = now.getHours();
-
-  const minutes =
-    String(now.getMinutes()).padStart(2,"0");
-
-  const time =
-    `${hours}:${minutes}`;
-
-  document.getElementById(
-    "lockTime"
-  ).textContent = time;
-
-  document.getElementById(
-    "statusTime"
-  ).textContent = time;
-
-  document.getElementById(
-    "lockDate"
-  ).textContent =
-    now.toLocaleDateString(
-      "en-US",
-      {
-        weekday:"long",
-        month:"long",
-        day:"numeric"
-      }
+const lockScreen =
+    document.getElementById(
+        "lockScreen"
     );
+
+const appScreen =
+    document.getElementById(
+        "appScreen"
+    );
+
+const appTitle =
+    document.getElementById(
+        "appTitle"
+    );
+
+const appHeading =
+    document.getElementById(
+        "appHeading"
+    );
+
+const appDescription =
+    document.getElementById(
+        "appDescription"
+    );
+
+const appIconImage =
+    document.getElementById(
+        "appIconImage"
+    );
+
+const snakeBig =
+    document.getElementById(
+        "snakeBig"
+    );
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock() {
+
+    const now =
+        new Date();
+
+
+    const time =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+
+    const date =
+        now.toLocaleDateString(
+            [],
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            }
+        );
+
+
+    document.getElementById(
+        "lockTime"
+    ).textContent = time;
+
+
+    document.getElementById(
+        "homeTime"
+    ).textContent = time;
+
+
+    document.getElementById(
+        "lockDate"
+    ).textContent = date;
+
 }
+
 
 updateClock();
 
-setInterval(updateClock,1000);
+setInterval(
+    updateClock,
+    1000
+);
 
 
-/* =========================================================
-   LOCKSCREEN SWIPE
-   ========================================================= */
+
+/* =========================
+   SWIPE UP UNLOCK
+========================= */
 
 let lockStartY = 0;
 
-lockscreen.addEventListener(
-  "touchstart",
-  e=>{
 
-    lockStartY =
-      e.touches[0].clientY;
+lockScreen.addEventListener(
+    "touchstart",
+    function(e) {
 
-  },
-  {passive:true}
+        lockStartY =
+            e.touches[0].clientY;
+
+    },
+    {
+        passive: true
+    }
 );
 
-lockscreen.addEventListener(
-  "touchend",
-  e=>{
 
-    const endY =
-      e.changedTouches[0].clientY;
+lockScreen.addEventListener(
+    "touchend",
+    function(e) {
 
-    if(
-      lockStartY - endY > 70
-    ){
+        const endY =
+            e.changedTouches[0].clientY;
 
-      lockscreen.classList.add(
-        "unlocked"
-      );
+
+        if (
+            lockStartY - endY > 55
+        ) {
+
+            lockScreen.style.transform =
+                "translateY(-100%)";
+
+            lockScreen.style.opacity =
+                "0";
+
+
+            setTimeout(
+                function() {
+
+                    lockScreen.style.display =
+                        "none";
+
+                },
+                480
+            );
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+
+/* =========================
+   OPEN APP
+========================= */
+
+function openApp(
+    name,
+    icon
+) {
+
+    appTitle.textContent =
+        name;
+
+
+    appHeading.textContent =
+        name;
+
+
+    appDescription.textContent =
+        "Welcome to " +
+        name +
+        " on ZoraOS.";
+
+
+    if (
+        icon === "snake"
+    ) {
+
+        appIconImage.style.display =
+            "none";
+
+        snakeBig.style.display =
+            "flex";
 
     }
 
-  },
-  {passive:true}
-);
+    else {
+
+        snakeBig.style.display =
+            "none";
+
+        appIconImage.style.display =
+            "block";
+
+        appIconImage.src =
+            icon;
+
+    }
 
 
-/* =========================================================
-   CONTROL CENTRE
-   ========================================================= */
-
-let ccStartY = 0;
-
-document
-  .getElementById("phone")
-  .addEventListener(
-    "touchstart",
-    e=>{
-
-      ccStartY =
-        e.touches[0].clientY;
-
-    },
-    {passive:true}
-  );
+    appScreen.style.display =
+        "block";
 
 
-document
-  .getElementById("phone")
-  .addEventListener(
-    "touchend",
-    e=>{
-
-      const endY =
-        e.changedTouches[0].clientY;
-
-      const difference =
-        endY - ccStartY;
-
-      if(
-        ccStartY < 60 &&
-        difference > 70 &&
-        !currentApp &&
-        lockscreen.classList.contains(
-          "unlocked"
-        )
-      ){
-
-        openControlCentre();
-
-      }
-
-    },
-    {passive:true}
-  );
-
-
-function openControlCentre(){
-
-  controlCentre.classList.add("open");
-
-}
-
-
-function closeControlCentre(){
-
-  controlCentre.classList.remove("open");
-
-}
-
-
-/* =========================================================
-   CC TOGGLES
-   ========================================================= */
-
-function toggleCC(id){
-
-  const tile =
-    document.getElementById(id);
-
-  tile.classList.toggle("active");
-
-  localStorage.setItem(
-    id,
-    tile.classList.contains("active")
-  );
-
-}
-
-
-[
-  "wifiTile",
-  "bluetoothTile",
-  "darkTile",
-  "airplaneTile",
-  "rotationTile"
-].forEach(id=>{
-
-  if(
-    localStorage.getItem(id)==="true"
-  ){
-
-    document
-      .getElementById(id)
-      .classList.add("active");
-
-  }
-
-});
-
-
-/* =========================================================
-   BRIGHTNESS
-   ========================================================= */
-
-function setBrightness(value){
-
-  const opacity =
-    1 - Number(value)/100;
-
-  brightnessLayer.style.opacity =
-    Math.max(0,opacity*.75);
-
-  localStorage.setItem(
-    "brightness",
-    value
-  );
-
-}
-
-
-const savedBrightness =
-localStorage.getItem("brightness");
-
-if(savedBrightness){
-
-  document.getElementById(
-    "brightnessSlider"
-  ).value = savedBrightness;
-
-  setBrightness(savedBrightness);
-
-}
-
-
-/* =========================================================
-   WALLPAPERS
-   ========================================================= */
-
-const wallpapers = {
-
-  1:
-  "radial-gradient(circle at 20% 15%,#7c3aed 0%,transparent 35%),radial-gradient(circle at 85% 80%,#06b6d4 0%,transparent 38%),linear-gradient(145deg,#0f172a,#111827)",
-
-  2:
-  "linear-gradient(145deg,#020617,#1d4ed8,#06b6d4)",
-
-  3:
-  "linear-gradient(145deg,#1e1b4b,#7e22ce,#ec4899)",
-
-  4:
-  "linear-gradient(145deg,#052e16,#16a34a,#22d3ee)",
-
-  5:
-  "linear-gradient(145deg,#450a0a,#dc2626,#f97316)",
-
-  6:
-  "linear-gradient(145deg,#111827,#374151,#000)"
-
-};
-
-
-function setWallpaper(number){
-
-  wallpaper.style.background =
-    wallpapers[number];
-
-  localStorage.setItem(
-    "wallpaper",
-    number
-  );
-
-  document
-    .querySelectorAll(
-      ".wallpaper-option"
-    )
-    .forEach(
-      x=>x.classList.remove("selected")
+    appScreen.classList.add(
+        "open"
     );
 
-  const selected =
-    document.querySelector(
-      `.wp${number}`
-    );
 
-  if(selected)
-    selected.classList.add(
-      "selected"
+    requestAnimationFrame(
+        function() {
+
+            requestAnimationFrame(
+                function() {
+
+                    appScreen.classList.add(
+                        "visible"
+                    );
+
+                }
+            );
+
+        }
     );
 
 }
 
 
-setWallpaper(
-  localStorage.getItem(
-    "wallpaper"
-  ) || 1
-);
 
+/* =========================
+   CLOSE APP
+========================= */
 
-/* =========================================================
-   APPS
-   ========================================================= */
+function finishClose() {
 
-const apps = {
+    appScreen.classList.remove(
+        "visible"
+    );
 
-  phone:{
-    title:"Phone",
-    content:`
-      <div class="fake-card">
-        <h2>📞 Phone</h2>
-        <p>Your recent calls will appear here.</p>
-      </div>
-
-      <div class="fake-card">
-        <h2>Contacts</h2>
-        <p>ZoraOS contacts interface.</p>
-      </div>
-    `
-  },
-
-  messages:{
-    title:"Messages",
-    content:`
-      <div class="fake-card">
-        <h2>💬 Messages</h2>
-        <p>No new conversations.</p>
-      </div>
-    `
-  },
-
-  camera:{
-    title:"Camera",
-    content:`
-      <div class="fake-card">
-        <h2>📷 Zora Camera</h2>
-        <p>Camera simulator coming soon.</p>
-      </div>
-    `
-  },
-
-  music:{
-    title:"Music",
-    content:`
-      <div class="fake-card">
-        <h2>🎵 Zora Music</h2>
-        <p>Your music player interface.</p>
-      </div>
-    `
-  },
-
-  photos:{
-    title:"Photos",
-    content:`
-      <div class="fake-card">
-        <h2>🌈 Photos</h2>
-        <p>Your ZoraOS gallery.</p>
-      </div>
-    `
-  },
-
-  notes:{
-    title:"Notes",
-    content:`
-      <div class="fake-card">
-        <h2>📝 Notes</h2>
-        <p>Write something in ZoraOS.</p>
-      </div>
-    `
-  }
-
-};
-
-
-/* =========================================================
-   OPEN APP
-   ========================================================= */
-
-function openApp(name){
-
-  closeControlCentre();
-
-  currentApp = name;
-
-  if(name==="settings"){
-
-    settingsApp.classList.add("open");
-
-    return;
-
-  }
-
-
-  if(name==="snake"){
-
-    snakeApp.classList.add("open");
 
     setTimeout(
-      startSnake,
-      260
+        function() {
+
+            appScreen.classList.remove(
+                "open"
+            );
+
+            appScreen.style.display =
+                "none";
+
+            appScreen.style.transform =
+                "";
+
+            appScreen.style.opacity =
+                "";
+
+            appScreen.style.transition =
+                "";
+
+            appScreen.style.borderRadius =
+                "";
+
+        },
+        300
     );
-
-    return;
-
-  }
-
-
-  const app = apps[name];
-
-  if(!app)
-    return;
-
-  document.getElementById(
-    "genericTitle"
-  ).textContent =
-    app.title;
-
-  document.getElementById(
-    "genericContent"
-  ).innerHTML =
-    app.content;
-
-  genericApp.classList.add(
-    "open"
-  );
 
 }
 
 
-/* =========================================================
-   CLOSE APP
-   ========================================================= */
+function closeApp() {
 
-function closeApp(){
-
-  genericApp.classList.remove(
-    "open"
-  );
-
-  settingsApp.classList.remove(
-    "open"
-  );
-
-  snakeApp.classList.remove(
-    "open"
-  );
-
-  currentApp = null;
-
-  if(snakeLoop){
-
-    clearInterval(
-      snakeLoop
-    );
-
-    snakeLoop = null;
-
-  }
+    finishClose();
 
 }
 
 
-/* =========================================================
-   SWIPE UP TO CLOSE APP
-   ========================================================= */
 
-let appStartY = 0;
+/* =========================
+   SWIPE DOWN TO CLOSE
+========================= */
 
-document
-  .getElementById("phone")
-  .addEventListener(
+let startY = 0;
+
+let currentY = 0;
+
+let dragging = false;
+
+
+appScreen.addEventListener(
     "touchstart",
-    e=>{
+    function(e) {
 
-      if(!currentApp)
-        return;
+        startY =
+            e.touches[0].clientY;
 
-      appStartY =
-        e.touches[0].clientY;
+        currentY =
+            startY;
+
+        dragging =
+            true;
+
+
+        appScreen.style.transition =
+            "none";
 
     },
-    {passive:true}
-  );
+    {
+        passive: true
+    }
+);
 
 
-document
-  .getElementById("phone")
-  .addEventListener(
+appScreen.addEventListener(
+    "touchmove",
+    function(e) {
+
+        if (!dragging)
+            return;
+
+
+        currentY =
+            e.touches[0].clientY;
+
+
+        const distance =
+            Math.max(
+                0,
+                currentY - startY
+            );
+
+
+        if (
+            distance > 0
+        ) {
+
+            const scale =
+                1 -
+                Math.min(
+                    distance / 1600,
+                    .07
+                );
+
+
+            const opacity =
+                1 -
+                Math.min(
+                    distance / 650,
+                    .35
+                );
+
+
+            appScreen.style.transform =
+                "translateY(" +
+                distance +
+                "px) scale(" +
+                scale +
+                ")";
+
+
+            appScreen.style.opacity =
+                opacity;
+
+
+            appScreen.style.borderRadius =
+                Math.min(
+                    distance / 5,
+                    34
+                ) + "px";
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+appScreen.addEventListener(
     "touchend",
-    e=>{
+    function() {
 
-      if(!currentApp)
-        return;
+        if (!dragging)
+            return;
 
-      const endY =
-        e.changedTouches[0].clientY;
 
-      if(
-        appStartY - endY > 100
-      ){
+        dragging =
+            false;
 
-        closeApp();
 
-      }
+        const distance =
+            currentY - startY;
+
+
+        appScreen.style.transition =
+            "transform .30s cubic-bezier(.2,.8,.2,1), opacity .25s ease, border-radius .3s ease";
+
+
+        if (
+            distance > 105
+        ) {
+
+            appScreen.style.transform =
+                "translateY(105%) scale(.92)";
+
+            appScreen.style.opacity =
+                "0";
+
+
+            setTimeout(
+                function() {
+
+                    appScreen.classList.remove(
+                        "visible",
+                        "open"
+                    );
+
+
+                    appScreen.style.display =
+                        "none";
+
+
+                    appScreen.style.transform =
+                        "";
+
+                    appScreen.style.opacity =
+                        "";
+
+                    appScreen.style.transition =
+                        "";
+
+                    appScreen.style.borderRadius =
+                        "";
+
+                },
+                300
+            );
+
+        }
+
+        else {
+
+            appScreen.style.transform =
+                "translateY(0) scale(1)";
+
+            appScreen.style.opacity =
+                "1";
+
+            appScreen.style.borderRadius =
+                "0";
+
+
+            setTimeout(
+                function() {
+
+                    appScreen.style.transition =
+                        "";
+
+                },
+                300
+            );
+
+        }
 
     },
-    {passive:true}
-  );
-
-
-/* =========================================================
-   SNAKE
-   ========================================================= */
-
-let snake = [];
-
-let snakeFood = {
-  x:10,
-  y:10
-};
-
-let snakeDirection = {
-  x:1,
-  y:0
-};
-
-let nextSnakeDirection = {
-  x:1,
-  y:0
-};
-
-let snakeScore = 0;
-
-let snakeLoop = null;
-
-const snakeGrid = 20;
-
-const canvas =
-document.getElementById(
-  "snakeCanvas"
-);
-
-const ctx =
-canvas.getContext("2d");
-
-
-function startSnake(){
-
-  if(snakeLoop){
-
-    clearInterval(
-      snakeLoop
-    );
-
-  }
-
-  snake = [
-
-    {x:10,y:10},
-    {x:9,y:10},
-    {x:8,y:10}
-
-  ];
-
-  snakeDirection = {
-    x:1,
-    y:0
-  };
-
-  nextSnakeDirection = {
-    x:1,
-    y:0
-  };
-
-  snakeScore = 0;
-
-  document.getElementById(
-    "snakeScore"
-  ).textContent = "0";
-
-  document.getElementById(
-    "snakeGameOver"
-  ).classList.remove(
-    "show"
-  );
-
-  spawnSnakeFood();
-
-  drawSnake();
-
-  /*
-    Slower gameplay:
-    200 milliseconds.
-  */
-
-  snakeLoop =
-    setInterval(
-      runSnake,
-      200
-    );
-
-}
-
-
-function spawnSnakeFood(){
-
-  do{
-
-    snakeFood = {
-
-      x:
-      Math.floor(
-        Math.random()*snakeGrid
-      ),
-
-      y:
-      Math.floor(
-        Math.random()*snakeGrid
-      )
-
-    };
-
-  }while(
-    snake.some(
-      p=>
-        p.x===snakeFood.x &&
-        p.y===snakeFood.y
-    )
-  );
-
-}
-
-
-function runSnake(){
-
-  snakeDirection =
-    nextSnakeDirection;
-
-  const head = {
-
-    x:
-    snake[0].x +
-    snakeDirection.x,
-
-    y:
-    snake[0].y +
-    snakeDirection.y
-
-  };
-
-
-  if(
-
-    head.x<0 ||
-    head.x>=snakeGrid ||
-    head.y<0 ||
-    head.y>=snakeGrid
-
-  ){
-
-    endSnake();
-
-    return;
-
-  }
-
-
-  if(
-    snake.some(
-      p=>
-        p.x===head.x &&
-        p.y===head.y
-    )
-  ){
-
-    endSnake();
-
-    return;
-
-  }
-
-
-  snake.unshift(head);
-
-
-  if(
-
-    head.x===snakeFood.x &&
-    head.y===snakeFood.y
-
-  ){
-
-    snakeScore++;
-
-    document.getElementById(
-      "snakeScore"
-    ).textContent =
-      snakeScore;
-
-    spawnSnakeFood();
-
-  }else{
-
-    snake.pop();
-
-  }
-
-
-  drawSnake();
-
-}
-
-
-function drawSnake(){
-
-  const size =
-    canvas.width/snakeGrid;
-
-
-  ctx.fillStyle =
-    "#07110b";
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-
-  /* FOOD */
-
-  ctx.fillStyle =
-    "#ef4444";
-
-  ctx.beginPath();
-
-  ctx.arc(
-
-    snakeFood.x*size+
-    size/2,
-
-    snakeFood.y*size+
-    size/2,
-
-    size*.35,
-
-    0,
-    Math.PI*2
-
-  );
-
-  ctx.fill();
-
-
-  /* SNAKE */
-
-  snake.forEach(
-    (part,index)=>{
-
-      ctx.fillStyle =
-        index===0
-        ? "#86efac"
-        : "#22c55e";
-
-      ctx.fillRect(
-
-        part.x*size+1,
-        part.y*size+1,
-
-        size-2,
-        size-2
-
-      );
-
+    {
+        passive: true
     }
-  );
-
-
-  /* EYES */
-
-  const head =
-    snake[0];
-
-  if(head){
-
-    ctx.fillStyle =
-      "#052e16";
-
-    ctx.fillRect(
-
-      head.x*size+
-      size*.62,
-
-      head.y*size+
-      size*.25,
-
-      3,
-      3
-
-    );
-
-    ctx.fillRect(
-
-      head.x*size+
-      size*.62,
-
-      head.y*size+
-      size*.62,
-
-      3,
-      3
-
-    );
-
-  }
-
-}
-
-
-function changeSnakeDirection(
-  direction
-){
-
-  if(direction==="up"){
-
-    if(snakeDirection.y!==1){
-
-      nextSnakeDirection={
-        x:0,
-        y:-1
-      };
-
-    }
-
-  }
-
-
-  if(direction==="down"){
-
-    if(snakeDirection.y!==-1){
-
-      nextSnakeDirection={
-        x:0,
-        y:1
-      };
-
-    }
-
-  }
-
-
-  if(direction==="left"){
-
-    if(snakeDirection.x!==1){
-
-      nextSnakeDirection={
-        x:-1,
-        y:0
-      };
-
-    }
-
-  }
-
-
-  if(direction==="right"){
-
-    if(snakeDirection.x!==-1){
-
-      nextSnakeDirection={
-        x:1,
-        y:0
-      };
-
-    }
-
-  }
-
-}
-
-
-function endSnake(){
-
-  if(snakeLoop){
-
-    clearInterval(
-      snakeLoop
-    );
-
-    snakeLoop=null;
-
-  }
-
-  document.getElementById(
-    "snakeFinalScore"
-  ).textContent =
-    snakeScore;
-
-  document.getElementById(
-    "snakeGameOver"
-  ).classList.add(
-    "show"
-  );
-
-}
-
-
-/* =========================================================
-   SNAKE TOUCH CONTROLS
-   ========================================================= */
-
-let snakeTouchX=0;
-let snakeTouchY=0;
-
-canvas.addEventListener(
-  "touchstart",
-  e=>{
-
-    const t =
-      e.touches[0];
-
-    snakeTouchX =
-      t.clientX;
-
-    snakeTouchY =
-      t.clientY;
-
-  },
-  {passive:true}
-);
-
-
-canvas.addEventListener(
-  "touchend",
-  e=>{
-
-    const t =
-      e.changedTouches[0];
-
-    const dx =
-      t.clientX-snakeTouchX;
-
-    const dy =
-      t.clientY-snakeTouchY;
-
-
-    if(
-      Math.abs(dx)<20 &&
-      Math.abs(dy)<20
-    )
-      return;
-
-
-    if(
-      Math.abs(dx)>
-      Math.abs(dy)
-    ){
-
-      if(dx>0)
-        changeSnakeDirection(
-          "right"
-        );
-      else
-        changeSnakeDirection(
-          "left"
-        );
-
-    }else{
-
-      if(dy>0)
-        changeSnakeDirection(
-          "down"
-        );
-      else
-        changeSnakeDirection(
-          "up"
-        );
-
-    }
-
-  },
-  {passive:true}
-);
-
-
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
-
-document.addEventListener(
-  "keydown",
-  e=>{
-
-    if(e.key==="ArrowUp")
-      changeSnakeDirection("up");
-
-    if(e.key==="ArrowDown")
-      changeSnakeDirection("down");
-
-    if(e.key==="ArrowLeft")
-      changeSnakeDirection("left");
-
-    if(e.key==="ArrowRight")
-      changeSnakeDirection("right");
-
-  }
 );
 
 </script>
 
 </body>
-            </html>
+          </html>
