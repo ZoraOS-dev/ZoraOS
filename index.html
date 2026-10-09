@@ -1,1497 +1,1153 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#071746">
 <title>ZoraOS</title>
 
 <style>
-
 :root {
-    --text: #ffffff;
-    --muted: #c9d2e3;
+  --accent: #72baff;
+  --clock-size: 82px;
+  --glass: rgba(255,255,255,.14);
+  --border: rgba(255,255,255,.23);
 }
 
 * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,
 body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: white;
+  background: #061338;
+  overflow: hidden;
+  user-select: none;
+}
 
-    background: #000;
-    color: white;
-
-    font-family: Arial, Helvetica, sans-serif;
+button, input {
+  font: inherit;
 }
 
 button {
-    font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
-
-/* =========================
-   LOCK SCREEN
-========================= */
-
-#lockScreen {
-
-    position: fixed;
-    inset: 0;
-
-    z-index: 1000;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-
-    padding:
-        72px
-        22px
-        calc(28px + env(safe-area-inset-bottom));
-
-    background:
-
-        radial-gradient(
-            circle at 20% 15%,
-            rgba(137, 53, 255, .85),
-            transparent 31%
-        ),
-
-        radial-gradient(
-            circle at 76% 82%,
-            rgba(0, 218, 235, .55),
-            transparent 38%
-        ),
-
-        linear-gradient(
-            150deg,
-            #081321 0%,
-            #0a1020 60%,
-            #06111f 100%
-        );
-
-    transition:
-        transform .48s cubic-bezier(.2,.8,.2,1),
-        opacity .35s ease;
+#os {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 85% 18%, #2459dc 0%, transparent 38%),
+    radial-gradient(ellipse at 12% 75%, #4920b9 0%, transparent 42%),
+    linear-gradient(145deg,#03102e,#092e85 48%,#071334);
 }
 
-.lockClock {
-    text-align: center;
-
-    text-shadow:
-        0 4px 24px rgba(0,0,0,.25);
+.wallpaper {
+  position: absolute;
+  inset: -15%;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-#lockTime {
-
-    font-size: 72px;
-
-    line-height: .95;
-
-    font-weight: 700;
-
-    letter-spacing: -4px;
+.ribbon {
+  position: absolute;
+  width: 120%;
+  height: 42%;
+  border: 2px solid rgba(80,180,255,.62);
+  border-radius: 50%;
+  transform: rotate(-38deg);
+  filter: blur(1px);
+  box-shadow: 0 0 22px #247bff, inset 0 0 25px #225cff;
 }
 
-#lockDate {
-
-    margin-top: 12px;
-
-    font-size: 15px;
-
-    color: #e6ebf3;
+.ribbon.one { top: 12%; left: -45%; }
+.ribbon.two {
+  top: 47%; left: 15%;
+  border-color: rgba(177,99,255,.85);
+  box-shadow: 0 0 24px #803aff,inset 0 0 20px #5b30ff;
+  transform: rotate(35deg);
+}
+.ribbon.three {
+  top: 68%; left: -30%;
+  border-color: rgba(58,166,255,.8);
+  transform: rotate(-20deg);
 }
 
-.lockHint {
-    text-align: center;
+.glass {
+  background: linear-gradient(135deg,rgba(255,255,255,.19),rgba(255,255,255,.055));
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.18),0 12px 35px rgba(0,0,0,.13);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
 }
 
-.lockHint p {
-
-    margin: 0 0 14px;
-
-    color: #e7edf7;
-
-    font-size: 14px;
+#status {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  font-size: 14px;
+  font-weight: 650;
+  text-shadow: 0 1px 8px #172e70;
 }
 
-.homeBar {
-
-    width: 138px;
-    height: 5px;
-
-    border-radius: 99px;
-
-    background: white;
-
-    margin: auto;
+.status-right { display:flex; gap:7px; align-items:center; }
+.battery {
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-size: 12px;
 }
 
-
-/* =========================
-   HOME SCREEN
-========================= */
-
-#homeScreen {
-
-    position: fixed;
-    inset: 0;
-
-    z-index: 1;
-
-    padding:
-        calc(18px + env(safe-area-inset-top))
-        20px
-        calc(132px + env(safe-area-inset-bottom));
-
-    background:
-
-        radial-gradient(
-            circle at 17% 17%,
-            rgba(142,43,255,.92),
-            transparent 30%
-        ),
-
-        radial-gradient(
-            circle at 82% 82%,
-            rgba(0,221,238,.72),
-            transparent 32%
-        ),
-
-        linear-gradient(
-            160deg,
-            #0b1020 0%,
-            #10192d 50%,
-            #061522 100%
-        );
+#home {
+  position: absolute;
+  inset: 48px 0 0;
+  padding: 10px 20px 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform .42s cubic-bezier(.2,.8,.2,1), opacity .3s;
 }
 
-
-/* STATUS BAR */
-
-.statusBar {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    font-size: 14px;
-
-    font-weight: 700;
+.widgets {
+  display: grid;
+  grid-template-columns: 1.2fr .85fr;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
-
-/* BRAND */
-
-.brand {
-
-    margin-top: 30px;
-
-    margin-bottom: 34px;
+.widget {
+  height: 185px;
+  border-radius: 30px;
+  padding: 16px;
+  overflow: hidden;
+  position: relative;
 }
 
-.brand h1 {
-
-    margin: 0;
-
-    font-size: 44px;
-
-    letter-spacing: -1.6px;
+.widget-clock {
+  font-size: clamp(42px,12vw,64px);
+  font-weight: 300;
+  letter-spacing: -3px;
+  line-height: 1.1;
+  margin-top: 10px;
 }
 
-.brand p {
+.widget-date { font-size: 14px; margin-top: 5px; opacity: .95; }
+.weather-row { display:flex; align-items:center; gap:10px; margin-top:17px; }
+.weather-icon { font-size:36px; }
+.weather-temp { font-size:30px; line-height:1.05; }
+.weather-small { font-size:11px; opacity:.85; margin-top:4px; }
 
-    margin: 7px 0 0;
+.brand-widget {
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding: 23px 17px;
+}
+.brand-name { font-size:24px; font-weight:700; }
+.brand-tag { font-size:13px; opacity:.85; line-height:1.5; }
+.planet { font-size:48px; text-align:right; }
+.event { border-top:1px solid #ffffff55; padding-top:14px; font-size:12px; line-height:1.7; }
 
-    color: var(--muted);
-
-    font-size: 14px;
+.pages {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  width: 100%;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
 }
 
-
-/* =========================
-   APP GRID
-========================= */
-
-.grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    column-gap: 16px;
-
-    row-gap: 28px;
+.page {
+  min-width:100%;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  gap: 8px 4px;
+  padding: 18px 0 8px;
 }
 
-.appIcon {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 7px;
-
-    user-select: none;
-
-    cursor: pointer;
-
-    transition:
-        transform .13s ease;
+.app-icon {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:7px;
+  border:0;
+  background:transparent;
+  min-width:0;
+  animation: iconIn .45s both;
 }
 
-.appIcon:active {
+.app-icon:nth-child(2n) { animation-delay:.025s; }
+.app-icon:nth-child(3n) { animation-delay:.05s; }
 
-    transform: scale(.84);
+@keyframes iconIn {
+  from { opacity:0; transform:translateY(12px) scale(.94); }
+  to { opacity:1; transform:translateY(0) scale(1); }
 }
 
-
-/* REAL ICONS */
-
-.appIcon img {
-
-    width: 68px;
-    height: 68px;
-
-    object-fit: contain;
-
-    border-radius: 22px;
-
-    filter:
-        drop-shadow(
-            0 9px 16px rgba(0,0,0,.28)
-        );
+.icon-art {
+  width:min(17vw,70px);
+  height:min(17vw,70px);
+  min-width:47px;
+  min-height:47px;
+  max-width:70px;
+  max-height:70px;
+  border-radius:23px;
+  display:grid;
+  place-items:center;
+  font-size:35px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid #ffffff55;
+  box-shadow:inset 0 1px 3px #ffffff50,0 5px 12px #0003;
+  background:linear-gradient(145deg,#468fff,#123bd5);
 }
 
-
-/* SNAKE */
-
-.snakeIcon {
-
-    width: 68px;
-    height: 68px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 38px;
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #16b85d,
-            #0b8846
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.22);
-
-    box-shadow:
-
-        inset
-        0 1px 2px
-        rgba(255,255,255,.24),
-
-        0 9px 16px
-        rgba(0,0,0,.28);
+.icon-art::before {
+  content:"";
+  position:absolute;
+  top:-40%;
+  left:-25%;
+  width:100%;
+  height:70%;
+  border-radius:50%;
+  background:#ffffff24;
+  transform:rotate(-35deg);
 }
 
-.appLabel {
+.icon-art span { position:relative; z-index:1; }
 
-    font-size: 12px;
+.icon-phone { background:linear-gradient(145deg,#3df4a2,#00a76c); }
+.icon-messages { background:linear-gradient(145deg,#2dafff,#003edb); }
+.icon-camera { background:linear-gradient(145deg,#7487c7,#131d48); }
+.icon-music { background:linear-gradient(145deg,#d35dff,#4133d9); }
+.icon-gallery { background:linear-gradient(145deg,#6579a9,#111b43); }
+.icon-browser { background:linear-gradient(145deg,#147fff,#071e91); }
+.icon-store { background:linear-gradient(145deg,#35528e,#111936); }
+.icon-files { background:linear-gradient(145deg,#2ddcff,#0875c8); }
+.icon-weather { background:linear-gradient(145deg,#32a9ff,#073fdd); }
+.icon-calendar { background:linear-gradient(145deg,#fff,#c4d6ff); color:#20335b; }
+.icon-clock { background:linear-gradient(145deg,#35456e,#070e28); }
+.icon-email { background:linear-gradient(145deg,#41bdff,#0647df); }
+.icon-calculator { background:linear-gradient(145deg,#657cae,#182451); }
+.icon-recorder { background:linear-gradient(145deg,#794bff,#190d68); }
+.icon-compass { background:linear-gradient(145deg,#344e83,#07152e); }
+.icon-maps { background:linear-gradient(145deg,#6ce7b5,#2775c8); }
+.icon-snake { background:linear-gradient(145deg,#53e6a2,#047c56); }
+.icon-settings { background:linear-gradient(145deg,#899ab9,#273650); }
+.icon-label { font-size:11px; white-space:nowrap; text-shadow:0 1px 5px #0007; }
 
-    color: white;
+.page-dots {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  height:26px;
+  flex-shrink:0;
+}
+.dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ffffff65;
+  transition:all .25s;
+}
+.dot.active { background:white; width:19px; border-radius:8px; }
 
-    text-shadow:
-        0 2px 8px rgba(0,0,0,.4);
+.dock {
+  height:90px;
+  flex-shrink:0;
+  border-radius:32px;
+  margin:6px -1px 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-evenly;
+  padding:8px;
+  background:rgba(205,220,255,.17);
+  border:1px solid #ffffff42;
+  backdrop-filter:blur(32px);
+  -webkit-backdrop-filter:blur(32px);
+  box-shadow:inset 0 1px 2px #ffffff4a,0 8px 30px #0003;
+}
+.dock .icon-art { width:60px; height:60px; min-width:60px; min-height:60px; border-radius:20px; }
+.dock button { padding:0; border:0; background:none; }
 
-    white-space: nowrap;
+#nav-pill {
+  position:absolute;
+  z-index:60;
+  bottom:7px;
+  left:50%;
+  transform:translateX(-50%);
+  width:108px;
+  height:4px;
+  background:#ffffffb5;
+  border-radius:8px;
 }
 
-
-/* =========================
-   DOCK
-========================= */
-
-#dock {
-
-    position: absolute;
-
-    left: 18px;
-    right: 18px;
-
-    /* RAISED DOCK */
-    bottom:
-        calc(
-            30px +
-            env(safe-area-inset-bottom)
-        );
-
-    height: 92px;
-
-    border-radius: 34px;
-
-    background:
-        rgba(255,255,255,.13);
-
-    border:
-        1px solid
-        rgba(255,255,255,.17);
-
-    backdrop-filter:
-        blur(24px);
-
-    -webkit-backdrop-filter:
-        blur(24px);
-
-    box-shadow:
-
-        0 16px 35px
-        rgba(0,0,0,.30),
-
-        inset
-        0 1px 1px
-        rgba(255,255,255,.1);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-around;
-
-    padding: 0 10px;
+#lockscreen {
+  position:absolute;
+  z-index:30;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  padding:58px 24px 32px;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s;
 }
+#lockscreen.unlocked { transform:translateY(-105%); opacity:0; pointer-events:none; }
 
-.dockApp {
-
-    cursor: pointer;
-
-    transition:
-        transform .13s ease;
+.lock-top { text-align:center; margin-top:5vh; }
+.lock-date { font-size:17px; opacity:.9; }
+.lock-clock {
+  font-size:var(--clock-size);
+  font-weight:250;
+  line-height:1.1;
+  letter-spacing:-4px;
+  text-shadow:0 4px 30px #1c49a5;
+  transition:font-size .2s;
 }
-
-.dockApp:active {
-
-    transform: scale(.82);
+.lock-weather { margin-top:16px; font-size:16px; }
+.lock-notification {
+  margin-top:auto;
+  border-radius:24px;
+  padding:16px;
+  line-height:1.5;
 }
-
-.dockApp img {
-
-    width: 68px;
-    height: 68px;
-
-    object-fit: contain;
-
-    display: block;
-
-    filter:
-        drop-shadow(
-            0 8px 14px
-            rgba(0,0,0,.28)
-        );
+.lock-notification strong { font-size:14px; }
+.lock-bottom { text-align:center; margin-top:22px; font-size:13px; }
+.lock-shortcuts { display:flex; justify-content:space-between; margin-top:23px; }
+.shortcut {
+  width:47px;height:47px;border-radius:50%;
+  border:1px solid #ffffff50;
+  background:#ffffff1c;
+  display:grid;place-items:center;font-size:21px;
 }
+.unlock-hint { text-align:center; margin-top:25px; font-size:12px; opacity:.8; }
 
-
-/* =========================
-   APP SCREEN
-========================= */
-
-#appScreen {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 50;
-
-    display: none;
-
-    background:
-
-        radial-gradient(
-            circle at 70% 5%,
-            rgba(70,113,255,.35),
-            transparent 32%
-        ),
-
-        linear-gradient(
-            160deg,
-            #0b1425,
-            #060b13 70%
-        );
-
-    transform:
-        translateY(18px)
-        scale(.94);
-
-    opacity: 0;
-
-    transition:
-
-        transform .34s cubic-bezier(.2,.8,.2,1),
-
-        opacity .25s ease,
-
-        border-radius .34s ease;
-
-    border-radius: 30px;
-
-    overflow: hidden;
-
-    touch-action: none;
+.screen {
+  position:absolute;
+  z-index:25;
+  inset:0;
+  background:linear-gradient(145deg,#edf4ff,#c9dfff 60%,#a5c9ff);
+  color:#14264a;
+  transform:translateY(105%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .25s;
+  overflow-y:auto;
+  overscroll-behavior:contain;
 }
-
-#appScreen.open {
-
-    display: block;
+.screen.open {
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
 }
-
-#appScreen.visible {
-
-    transform:
-        translateY(0)
-        scale(1);
-
-    opacity: 1;
-
-    border-radius: 0;
+.screen-inner { padding:55px 20px 45px; min-height:100%; }
+.app-header { display:flex; align-items:center; gap:15px; margin-bottom:25px; }
+.back {
+  width:40px;height:40px;border-radius:50%;
+  background:#ffffff9c;border:1px solid #ffffffc4;
+  color:#15264b;font-size:22px;
 }
-
-
-/* APP HEADER */
-
-.appTop {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding:
-        calc(
-            18px +
-            env(safe-area-inset-top)
-        )
-        18px
-        12px;
+.app-title { font-size:27px;font-weight:750; letter-spacing:-.6px; }
+.app-subtitle { font-size:13px;color:#61708e;margin-top:3px; }
+.panel {
+  background:#ffffffa8;
+  border:1px solid #ffffffc9;
+  border-radius:24px;
+  padding:17px;
+  margin-bottom:15px;
+  box-shadow:0 8px 25px #274a8b0c;
 }
-
-.backBtn {
-
-    border: 0;
-
-    color: white;
-
-    background:
-        rgba(255,255,255,.11);
-
-    padding: 10px 14px;
-
-    border-radius: 16px;
-
-    cursor: pointer;
+.row-item {
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:14px 0;
+  border-bottom:1px solid #193e7013;
 }
-
-#appTitle {
-
-    font-size: 18px;
-
-    font-weight: 700;
+.row-item:last-child { border-bottom:0; }
+.row-emoji {
+  width:42px;height:42px;border-radius:14px;
+  display:grid;place-items:center;
+  background:#dceaff;font-size:21px;flex-shrink:0;
 }
-
-
-/* APP CONTENT */
-
-.appBody {
-
-    padding: 20px;
+.row-main { flex:1;min-width:0; }
+.row-title { font-size:15px;font-weight:650; }
+.row-desc { font-size:12px;color:#6d7b96;margin-top:4px; }
+.chevron { color:#8796b0;font-size:22px; }
+.action {
+  border:0;border-radius:15px;
+  background:#236be9;color:white;
+  padding:12px 16px;font-weight:650;
 }
-
-.appCard {
-
-    margin-top: 10px;
-
-    padding: 24px;
-
-    border-radius: 26px;
-
-    background:
-        rgba(255,255,255,.08);
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    backdrop-filter:
-        blur(16px);
-
-    -webkit-backdrop-filter:
-        blur(16px);
+.secondary {
+  border:1px solid #b7c9e9;border-radius:15px;
+  background:#ffffffa6;color:#18315c;padding:12px 16px;
 }
-
-.bigAppIcon {
-
-    width: 82px;
-    height: 82px;
-
-    object-fit: contain;
-
-    display: block;
-
-    margin-bottom: 18px;
+input[type="range"] { width:100%; accent-color:#246be8; margin:12px 0; }
+input[type="text"],textarea {
+  width:100%;border:1px solid #cad7ee;border-radius:13px;
+  padding:12px;background:white;color:#1a2e50;
 }
-
-.appCard h2 {
-
-    margin: 0 0 8px;
-
-    font-size: 30px;
+.setting-label { font-size:13px;color:#647491; }
+.about-hero { text-align:center;padding:24px 10px 27px; }
+.about-logo {
+  width:92px;height:92px;border-radius:28px;margin:0 auto 14px;
+  display:grid;place-items:center;font-size:52px;
+  background:linear-gradient(145deg,#4a9bff,#4034de);
+  color:white;box-shadow:0 10px 30px #346ce94a;
 }
+.about-version { font-size:14px;color:#667798;margin-top:5px; }
+.info-line { display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #193e7013;font-size:13px; }
+.info-line:last-child { border:0; }
+.info-line span:last-child { color:#687895;text-align:right; }
 
-.appCard p {
-
-    margin: 0;
-
-    color: #cbd5e1;
-
-    line-height: 1.45;
+#control {
+  position:absolute;z-index:45;inset:0;
+  padding:65px 19px 35px;
+  background:linear-gradient(145deg,rgba(14,28,65,.9),rgba(24,48,105,.84));
+  backdrop-filter:blur(35px);-webkit-backdrop-filter:blur(35px);
+  transform:translateY(-110%);
+  opacity:0;pointer-events:none;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .3s;
+  overflow-y:auto;
 }
-
-
-/* APP HOME BAR */
-
-.gestureBar {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom:
-        calc(
-            10px +
-            env(safe-area-inset-bottom)
-        );
-
-    transform:
-        translateX(-50%);
-
-    width: 120px;
-
-    height: 5px;
-
-    border-radius: 99px;
-
-    background: white;
-
-    opacity: .9;
+#control.open { transform:translateY(0);opacity:1;pointer-events:auto; }
+.cc-head { display:flex;justify-content:space-between;align-items:center;margin-bottom:22px; }
+.cc-title { font-size:28px;font-weight:750; }
+.cc-time { opacity:.8;font-size:14px; }
+.cc-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+.cc-tile {
+  min-height:88px;border-radius:23px;padding:14px;
+  border:1px solid #ffffff30;background:#ffffff16;
+  display:flex;flex-direction:column;justify-content:space-between;gap:12px;
+  text-align:left;
 }
+.cc-tile.active { background:#e8f2ff;color:#16336c; }
+.cc-tile .tile-icon { font-size:25px; }
+.cc-tile strong { font-size:14px; }
+.cc-tile small { opacity:.72; }
+.cc-slider { border-radius:22px;padding:17px;margin-top:13px;background:#ffffff16;border:1px solid #ffffff25; }
+.cc-slider label { display:flex;justify-content:space-between;font-size:13px; }
+.cc-slider input { accent-color:white; }
+.cc-close { width:100%;margin-top:18px;border-radius:18px;border:1px solid #ffffff40;background:#ffffff18;padding:14px; }
 
+#toast {
+  position:absolute;z-index:100;left:50%;bottom:45px;
+  transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:#142449e8;color:white;padding:11px 17px;border-radius:22px;
+  font-size:13px;transition:.25s;white-space:nowrap;
+}
+#toast.show { transform:translate(-50%,0);opacity:1; }
+
+.snake-board {
+  display:grid;
+  grid-template-columns:repeat(16,1fr);
+  gap:2px;
+  width:100%;
+  aspect-ratio:1;
+  padding:7px;border-radius:20px;
+  background:#d8e7fa;
+}
+.cell { border-radius:4px;background:#edf4ff;aspect-ratio:1; }
+.cell.snake { background:#20b77b;box-shadow:inset 0 1px 2px #ffffff9a; }
+.cell.food { background:#f64e75;border-radius:50%; }
+.dpad { display:grid;grid-template-columns:repeat(3,55px);gap:7px;justify-content:center;margin-top:18px; }
+.dpad button { height:48px;border:0;border-radius:14px;background:#ffffffbd;color:#173464;font-size:22px; }
+.dpad button:active { background:#c4dafa; }
+
+#gestureHint {
+  position:absolute;z-index:18;top:48px;right:0;width:70px;height:26px;
+}
+.hidden { display:none!important; }
+
+@media (max-height:720px) {
+  .widget { height:155px;padding:13px; }
+  .widget-clock { font-size:49px; }
+  .weather-row { margin-top:10px; }
+  .page { padding-top:12px;gap:4px 3px; }
+  .icon-label { font-size:10px; }
+  .dock { height:74px;margin-bottom:9px; }
+  .dock .icon-art { width:52px;height:52px;min-width:52px;min-height:52px; }
+  .icon-art { border-radius:19px; }
+}
 </style>
 </head>
 
-
 <body>
+<div id="os">
+  <div class="wallpaper">
+    <div class="ribbon one"></div>
+    <div class="ribbon two"></div>
+    <div class="ribbon three"></div>
+  </div>
 
+  <div id="status">
+    <span id="statusTime">9:41</span>
+    <div class="status-right">
+      <span>▂▄▆</span><span>◉</span><span class="battery">78%</span>
+    </div>
+  </div>
 
-<!-- =========================
-     LOCK SCREEN
-========================= -->
+  <div id="gestureHint" aria-label="Open Control Center"></div>
 
-<div id="lockScreen">
-
-    <div class="lockClock">
-
-        <div id="lockTime">
-            09:41
+  <main id="home">
+    <div class="widgets">
+      <div class="widget glass">
+        <div class="widget-clock" id="widgetClock">9:41</div>
+        <div class="widget-date" id="widgetDate">Mon, 23 Jun</div>
+        <div class="weather-row">
+          <span class="weather-icon">🌤️</span>
+          <div>
+            <div class="weather-temp">26°</div>
+            <div class="weather-small">Mostly cloudy</div>
+          </div>
         </div>
+      </div>
 
-        <div id="lockDate">
-            Tuesday, 6 October
+      <div class="widget glass brand-widget">
+        <div>
+          <div class="brand-name">ZoraOS</div>
+          <div class="brand-tag">Your world.<br>Your OS.</div>
+          <div class="planet">🪐</div>
         </div>
-
+        <div class="event">▢ &nbsp; No events today<br>&nbsp;&nbsp;&nbsp;&nbsp; Enjoy your day!</div>
+      </div>
     </div>
 
-
-    <div class="lockHint">
-
-        <p>
-            Swipe up to unlock
-        </p>
-
-        <div class="homeBar"></div>
-
+    <div class="pages" id="pages">
+      <div class="page" id="page1"></div>
+      <div class="page" id="page2"></div>
     </div>
 
+    <div class="page-dots">
+      <span class="dot active" id="dot0"></span>
+      <span class="dot" id="dot1"></span>
+    </div>
+
+    <div class="dock" id="dock"></div>
+  </main>
+
+  <div id="lockscreen">
+    <div class="lock-top">
+      <div class="lock-date" id="lockDate">Monday, 23 June</div>
+      <div class="lock-clock" id="lockClock">9:41</div>
+      <div class="lock-weather">🌤️ &nbsp; 26° &nbsp; Mostly cloudy</div>
+    </div>
+
+    <div class="lock-notification glass">
+      <strong>◉ &nbsp; ZoraOS</strong>
+      <div>Your world. Your OS.</div>
+      <div style="font-size:12px;opacity:.75">Welcome back to your device.</div>
+    </div>
+
+    <div class="lock-bottom">
+      <div class="lock-shortcuts">
+        <button class="shortcut" onclick="toast('Flashlight simulation')">☼</button>
+        <button class="shortcut" onclick="openApp('Camera')">◎</button>
+      </div>
+      <div class="unlock-hint">Swipe up to unlock</div>
+    </div>
+  </div>
+
+  <section class="screen" id="appScreen">
+    <div class="screen-inner" id="appContent"></div>
+  </section>
+
+  <section id="control">
+    <div class="cc-head">
+      <div>
+        <div class="cc-title">Control Center</div>
+        <div class="cc-time" id="ccTime">Monday · 9:41</div>
+      </div>
+      <button class="shortcut" onclick="closeControl()">✕</button>
+    </div>
+
+    <div class="cc-grid">
+      <button class="cc-tile active" data-toggle="Wi-Fi" onclick="toggleTile(this)">
+        <span class="tile-icon">⌁</span><strong>Wi-Fi</strong><small>Connected</small>
+      </button>
+      <button class="cc-tile active" data-toggle="Bluetooth" onclick="toggleTile(this)">
+        <span class="tile-icon">ᛒ</span><strong>Bluetooth</strong><small>On</small>
+      </button>
+      <button class="cc-tile" data-toggle="Airplane Mode" onclick="toggleTile(this)">
+        <span class="tile-icon">✈</span><strong>Airplane Mode</strong><small>Off</small>
+      </button>
+      <button class="cc-tile" data-toggle="Focus" onclick="toggleTile(this)">
+        <span class="tile-icon">☾</span><strong>Focus</strong><small>Off</small>
+      </button>
+      <button class="cc-tile" onclick="openApp('Settings');closeControl()">
+        <span class="tile-icon">⚙</span><strong>Settings</strong><small>Customize ZoraOS</small>
+      </button>
+      <button class="cc-tile" onclick="openApp('Snake');closeControl()">
+        <span class="tile-icon">🐍</span><strong>Snake</strong><small>Play a game</small>
+      </button>
+    </div>
+
+    <div class="cc-slider">
+      <label><span>☼ &nbsp; Brightness</span><span id="brightVal">85%</span></label>
+      <input type="range" min="20" max="100" value="85" oninput="setBrightness(this.value)">
+    </div>
+    <div class="cc-slider">
+      <label><span>♫ &nbsp; Volume</span><span id="volumeVal">65%</span></label>
+      <input type="range" min="0" max="100" value="65" oninput="document.getElementById('volumeVal').textContent=this.value+'%'">
+    </div>
+    <button class="cc-close" onclick="closeControl()">Done</button>
+  </section>
+
+  <div id="nav-pill"></div>
+  <div id="toast"></div>
 </div>
-
-
-
-<!-- =========================
-     HOME SCREEN
-========================= -->
-
-<div id="homeScreen">
-
-
-    <div class="statusBar">
-
-        <span id="homeTime">
-            09:41
-        </span>
-
-        <span>
-            ● Wi-Fi ▮▮▮ 🔋
-        </span>
-
-    </div>
-
-
-    <div class="brand">
-
-        <h1>
-            ZoraOS
-        </h1>
-
-        <p>
-            Your world. Your OS.
-        </p>
-
-    </div>
-
-
-
-    <div class="grid">
-
-
-        <!-- PHONE -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Phone',
-                'icons/phone.png'
-            )"
-        >
-
-            <img
-                src="icons/phone.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Phone
-            </div>
-
-        </div>
-
-
-        <!-- MESSAGES -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Messages',
-                'icons/messages.png'
-            )"
-        >
-
-            <img
-                src="icons/messages.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Messages
-            </div>
-
-        </div>
-
-
-        <!-- CAMERA -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Camera',
-                'icons/camera.png'
-            )"
-        >
-
-            <img
-                src="icons/camera.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Camera
-            </div>
-
-        </div>
-
-
-        <!-- MUSIC -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Music',
-                'icons/music.png'
-            )"
-        >
-
-            <img
-                src="icons/music.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Music
-            </div>
-
-        </div>
-
-
-        <!-- PHOTOS -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Photos',
-                'icons/photos.png'
-            )"
-        >
-
-            <img
-                src="icons/photos.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Photos
-            </div>
-
-        </div>
-
-
-        <!-- NOTES -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Notes',
-                'icons/notes.png'
-            )"
-        >
-
-            <img
-                src="icons/notes.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Notes
-            </div>
-
-        </div>
-
-
-        <!-- SETTINGS -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Settings',
-                'icons/settings.png'
-            )"
-        >
-
-            <img
-                src="icons/settings.png"
-                alt=""
-            >
-
-            <div class="appLabel">
-                Settings
-            </div>
-
-        </div>
-
-
-        <!-- SNAKE -->
-
-        <div
-            class="appIcon"
-            onclick="openApp(
-                'Snake',
-                'snake'
-            )"
-        >
-
-            <div class="snakeIcon">
-                🐍
-            </div>
-
-            <div class="appLabel">
-                Snake
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================
-         DOCK
-    ========================= -->
-
-    <div id="dock">
-
-
-        <div
-            class="dockApp"
-            onclick="openApp(
-                'Phone',
-                'icons/phone.png'
-            )"
-        >
-
-            <img
-                src="icons/phone.png"
-                alt=""
-            >
-
-        </div>
-
-
-        <div
-            class="dockApp"
-            onclick="openApp(
-                'Messages',
-                'icons/messages.png'
-            )"
-        >
-
-            <img
-                src="icons/messages.png"
-                alt=""
-            >
-
-        </div>
-
-
-        <div
-            class="dockApp"
-            onclick="openApp(
-                'Camera',
-                'icons/camera.png'
-            )"
-        >
-
-            <img
-                src="icons/camera.png"
-                alt=""
-            >
-
-        </div>
-
-
-        <div
-            class="dockApp"
-            onclick="openApp(
-                'Music',
-                'icons/music.png'
-            )"
-        >
-
-            <img
-                src="icons/music.png"
-                alt=""
-            >
-
-        </div>
-
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================
-     APP SCREEN
-========================= -->
-
-<div id="appScreen">
-
-
-    <div class="appTop">
-
-        <button
-            class="backBtn"
-            onclick="closeApp()"
-        >
-            ← Home
-        </button>
-
-        <div id="appTitle">
-            App
-        </div>
-
-        <div style="width:70px"></div>
-
-    </div>
-
-
-    <div class="appBody">
-
-        <div class="appCard">
-
-
-            <img
-                id="appIconImage"
-                class="bigAppIcon"
-                src="icons/phone.png"
-                alt=""
-            >
-
-
-            <div
-                id="snakeBig"
-                class="snakeIcon"
-                style="
-                    width:82px;
-                    height:82px;
-                    margin-bottom:18px;
-                    display:none;
-                "
-            >
-                🐍
-            </div>
-
-
-            <h2 id="appHeading">
-                App
-            </h2>
-
-
-            <p id="appDescription">
-                Welcome to ZoraOS.
-            </p>
-
-
-        </div>
-
-    </div>
-
-
-    <div class="gestureBar"></div>
-
-</div>
-
-
 
 <script>
+"use strict";
 
+const $ = id => document.getElementById(id);
 
-/* =========================
-   ELEMENTS
-========================= */
+const apps = [
+  {name:"Phone",icon:"☎",cls:"icon-phone",page:1},
+  {name:"Messages",icon:"●",cls:"icon-messages",page:1},
+  {name:"Camera",icon:"◎",cls:"icon-camera",page:1},
+  {name:"Music",icon:"♫",cls:"icon-music",page:1},
+  {name:"Gallery",icon:"🌈",cls:"icon-gallery",page:1},
+  {name:"Browser",icon:"🪐",cls:"icon-browser",page:1},
+  {name:"Play Store",icon:"▶",cls:"icon-store",page:1},
+  {name:"Files",icon:"📁",cls:"icon-files",page:1},
+  {name:"Weather",icon:"🌤️",cls:"icon-weather",page:1},
+  {name:"Calendar",icon:"23",cls:"icon-calendar",page:1},
+  {name:"Clock",icon:"◷",cls:"icon-clock",page:1},
+  {name:"Email",icon:"✉",cls:"icon-email",page:1},
+  {name:"Calculator",icon:"⊞",cls:"icon-calculator",page:1},
+  {name:"Recorder",icon:"〰",cls:"icon-recorder",page:1},
+  {name:"Compass",icon:"🧭",cls:"icon-compass",page:1},
+  {name:"Maps",icon:"➤",cls:"icon-maps",page:1},
+  {name:"Snake",icon:"🐍",cls:"icon-snake",page:2},
+  {name:"Settings",icon:"⚙",cls:"icon-settings",page:2},
+  {name:"About ZoraOS",icon:"🪐",cls:"icon-browser",page:2},
+  {name:"Notes",icon:"📝",cls:"icon-calendar",page:2},
+  {name:"Lock screen",icon:"🔒",cls:"icon-gallery",page:2}
+];
 
-const lockScreen =
-    document.getElementById(
-        "lockScreen"
-    );
+const dockApps = ["Phone","Messages","Browser","Music"];
+let currentPage = 0;
+let currentApp = "";
+let snakeTimer = null;
+let snake = [];
+let food = 0;
+let direction = {x:1,y:0};
+let nextDirection = {x:1,y:0};
+let score = 0;
+let snakeRunning = false;
+let toastTimer = null;
+let brightness = 85;
 
-const appScreen =
-    document.getElementById(
-        "appScreen"
-    );
-
-const appTitle =
-    document.getElementById(
-        "appTitle"
-    );
-
-const appHeading =
-    document.getElementById(
-        "appHeading"
-    );
-
-const appDescription =
-    document.getElementById(
-        "appDescription"
-    );
-
-const appIconImage =
-    document.getElementById(
-        "appIconImage"
-    );
-
-const snakeBig =
-    document.getElementById(
-        "snakeBig"
-    );
-
-
-/* =========================
-   CLOCK
-========================= */
-
-function updateClock() {
-
-    const now =
-        new Date();
-
-
-    const time =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
-
-
-    const date =
-        now.toLocaleDateString(
-            [],
-            {
-                weekday: "long",
-                day: "numeric",
-                month: "long"
-            }
-        );
-
-
-    document.getElementById(
-        "lockTime"
-    ).textContent = time;
-
-
-    document.getElementById(
-        "homeTime"
-    ).textContent = time;
-
-
-    document.getElementById(
-        "lockDate"
-    ).textContent = date;
-
+function makeIcon(app, label=true) {
+  const btn = document.createElement("button");
+  btn.className = "app-icon";
+  btn.setAttribute("aria-label", app.name);
+  btn.innerHTML = `
+    <div class="icon-art ${app.cls}"><span>${app.icon}</span></div>
+    ${label ? `<span class="icon-label">${app.name}</span>` : ""}
+  `;
+  btn.addEventListener("click", () => openApp(app.name));
+  return btn;
 }
 
+function buildHome() {
+  $("page1").replaceChildren();
+  $("page2").replaceChildren();
+  apps.filter(a => a.page===1).forEach(a=>$("page1").appendChild(makeIcon(a)));
+  apps.filter(a => a.page===2).forEach(a=>$("page2").appendChild(makeIcon(a)));
+  $("dock").replaceChildren();
+  dockApps.forEach(name => {
+    const app=apps.find(a=>a.name===name);
+    if(app) $("dock").appendChild(makeIcon(app,false));
+  });
+}
+buildHome();
 
-updateClock();
+function updateTime() {
+  const now = new Date();
+  const time = now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+  const date = now.toLocaleDateString([], {weekday:"short",day:"numeric",month:"short"});
+  $("statusTime").textContent = time;
+  $("widgetClock").textContent = time;
+  $("widgetDate").textContent = date;
+  $("lockClock").textContent = time;
+  $("lockDate").textContent = now.toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"});
+  $("ccTime").textContent = now.toLocaleDateString([], {weekday:"long"})+" · "+time;
+}
+updateTime();
+setInterval(updateTime,1000);
 
-setInterval(
-    updateClock,
-    1000
-);
-
-
-
-/* =========================
-   SWIPE UP UNLOCK
-========================= */
-
-let lockStartY = 0;
-
-
-lockScreen.addEventListener(
-    "touchstart",
-    function(e) {
-
-        lockStartY =
-            e.touches[0].clientY;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-lockScreen.addEventListener(
-    "touchend",
-    function(e) {
-
-        const endY =
-            e.changedTouches[0].clientY;
-
-
-        if (
-            lockStartY - endY > 55
-        ) {
-
-            lockScreen.style.transform =
-                "translateY(-100%)";
-
-            lockScreen.style.opacity =
-                "0";
-
-
-            setTimeout(
-                function() {
-
-                    lockScreen.style.display =
-                        "none";
-
-                },
-                480
-            );
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-
-/* =========================
-   OPEN APP
-========================= */
-
-function openApp(
-    name,
-    icon
-) {
-
-    appTitle.textContent =
-        name;
-
-
-    appHeading.textContent =
-        name;
-
-
-    appDescription.textContent =
-        "Welcome to " +
-        name +
-        " on ZoraOS.";
-
-
-    if (
-        icon === "snake"
-    ) {
-
-        appIconImage.style.display =
-            "none";
-
-        snakeBig.style.display =
-            "flex";
-
-    }
-
-    else {
-
-        snakeBig.style.display =
-            "none";
-
-        appIconImage.style.display =
-            "block";
-
-        appIconImage.src =
-            icon;
-
-    }
-
-
-    appScreen.style.display =
-        "block";
-
-
-    appScreen.classList.add(
-        "open"
-    );
-
-
-    requestAnimationFrame(
-        function() {
-
-            requestAnimationFrame(
-                function() {
-
-                    appScreen.classList.add(
-                        "visible"
-                    );
-
-                }
-            );
-
-        }
-    );
-
+function toast(message) {
+  const el=$("toast");
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2000);
 }
 
-
-
-/* =========================
-   CLOSE APP
-========================= */
-
-function finishClose() {
-
-    appScreen.classList.remove(
-        "visible"
-    );
-
-
-    setTimeout(
-        function() {
-
-            appScreen.classList.remove(
-                "open"
-            );
-
-            appScreen.style.display =
-                "none";
-
-            appScreen.style.transform =
-                "";
-
-            appScreen.style.opacity =
-                "";
-
-            appScreen.style.transition =
-                "";
-
-            appScreen.style.borderRadius =
-                "";
-
-        },
-        300
-    );
-
+function setPage(page) {
+  currentPage = Math.max(0,Math.min(1,page));
+  $("pages").style.transform = `translateX(-${currentPage*100}%)`;
+  $("dot0").classList.toggle("active",currentPage===0);
+  $("dot1").classList.toggle("active",currentPage===1);
 }
 
+function showLock() {
+  closeApp();
+  closeControl();
+  $("lockscreen").classList.remove("unlocked");
+}
+
+function unlock() {
+  $("lockscreen").classList.add("unlocked");
+}
+
+function openApp(name) {
+  closeControl();
+  if(name==="Lock screen") { showLock(); return; }
+  currentApp=name;
+  $("appContent").innerHTML=renderApp(name);
+  $("appScreen").classList.add("open");
+  $("appScreen").scrollTop=0;
+  if(name==="Snake") initSnake();
+}
 
 function closeApp() {
-
-    finishClose();
-
+  stopSnake();
+  $("appScreen").classList.remove("open");
+  currentApp="";
 }
 
-
-
-/* =========================
-   SWIPE DOWN TO CLOSE
-========================= */
-
-let startY = 0;
-
-let currentY = 0;
-
-let dragging = false;
-
-
-appScreen.addEventListener(
-    "touchstart",
-    function(e) {
-
-        startY =
-            e.touches[0].clientY;
-
-        currentY =
-            startY;
-
-        dragging =
-            true;
-
-
-        appScreen.style.transition =
-            "none";
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-appScreen.addEventListener(
-    "touchmove",
-    function(e) {
-
-        if (!dragging)
-            return;
-
-
-        currentY =
-            e.touches[0].clientY;
-
-
-        const distance =
-            Math.max(
-                0,
-                currentY - startY
-            );
-
-
-        if (
-            distance > 0
-        ) {
-
-            const scale =
-                1 -
-                Math.min(
-                    distance / 1600,
-                    .07
-                );
-
-
-            const opacity =
-                1 -
-                Math.min(
-                    distance / 650,
-                    .35
-                );
-
-
-            appScreen.style.transform =
-                "translateY(" +
-                distance +
-                "px) scale(" +
-                scale +
-                ")";
-
-
-            appScreen.style.opacity =
-                opacity;
-
-
-            appScreen.style.borderRadius =
-                Math.min(
-                    distance / 5,
-                    34
-                ) + "px";
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-appScreen.addEventListener(
-    "touchend",
-    function() {
-
-        if (!dragging)
-            return;
-
-
-        dragging =
-            false;
-
-
-        const distance =
-            currentY - startY;
-
-
-        appScreen.style.transition =
-            "transform .30s cubic-bezier(.2,.8,.2,1), opacity .25s ease, border-radius .3s ease";
-
-
-        if (
-            distance > 105
-        ) {
-
-            appScreen.style.transform =
-                "translateY(105%) scale(.92)";
-
-            appScreen.style.opacity =
-                "0";
-
-
-            setTimeout(
-                function() {
-
-                    appScreen.classList.remove(
-                        "visible",
-                        "open"
-                    );
-
-
-                    appScreen.style.display =
-                        "none";
-
-
-                    appScreen.style.transform =
-                        "";
-
-                    appScreen.style.opacity =
-                        "";
-
-                    appScreen.style.transition =
-                        "";
-
-                    appScreen.style.borderRadius =
-                        "";
-
-                },
-                300
-            );
-
-        }
-
-        else {
-
-            appScreen.style.transform =
-                "translateY(0) scale(1)";
-
-            appScreen.style.opacity =
-                "1";
-
-            appScreen.style.borderRadius =
-                "0";
-
-
-            setTimeout(
-                function() {
-
-                    appScreen.style.transition =
-                        "";
-
-                },
-                300
-            );
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
+function backAction() {
+  if($("control").classList.contains("open")) { closeControl();return; }
+  if($("appScreen").classList.contains("open")) {
+    if(currentApp==="About ZoraOS") { openApp("Settings");return; }
+    closeApp();return;
+  }
+  if(!$("lockscreen").classList.contains("unlocked")) unlock();
+}
+
+function openControl() {
+  if(!$("lockscreen").classList.contains("unlocked")) return;
+  $("control").classList.add("open");
+}
+function closeControl() { $("control").classList.remove("open"); }
+
+function toggleTile(el) {
+  el.classList.toggle("active");
+  const name=el.dataset.toggle;
+  const enabled=el.classList.contains("active");
+  el.querySelector("small").textContent=enabled?"On":"Off";
+  toast(name+" "+(enabled?"enabled":"disabled")+" (demo)");
+}
+
+function setBrightness(value) {
+  brightness=Number(value);
+  $("brightVal").textContent=value+"%";
+  $("os").style.filter=`brightness(${0.45+brightness/180})`;
+}
+
+function row(icon,title,desc,action) {
+  return `<div class="row-item" ${action?`onclick="${action}" style="cursor:pointer"`:""}>
+    <div class="row-emoji">${icon}</div>
+    <div class="row-main"><div class="row-title">${title}</div><div class="row-desc">${desc}</div></div>
+    ${action?'<span class="chevron">›</span>':""}
+  </div>`;
+}
+
+function header(title,sub="") {
+  return `<div class="app-header">
+    <button class="back" onclick="backAction()">‹</button>
+    <div><div class="app-title">${title}</div>${sub?`<div class="app-subtitle">${sub}</div>`:""}</div>
+  </div>`;
+}
+
+function renderApp(name) {
+  switch(name) {
+    case "Settings": return renderSettings();
+    case "About ZoraOS": return renderAbout();
+    case "Snake": return renderSnake();
+    case "Phone": return header("Phone","Calls · Demo")+`
+      <div class="panel"><div style="font-size:48px;text-align:center;padding:24px">☎</div>
+      <input type="text" id="dialNumber" placeholder="Enter phone number" inputmode="tel">
+      <button class="action" style="width:100%;margin-top:12px" onclick="toast('Calling is not available in this web demo')">Call</button></div>`;
+    case "Messages": return header("Messages","Your conversations")+`
+      <div class="panel">${row("💬","ZoraOS","Welcome to your messages.")}</div>
+      <div class="panel"><input type="text" id="messageText" placeholder="Write a message...">
+      <button class="action" style="margin-top:10px" onclick="sendMessage()">Send</button><div id="messageOutput"></div></div>`;
+    case "Camera": return header("Camera","Camera preview")+`
+      <div class="panel" style="text-align:center;padding:30px">
+      <div style="font-size:90px">📷</div><p>Camera simulation</p>
+      <button class="action" onclick="toast('Photo captured in demo mode')">Capture</button></div>`;
+    case "Music": return header("Music","Your music")+`
+      <div class="panel" style="text-align:center;padding:30px">
+      <div style="font-size:80px">🎵</div><h3>Zora Mix</h3><p>Music player prototype</p>
+      <button class="action" onclick="toast('Add audio playback in a future update')">▶ Play</button></div>`;
+    case "Gallery": return header("Gallery","Your memories")+`
+      <div class="panel" style="text-align:center;padding:35px"><div style="font-size:60px">🌄</div><p>Your gallery is empty.</p></div>`;
+    case "Browser": return header("Browser","Web preview")+`
+      <div class="panel"><input type="text" id="webAddress" value="https://example.com">
+      <button class="action" style="margin-top:10px" onclick="visitWeb()">Go</button></div>
+      <div class="panel"><p>For safety, this demo opens websites in a separate browser tab.</p></div>`;
+    case "Play Store": return header("Play Store","Apps and games")+`
+      <div class="panel" style="text-align:center;padding:30px"><div style="font-size:60px">▶️</div>
+      <p>Store concept</p><p class="setting-label">This prototype cannot install Android apps.</p></div>`;
+    case "Files": return header("Files","Recent files")+`
+      <div class="panel">${row("📁","Internal storage","File manager demo")}${row("⬇️","Downloads","No downloads shown")}</div>`;
+    case "Weather": return header("Weather","Local weather demo")+`
+      <div class="panel" style="text-align:center;padding:25px"><div style="font-size:65px">🌤️</div>
+      <div style="font-size:42px">26°C</div><p>Mostly cloudy</p></div>`;
+    case "Calendar": return header("Calendar","Your schedule")+`
+      <div class="panel" style="text-align:center;padding:25px"><div id="calendarToday" style="font-size:58px">23</div><p>${new Date().toLocaleDateString([], {weekday:"long",month:"long",year:"numeric"})}</p><p>No events today</p></div>`;
+    case "Clock": return header("Clock","Time and timers")+`
+      <div class="panel" style="text-align:center;padding:28px"><div style="font-size:50px" id="bigClock">9:41</div><p>Local time</p>
+      <button class="action" onclick="toast('Timer feature coming soon')">＋ Timer</button></div>`;
+    case "Email": return header("Email","Mail demo")+`
+      <div class="panel">${row("✉","Welcome to ZoraOS","Your new home for productivity.")}</div>`;
+    case "Calculator": return renderCalculator();
+    case "Recorder": return header("Recorder","Voice recorder demo")+`
+      <div class="panel" style="text-align:center;padding:28px"><div style="font-size:65px">〰️</div>
+      <button class="action" onclick="toast('Microphone recording is not implemented yet')">● Record</button></div>`;
+    case "Compass": return header("Compass","Compass demo")+`
+      <div class="panel" style="text-align:center;padding:30px"><div style="font-size:100px">🧭</div><p>North · 0°</p></div>`;
+    case "Maps": return header("Maps","Map preview")+`
+      <div class="panel" style="text-align:center;padding:30px"><div style="font-size:75px">🗺️</div><p>Map simulation</p></div>`;
+    case "Notes": return header("Notes","Quick notes")+`
+      <div class="panel"><textarea id="noteArea" rows="8" placeholder="Write your note..."></textarea>
+      <button class="action" style="margin-top:10px" onclick="saveNote()">Save note</button></div>`;
+    default: return header(name)+`<div class="panel">Welcome to ${name}.</div>`;
+  }
+}
+
+function renderSettings() {
+  return header("Settings","Personalize your ZoraOS")+`
+    <div class="panel">
+      ${row("🪐","About ZoraOS","Version, device details","openApp('About ZoraOS')")}
+      ${row("🔒","Lock screen & wallpaper","Clock size and appearance","openApp('Lock screen & wallpaper')")}
+      ${row("🎨","Display & brightness","Screen appearance","openApp('Display & brightness')")}
+      ${row("🎛️","Control Center","Quick settings","openControl()")}
+      ${row("🔊","Sound & vibration","Volume demo","toast('Sound settings are simulated')")}
+      ${row("🛡️","Privacy","Prototype privacy information","openApp('Privacy')")}
+      ${row("ℹ️","System updates","Check ZoraOS version","toast('You are using the latest demo')")}
+    </div>
+    <div class="setting-label" style="text-align:center;padding:8px">ZoraOS · Your world. Your OS.</div>`;
+}
+
+function renderAbout() {
+  return header("About device","ZoraOS device information")+`
+    <div class="panel about-hero">
+      <div class="about-logo">🪐</div>
+      <div style="font-size:24px;font-weight:750">ZoraOS</div>
+      <div class="about-version">Version 1.0 · Web Edition</div>
+    </div>
+    <div class="panel">
+      <div style="font-size:16px;font-weight:750;margin-bottom:8px">Device information</div>
+      <div class="info-line"><span>Device name</span><span>ZoraOS Prototype</span></div>
+      <div class="info-line"><span>Model</span><span>ZOS-01</span></div>
+      <div class="info-line"><span>Software version</span><span>1.0.0</span></div>
+      <div class="info-line"><span>UI version</span><span>Zora UI 1.0</span></div>
+      <div class="info-line"><span>Platform</span><span>Web</span></div>
+      <div class="info-line"><span>Build number</span><span>ZORA-100</span></div>
+    </div>
+    <div class="panel">
+      <div style="font-weight:750;margin-bottom:10px">Storage</div>
+      <div class="setting-label">Browser prototype · No real device storage access</div>
+      <div style="height:8px;border-radius:10px;background:#d9e5f8;margin-top:12px;overflow:hidden">
+        <div style="height:100%;width:38%;background:#4288ef;border-radius:10px"></div>
+      </div>
+    </div>
+    <button class="action" style="width:100%" onclick="toast('ZoraOS is up to date!')">Check for updates</button>`;
+}
+
+function renderLockEditor() {
+  return header("Lock screen & wallpaper","Customize your lock screen")+`
+    <div class="panel" style="text-align:center">
+      <div style="font-size:12px;color:#687895">CLOCK PREVIEW</div>
+      <div id="editorClock" style="font-size:var(--clock-size);font-weight:250;letter-spacing:-4px">9:41</div>
+      <div class="setting-label">Clock size</div>
+      <input type="range" min="52" max="120" value="${parseInt(getComputedStyle(document.documentElement).getPropertyValue('--clock-size'))||82}" oninput="setClockSize(this.value)">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#71809a"><span>Shorter</span><span>Larger</span></div>
+    </div>
+    <div class="panel">
+      <div class="row-title">Clock style</div>
+      <div style="display:flex;gap:9px;margin-top:12px">
+        <button class="secondary" onclick="toggleLockStyle('thin')">Thin</button>
+        <button class="secondary" onclick="toggleLockStyle('bold')">Bold</button>
+        <button class="secondary" onclick="toggleLockStyle('soft')">Soft</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="row-title">Wallpaper glow</div>
+      <input type="range" min="0" max="100" value="60" oninput="setWallpaperGlow(this.value)">
+    </div>
+    <button class="action" style="width:100%" onclick="toast('Lock screen settings saved')">Save changes</button>`;
+}
+
+function setClockSize(value) {
+  document.documentElement.style.setProperty('--clock-size',value+'px');
+  const preview=$("editorClock");
+  if(preview) preview.style.fontSize=value+'px';
+  toast("Clock size: "+value);
+}
+function toggleLockStyle(style) {
+  const clock=$("lockClock");
+  clock.style.fontWeight=style==="bold"?"600":style==="soft"?"350":"250";
+  clock.style.letterSpacing=style==="soft"?"0px":"-4px";
+  toast("Clock style updated");
+}
+function setWallpaperGlow(value) {
+  const glow=.15+(Number(value)/100)*.7;
+  document.querySelectorAll(".ribbon").forEach(r=>r.style.opacity=glow);
+}
+
+function renderDisplay() {
+  return header("Display & brightness","Appearance")+`
+    <div class="panel">
+      <div class="row-title">Screen brightness</div>
+      <input type="range" min="30" max="100" value="${brightness}" oninput="setBrightness(this.value)">
+      <div class="setting-label">This changes the prototype's screen brightness.</div>
+    </div>
+    <div class="panel">
+      <div class="row-title">Animations</div>
+      <div class="row-desc">ZoraOS uses smooth app transitions and glass effects.</div>
+      <button class="action" style="margin-top:12px" onclick="document.documentElement.style.setProperty('--glass','rgba(255,255,255,.2)');toast('Glass effect refreshed')">Refresh glass effect</button>
+    </div>`;
+}
+
+function renderCalculator() {
+  return header("Calculator","Simple calculator")+`
+    <div class="panel">
+      <input type="text" id="calcDisplay" value="0" readonly style="font-size:27px;text-align:right;margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      ${["AC","(",")","÷","7","8","9","×","4","5","6","−","1","2","3","+","0",".","⌫","="].map(k=>
+        `<button class="secondary" style="height:49px;font-size:18px" onclick="calcPress('${k}')">${k}</button>`
+      ).join("")}
+      </div>
+    </div>`;
+}
+let calcExpression="";
+function calcPress(k) {
+  if(k==="AC") calcExpression="";
+  else if(k==="⌫") calcExpression=calcExpression.slice(0,-1);
+  else if(k==="=") {
+    try {
+      if(!/^[0-9+\-*/().\s]+$/.test(calcExpression)) throw Error();
+      const result=Function('"use strict";return ('+calcExpression+')')();
+      if(!Number.isFinite(result)) throw Error();
+      calcExpression=String(result);
+    } catch { toast("Invalid calculation");calcExpression=""; }
+  } else calcExpression+=({"÷":"/","×":"*","−":"-"}[k]||k);
+  const display=$("calcDisplay");
+  if(display) display.value=calcExpression||"0";
+}
+
+function sendMessage() {
+  const input=$("messageText");
+  const output=$("messageOutput");
+  if(!input||!output||!input.value.trim()) return toast("Write a message first");
+  output.innerHTML=`<div class="panel" style="margin-top:12px">${escapeHTML(input.value)}</div>`;
+  input.value="";
+}
+function saveNote() {
+  const value=$("noteArea")?.value||"";
+  try { localStorage.setItem("zora-note",value); } catch {}
+  toast("Note saved in this browser");
+}
+function visitWeb() {
+  let address=$("webAddress")?.value.trim();
+  if(!address) return;
+  if(!/^https?:\/\//i.test(address)) address="https://"+address;
+  window.open(address,"_blank","noopener");
+}
+function escapeHTML(text) {
+  return text.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function renderSnake() {
+  return header("Snake","Classic game · Touch controls")+`
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <strong>Score: <span id="snakeScore">0</span></strong>
+        <span id="snakeStatus" class="setting-label">Ready</span>
+      </div>
+      <div class="snake-board" id="snakeBoard"></div>
+      <div class="dpad">
+        <span></span><button onclick="setDirection(0,-1)">↑</button><span></span>
+        <button onclick="setDirection(-1,0)">←</button><button onclick="startSnake()">▶</button><button onclick="setDirection(1,0)">→</button>
+        <span></span><button onclick="setDirection(0,1)">↓</button><span></span>
+      </div>
+      <button class="action" style="width:100%;margin-top:16px" onclick="startSnake()">Start / Restart</button>
+    </div>
+    <div class="setting-label">Eat the red dots. Avoid the walls and your own tail.</div>`;
+}
+
+function initSnake() {
+  stopSnake();
+  snake=[{x:5,y:8},{x:4,y:8},{x:3,y:8}];
+  direction={x:1,y:0};
+  nextDirection={x:1,y:0};
+  score=0;
+  snakeRunning=false;
+  food=randomFood();
+  drawSnake();
+  if($("snakeStatus")) $("snakeStatus").textContent="Ready";
+}
+function randomFood() {
+  let p;
+  do { p={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}; }
+  while(snake.some(s=>s.x===p.x&&s.y===p.y));
+  return p;
+}
+function drawSnake() {
+  const board=$("snakeBoard");
+  if(!board) return;
+  board.replaceChildren();
+  for(let y=0;y<16;y++) for(let x=0;x<16;x++) {
+    const cell=document.createElement("div");
+    cell.className="cell";
+    if(snake.some(s=>s.x===x&&s.y===y)) cell.classList.add("snake");
+    if(food.x===x&&food.y===y) cell.classList.add("food");
+    board.appendChild(cell);
+  }
+  if($("snakeScore")) $("snakeScore").textContent=score;
+}
+function startSnake() {
+  if(currentApp!=="Snake") return;
+  if(snakeRunning) { initSnake(); }
+  snakeRunning=true;
+  if($("snakeStatus")) $("snakeStatus").textContent="Playing";
+  snakeTimer=setInterval(stepSnake,190);
+}
+function stopSnake() {
+  clearInterval(snakeTimer);
+  snakeTimer=null;
+  snakeRunning=false;
+}
+function setDirection(x,y) {
+  if(direction.x+x===0 && direction.y+y===0) return;
+  nextDirection={x,y};
+  if(!snakeRunning && currentApp==="Snake") startSnake();
+}
+function stepSnake() {
+  direction=nextDirection;
+  const head={x:snake[0].x+direction.x,y:snake[0].y+direction.y};
+  const ate=head.x===food.x&&head.y===food.y;
+  const body=ate?snake:snake.slice(0,-1);
+  if(head.x<0||head.y<0||head.x>=16||head.y>=16||body.some(s=>s.x===head.x&&s.y===head.y)) {
+    stopSnake();
+    if($("snakeStatus")) $("snakeStatus").textContent="Game over";
+    toast("Game over · Score "+score);
+    return;
+  }
+  snake.unshift(head);
+  if(ate) { score+=10;food=randomFood(); }
+  else snake.pop();
+  drawSnake();
+}
+document.addEventListener("keydown",e=>{
+  const map={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};
+  const d=map[e.key];
+  if(d&&currentApp==="Snake") { e.preventDefault();setDirection(d[0],d[1]); }
+  if(e.key==="Escape") backAction();
+});
+
+let startX=0,startY=0,lastX=0,lastY=0;
+const os=$("os");
+
+os.addEventListener("touchstart",e=>{
+  const t=e.changedTouches[0];
+  startX=t.clientX;startY=t.clientY;lastX=t.clientX;lastY=t.clientY;
+},{passive:true});
+
+os.addEventListener("touchend",e=>{
+  const t=e.changedTouches[0];
+  const dx=t.clientX-startX,dy=t.clientY-startY;
+  const absX=Math.abs(dx),absY=Math.abs(dy);
+
+  if(!$("lockscreen").classList.contains("unlocked")) {
+    if(dy < -45) unlock();
+    return;
+  }
+
+  if(startY<35 && startX>window.innerWidth*.62 && dy>55) {
+    openControl();return;
+  }
+
+  if($("control").classList.contains("open")) {
+    if(dy < -50) closeControl();
+    return;
+  }
+
+  if($("appScreen").classList.contains("open")) {
+    if(dy < -100 && startY>window.innerHeight-75) backAction();
+    return;
+  }
+
+  if(absX>55 && absX>absY) {
+    setPage(currentPage+(dx<0?1:-1));
+  }
+},{passive:true});
+
+$("gestureHint").addEventListener("click",openControl);
+$("nav-pill").addEventListener("click",backAction);
+
+let mouseStartX=0,mouseStartY=0;
+os.addEventListener("mousedown",e=>{mouseStartX=e.clientX;mouseStartY=e.clientY;});
+os.addEventListener("mouseup",e=>{
+  const dx=e.clientX-mouseStartX,dy=e.clientY-mouseStartY;
+  if(!$("lockscreen").classList.contains("unlocked")&&dy<-45) unlock();
+  else if(mouseStartY<30&&mouseStartX>window.innerWidth*.62&&dy>55) openControl();
+  else if(!$("appScreen").classList.contains("open")&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)) setPage(currentPage+(dx<0?1:-1));
+});
+
+const originalOpenApp=openApp;
+openApp=function(name) {
+  if(name==="Lock screen & wallpaper") {
+    currentApp=name;
+    $("appContent").innerHTML=renderLockEditor();
+    $("appScreen").classList.add("open");
+    $("appScreen").scrollTop=0;
+    return;
+  }
+  if(name==="Display & brightness") {
+    currentApp=name;
+    $("appContent").innerHTML=renderDisplay();
+    $("appScreen").classList.add("open");
+    $("appScreen").scrollTop=0;
+    return;
+  }
+  if(name==="Privacy") {
+    currentApp=name;
+    $("appContent").innerHTML=header("Privacy","Prototype information")+`
+      <div class="panel"><p>ZoraOS is a browser-based prototype. It does not change your Android system settings.</p>
+      <p>Some features are simulated for the demo.</p></div>`;
+    $("appScreen").classList.add("open");
+    return;
+  }
+  originalOpenApp(name);
+};
+
+try {
+  const savedNote=localStorage.getItem("zora-note");
+  if(savedNote) window.savedZoraNote=savedNote;
+} catch {}
 
 </script>
-
 </body>
-          </html>
+</html>
