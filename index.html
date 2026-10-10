@@ -4,1150 +4,798 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#071746">
+<meta name="theme-color" content="#080e2c">
 <title>ZoraOS</title>
 
 <style>
 :root {
-  --accent: #72baff;
+  --wallpaper: linear-gradient(135deg,#061638,#164fba 48%,#3214a1 75%,#061638);
+  --glass: rgba(255,255,255,.15);
+  --stroke: rgba(255,255,255,.23);
+  --text: #fff;
   --clock-size: 82px;
-  --glass: rgba(255,255,255,.14);
-  --border: rgba(255,255,255,.23);
+  --clock-y: 105px;
 }
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body {
+  margin:0;width:100%;height:100%;overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;color:var(--text);
+  background:#080e2c;
 }
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: white;
-  background: #061338;
-  overflow: hidden;
-  user-select: none;
+button,input,textarea {font:inherit}
+button {color:inherit;cursor:pointer}
+#phone {
+  position:relative;width:100%;height:100dvh;overflow:hidden;
+  background:var(--wallpaper);
+  isolation:isolate;
 }
-
-button, input {
-  font: inherit;
-}
-
-button {
-  color: inherit;
-  cursor: pointer;
-}
-
-#os {
-  position: relative;
-  width: 100%;
-  height: 100dvh;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 85% 18%, #2459dc 0%, transparent 38%),
-    radial-gradient(ellipse at 12% 75%, #4920b9 0%, transparent 42%),
-    linear-gradient(145deg,#03102e,#092e85 48%,#071334);
-}
-
 .wallpaper {
-  position: absolute;
-  inset: -15%;
-  overflow: hidden;
-  pointer-events: none;
+  position:absolute;inset:0;z-index:-1;
+  background:var(--wallpaper);transition:background .4s;
 }
-
-.ribbon {
-  position: absolute;
-  width: 120%;
-  height: 42%;
-  border: 2px solid rgba(80,180,255,.62);
-  border-radius: 50%;
-  transform: rotate(-38deg);
-  filter: blur(1px);
-  box-shadow: 0 0 22px #247bff, inset 0 0 25px #225cff;
+.wallpaper:before,.wallpaper:after {
+  content:"";position:absolute;width:90vw;height:90vw;border-radius:50%;
+  border:3px solid rgba(93,153,255,.5);filter:blur(2px);
+  transform:rotate(-30deg);left:12%;top:34%;
+  box-shadow:0 0 28px #347cff;
 }
-
-.ribbon.one { top: 12%; left: -45%; }
-.ribbon.two {
-  top: 47%; left: 15%;
-  border-color: rgba(177,99,255,.85);
-  box-shadow: 0 0 24px #803aff,inset 0 0 20px #5b30ff;
-  transform: rotate(35deg);
+.wallpaper:after {
+  width:120vw;height:120vw;left:-40%;top:48%;
+  border-color:rgba(194,90,255,.55);box-shadow:0 0 30px #873dff;
 }
-.ribbon.three {
-  top: 68%; left: -30%;
-  border-color: rgba(58,166,255,.8);
-  transform: rotate(-20deg);
-}
-
-.glass {
-  background: linear-gradient(135deg,rgba(255,255,255,.19),rgba(255,255,255,.055));
-  border: 1px solid var(--border);
-  box-shadow: inset 0 1px 1px rgba(255,255,255,.18),0 12px 35px rgba(0,0,0,.13);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-}
-
 #status {
-  position: absolute;
-  z-index: 20;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
-  font-size: 14px;
-  font-weight: 650;
-  text-shadow: 0 1px 8px #172e70;
-}
-
-.status-right { display:flex; gap:7px; align-items:center; }
-.battery {
-  border: 1px solid rgba(255,255,255,.8);
-  border-radius: 5px;
-  padding: 2px 5px;
-  font-size: 12px;
-}
-
-#home {
-  position: absolute;
-  inset: 48px 0 0;
-  padding: 10px 20px 0;
-  display: flex;
-  flex-direction: column;
-  transition: transform .42s cubic-bezier(.2,.8,.2,1), opacity .3s;
-}
-
-.widgets {
-  display: grid;
-  grid-template-columns: 1.2fr .85fr;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.widget {
-  height: 185px;
-  border-radius: 30px;
-  padding: 16px;
-  overflow: hidden;
-  position: relative;
-}
-
-.widget-clock {
-  font-size: clamp(42px,12vw,64px);
-  font-weight: 300;
-  letter-spacing: -3px;
-  line-height: 1.1;
-  margin-top: 10px;
-}
-
-.widget-date { font-size: 14px; margin-top: 5px; opacity: .95; }
-.weather-row { display:flex; align-items:center; gap:10px; margin-top:17px; }
-.weather-icon { font-size:36px; }
-.weather-temp { font-size:30px; line-height:1.05; }
-.weather-small { font-size:11px; opacity:.85; margin-top:4px; }
-
-.brand-widget {
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding: 23px 17px;
-}
-.brand-name { font-size:24px; font-weight:700; }
-.brand-tag { font-size:13px; opacity:.85; line-height:1.5; }
-.planet { font-size:48px; text-align:right; }
-.event { border-top:1px solid #ffffff55; padding-top:14px; font-size:12px; line-height:1.7; }
-
-.pages {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  width: 100%;
-  transition: transform .35s cubic-bezier(.2,.8,.2,1);
-}
-
-.page {
-  min-width:100%;
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  grid-template-rows:repeat(4,minmax(0,1fr));
-  gap: 8px 4px;
-  padding: 18px 0 8px;
-}
-
-.app-icon {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  gap:7px;
-  border:0;
-  background:transparent;
-  min-width:0;
-  animation: iconIn .45s both;
-}
-
-.app-icon:nth-child(2n) { animation-delay:.025s; }
-.app-icon:nth-child(3n) { animation-delay:.05s; }
-
-@keyframes iconIn {
-  from { opacity:0; transform:translateY(12px) scale(.94); }
-  to { opacity:1; transform:translateY(0) scale(1); }
-}
-
-.icon-art {
-  width:min(17vw,70px);
-  height:min(17vw,70px);
-  min-width:47px;
-  min-height:47px;
-  max-width:70px;
-  max-height:70px;
-  border-radius:23px;
-  display:grid;
-  place-items:center;
-  font-size:35px;
-  position:relative;
-  overflow:hidden;
-  border:1px solid #ffffff55;
-  box-shadow:inset 0 1px 3px #ffffff50,0 5px 12px #0003;
-  background:linear-gradient(145deg,#468fff,#123bd5);
-}
-
-.icon-art::before {
-  content:"";
-  position:absolute;
-  top:-40%;
-  left:-25%;
-  width:100%;
-  height:70%;
-  border-radius:50%;
-  background:#ffffff24;
-  transform:rotate(-35deg);
-}
-
-.icon-art span { position:relative; z-index:1; }
-
-.icon-phone { background:linear-gradient(145deg,#3df4a2,#00a76c); }
-.icon-messages { background:linear-gradient(145deg,#2dafff,#003edb); }
-.icon-camera { background:linear-gradient(145deg,#7487c7,#131d48); }
-.icon-music { background:linear-gradient(145deg,#d35dff,#4133d9); }
-.icon-gallery { background:linear-gradient(145deg,#6579a9,#111b43); }
-.icon-browser { background:linear-gradient(145deg,#147fff,#071e91); }
-.icon-store { background:linear-gradient(145deg,#35528e,#111936); }
-.icon-files { background:linear-gradient(145deg,#2ddcff,#0875c8); }
-.icon-weather { background:linear-gradient(145deg,#32a9ff,#073fdd); }
-.icon-calendar { background:linear-gradient(145deg,#fff,#c4d6ff); color:#20335b; }
-.icon-clock { background:linear-gradient(145deg,#35456e,#070e28); }
-.icon-email { background:linear-gradient(145deg,#41bdff,#0647df); }
-.icon-calculator { background:linear-gradient(145deg,#657cae,#182451); }
-.icon-recorder { background:linear-gradient(145deg,#794bff,#190d68); }
-.icon-compass { background:linear-gradient(145deg,#344e83,#07152e); }
-.icon-maps { background:linear-gradient(145deg,#6ce7b5,#2775c8); }
-.icon-snake { background:linear-gradient(145deg,#53e6a2,#047c56); }
-.icon-settings { background:linear-gradient(145deg,#899ab9,#273650); }
-.icon-label { font-size:11px; white-space:nowrap; text-shadow:0 1px 5px #0007; }
-
-.page-dots {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:9px;
-  height:26px;
-  flex-shrink:0;
-}
-.dot {
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#ffffff65;
-  transition:all .25s;
-}
-.dot.active { background:white; width:19px; border-radius:8px; }
-
-.dock {
-  height:90px;
-  flex-shrink:0;
-  border-radius:32px;
-  margin:6px -1px 17px;
-  display:flex;
-  align-items:center;
-  justify-content:space-evenly;
-  padding:8px;
-  background:rgba(205,220,255,.17);
-  border:1px solid #ffffff42;
-  backdrop-filter:blur(32px);
-  -webkit-backdrop-filter:blur(32px);
-  box-shadow:inset 0 1px 2px #ffffff4a,0 8px 30px #0003;
-}
-.dock .icon-art { width:60px; height:60px; min-width:60px; min-height:60px; border-radius:20px; }
-.dock button { padding:0; border:0; background:none; }
-
-#nav-pill {
-  position:absolute;
-  z-index:60;
-  bottom:7px;
-  left:50%;
-  transform:translateX(-50%);
-  width:108px;
-  height:4px;
-  background:#ffffffb5;
-  border-radius:8px;
-}
-
-#lockscreen {
-  position:absolute;
-  z-index:30;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  padding:58px 24px 32px;
-  transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s;
-}
-#lockscreen.unlocked { transform:translateY(-105%); opacity:0; pointer-events:none; }
-
-.lock-top { text-align:center; margin-top:5vh; }
-.lock-date { font-size:17px; opacity:.9; }
-.lock-clock {
-  font-size:var(--clock-size);
-  font-weight:250;
-  line-height:1.1;
-  letter-spacing:-4px;
-  text-shadow:0 4px 30px #1c49a5;
-  transition:font-size .2s;
-}
-.lock-weather { margin-top:16px; font-size:16px; }
-.lock-notification {
-  margin-top:auto;
-  border-radius:24px;
-  padding:16px;
-  line-height:1.5;
-}
-.lock-notification strong { font-size:14px; }
-.lock-bottom { text-align:center; margin-top:22px; font-size:13px; }
-.lock-shortcuts { display:flex; justify-content:space-between; margin-top:23px; }
-.shortcut {
-  width:47px;height:47px;border-radius:50%;
-  border:1px solid #ffffff50;
-  background:#ffffff1c;
-  display:grid;place-items:center;font-size:21px;
-}
-.unlock-hint { text-align:center; margin-top:25px; font-size:12px; opacity:.8; }
-
-.screen {
-  position:absolute;
-  z-index:25;
-  inset:0;
-  background:linear-gradient(145deg,#edf4ff,#c9dfff 60%,#a5c9ff);
-  color:#14264a;
-  transform:translateY(105%);
-  opacity:0;
+  position:absolute;z-index:40;top:0;left:0;width:100%;height:48px;
+  padding:13px 25px 0;display:flex;align-items:flex-start;
+  justify-content:space-between;font-size:15px;font-weight:700;
   pointer-events:none;
-  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .25s;
-  overflow-y:auto;
-  overscroll-behavior:contain;
 }
-.screen.open {
-  transform:translateY(0);
-  opacity:1;
-  pointer-events:auto;
+.status-right {display:flex;align-items:center;gap:6px}
+.wifi {font-size:19px}
+.signal {font-size:17px;letter-spacing:-4px;margin-right:5px}
+.battery {
+  display:inline-flex;align-items:center;gap:3px;
+  padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.25);
+  font-size:13px;
 }
-.screen-inner { padding:55px 20px 45px; min-height:100%; }
-.app-header { display:flex; align-items:center; gap:15px; margin-bottom:25px; }
+#home {
+  position:absolute;inset:48px 0 26px;padding:10px 18px;
+  overflow-y:auto;overscroll-behavior:contain;
+}
+.widget-grid {
+  display:grid;grid-template-columns:1.25fr .9fr;gap:12px;
+  margin:48px 0 32px;
+}
+.widget {
+  min-width:0;min-height:165px;padding:17px 14px;
+  border:1px solid var(--stroke);border-radius:34px;
+  background:var(--glass);backdrop-filter:blur(26px);
+  -webkit-backdrop-filter:blur(26px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.12);
+}
+.big-time {font-size:clamp(40px,12vw,58px);font-weight:300;letter-spacing:-3px}
+.widget-date {font-size:14px;margin-top:12px;opacity:.9}
+.weather {margin-top:20px;font-size:13px;line-height:1.6}
+.brand-widget {display:flex;flex-direction:column;justify-content:center}
+.brand-widget h2 {font-size:24px;margin:0 0 8px}
+.brand-widget p {margin:0;line-height:1.5;font-size:14px}
+.planet {font-size:43px;margin-top:12px}
+.app-grid {
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:23px 8px;
+}
+.app {
+  display:flex;align-items:center;flex-direction:column;gap:8px;
+  min-width:0;background:none;border:0;padding:0;
+}
+.app-icon {
+  width:min(17vw,76px);height:min(17vw,76px);max-width:76px;max-height:76px;
+  border-radius:25px;display:flex;align-items:center;justify-content:center;
+  font-size:35px;box-shadow:inset 0 1px 2px #ffffff50,0 5px 15px #0002;
+  border:1px solid #ffffff35;
+}
+.app-label {font-size:12px;text-align:center;overflow-wrap:anywhere}
+.green {background:linear-gradient(145deg,#54efb5,#00a96c)}
+.blue {background:linear-gradient(145deg,#49b5ff,#1740c9)}
+.purple {background:linear-gradient(145deg,#e16bff,#6231db)}
+.gray {background:linear-gradient(145deg,#9caac5,#3a4765)}
+.red {background:linear-gradient(145deg,#ff8888,#ce2454)}
+.white {background:linear-gradient(145deg,#fff,#dce6ff);color:#222}
+.home-banner {
+  margin:42px 3px 22px;padding:20px;border-radius:32px;
+  background:var(--glass);border:1px solid var(--stroke);
+  backdrop-filter:blur(25px);line-height:1.7;
+}
+.home-banner strong {font-size:16px}
+.home-banner small {opacity:.75}
+.page-dots {display:flex;justify-content:center;gap:9px;margin:24px 0}
+.page-dots span {width:8px;height:8px;border-radius:10px;background:#ffffff65}
+.page-dots span.active {width:24px;background:white}
+.dock {
+  position:absolute;bottom:28px;left:5%;width:90%;height:91px;
+  display:flex;justify-content:space-evenly;align-items:center;
+  border-radius:32px;background:rgba(255,255,255,.16);
+  border:1px solid var(--stroke);backdrop-filter:blur(28px);
+  z-index:20;
+}
+.dock .app-icon {width:64px;height:64px;border-radius:22px}
+.dock .app-label {display:none}
+#homeIndicator {
+  position:absolute;z-index:100;bottom:7px;left:50%;
+  transform:translateX(-50%);width:108px;height:5px;
+  border-radius:10px;background:#fff;
+}
+#homeIndicator.dark {background:#777}
+
+/* SOLID LOCK SCREEN */
+#lockscreen {
+  position:absolute;inset:0;z-index:70;display:none;
+  overflow:hidden;touch-action:pan-y;
+  background:#061333;
+  background-image:linear-gradient(160deg,#07152f,#164db3 48%,#30137c 80%,#07152f);
+}
+#lockscreen.show {display:block}
+.lock-wallpaper {
+  position:absolute;inset:0;
+  background:var(--wallpaper);
+  isolation:isolate;
+}
+.lock-wallpaper:before {
+  content:"";position:absolute;width:140vw;height:140vw;left:-25%;top:30%;
+  border-radius:50%;border:3px solid #8a73ff66;
+  box-shadow:0 0 35px #7a55ff;
+}
+.lock-content {position:absolute;inset:0;z-index:1}
+.lock-date {
+  position:absolute;top:calc(var(--clock-y) - 42px);width:100%;
+  text-align:center;font-size:17px;font-weight:500;
+}
+.lock-time {
+  position:absolute;top:var(--clock-y);left:0;width:100%;
+  text-align:center;font-size:var(--clock-size);font-weight:300;
+  letter-spacing:-4px;line-height:1.08;
+  text-shadow:0 2px 18px #0002;
+}
+.lock-widgets {
+  position:absolute;top:calc(var(--clock-y) + var(--clock-size) + 28px);
+  left:8%;width:84%;display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.lock-widget {
+  padding:15px 12px;border-radius:24px;
+  background:rgba(12,26,61,.84);
+  border:1px solid #ffffff30;
+  backdrop-filter:blur(16px);
+  font-size:13px;min-height:83px;
+}
+.lock-notifications {
+  position:absolute;left:6%;width:88%;bottom:125px;
+  display:flex;flex-direction:column;gap:9px;
+}
+.notification {
+  padding:13px 16px;border-radius:22px;
+  background:rgba(13,28,64,.94);
+  border:1px solid #ffffff35;line-height:1.5;
+  backdrop-filter:blur(20px);
+}
+.notification strong {font-size:14px}
+.notification p {font-size:13px;margin:4px 0 0}
+.unlock-hint {
+  position:absolute;bottom:66px;width:100%;text-align:center;
+  font-size:13px;text-shadow:0 1px 4px #000;
+  animation:breathe 2s infinite;
+}
+@keyframes breathe {50%{opacity:.55}}
+.lock-shortcuts {
+  position:absolute;bottom:26px;left:0;width:100%;
+  display:flex;justify-content:space-between;padding:0 28px;
+}
+.shortcut {
+  width:48px;height:48px;border-radius:50%;
+  background:#111c36;border:1px solid #ffffff50;font-size:21px;
+}
+
+/* APPS */
+#appScreen {
+  position:absolute;inset:0;z-index:30;display:none;
+  background:var(--wallpaper);overflow:hidden;
+  touch-action:pan-y;
+}
+#appScreen.open {display:block;animation:appOpen .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes appOpen {
+  from {opacity:0;transform:translateY(35px) scale(.96)}
+  to {opacity:1;transform:translateY(0) scale(1)}
+}
+.app-header {
+  position:absolute;top:49px;left:0;right:0;height:54px;
+  padding:0 22px;display:flex;align-items:center;justify-content:space-between;
+}
+.app-header h2 {font-size:21px;margin:0}
 .back {
-  width:40px;height:40px;border-radius:50%;
-  background:#ffffff9c;border:1px solid #ffffffc4;
-  color:#15264b;font-size:22px;
+  border:0;border-radius:50%;background:#ffffff20;
+  width:40px;height:40px;font-size:25px;
 }
-.app-title { font-size:27px;font-weight:750; letter-spacing:-.6px; }
-.app-subtitle { font-size:13px;color:#61708e;margin-top:3px; }
+.app-body {
+  position:absolute;top:108px;bottom:35px;left:0;right:0;
+  padding:18px 22px;overflow:auto;overscroll-behavior:contain;
+  scrollbar-width:none;
+}
+.app-body::-webkit-scrollbar {display:none}
 .panel {
-  background:#ffffffa8;
-  border:1px solid #ffffffc9;
-  border-radius:24px;
-  padding:17px;
-  margin-bottom:15px;
-  box-shadow:0 8px 25px #274a8b0c;
+  background:rgba(255,255,255,.13);border:1px solid var(--stroke);
+  border-radius:25px;padding:18px;margin-bottom:13px;
+  backdrop-filter:blur(22px);
 }
-.row-item {
-  display:flex;
-  align-items:center;
-  gap:13px;
-  padding:14px 0;
-  border-bottom:1px solid #193e7013;
+.row-setting {
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:15px 0;border-bottom:1px solid #ffffff20;
 }
-.row-item:last-child { border-bottom:0; }
-.row-emoji {
-  width:42px;height:42px;border-radius:14px;
-  display:grid;place-items:center;
-  background:#dceaff;font-size:21px;flex-shrink:0;
+.row-setting:last-child {border:0}
+.row-setting label {font-size:14px;line-height:1.5}
+input[type=range] {width:100%;accent-color:white;margin:14px 0}
+input[type=text],textarea {
+  width:100%;padding:13px;border:1px solid #ffffff35;
+  border-radius:15px;background:#ffffff15;color:white;outline:none;
 }
-.row-main { flex:1;min-width:0; }
-.row-title { font-size:15px;font-weight:650; }
-.row-desc { font-size:12px;color:#6d7b96;margin-top:4px; }
-.chevron { color:#8796b0;font-size:22px; }
+textarea {resize:vertical;min-height:130px}
+input::placeholder,textarea::placeholder {color:#ffffff90}
 .action {
-  border:0;border-radius:15px;
-  background:#236be9;color:white;
-  padding:12px 16px;font-weight:650;
+  border:1px solid #ffffff25;border-radius:17px;
+  background:#ffffff20;padding:12px 16px;
 }
-.secondary {
-  border:1px solid #b7c9e9;border-radius:15px;
-  background:#ffffffa6;color:#18315c;padding:12px 16px;
+.action.primary {background:#fff;color:#17264d}
+.wallpapers {display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.wallpaper-choice {
+  height:100px;border-radius:22px;border:2px solid #ffffff50;
 }
-input[type="range"] { width:100%; accent-color:#246be8; margin:12px 0; }
-input[type="text"],textarea {
-  width:100%;border:1px solid #cad7ee;border-radius:13px;
-  padding:12px;background:white;color:#1a2e50;
+#controlCentre {
+  position:absolute;inset:0;z-index:60;display:none;
+  padding:58px 20px 30px;background:rgba(8,15,35,.97);
+  backdrop-filter:blur(35px);overflow:auto;
 }
-.setting-label { font-size:13px;color:#647491; }
-.about-hero { text-align:center;padding:24px 10px 27px; }
-.about-logo {
-  width:92px;height:92px;border-radius:28px;margin:0 auto 14px;
-  display:grid;place-items:center;font-size:52px;
-  background:linear-gradient(145deg,#4a9bff,#4034de);
-  color:white;box-shadow:0 10px 30px #346ce94a;
-}
-.about-version { font-size:14px;color:#667798;margin-top:5px; }
-.info-line { display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #193e7013;font-size:13px; }
-.info-line:last-child { border:0; }
-.info-line span:last-child { color:#687895;text-align:right; }
-
-#control {
-  position:absolute;z-index:45;inset:0;
-  padding:65px 19px 35px;
-  background:linear-gradient(145deg,rgba(14,28,65,.9),rgba(24,48,105,.84));
-  backdrop-filter:blur(35px);-webkit-backdrop-filter:blur(35px);
-  transform:translateY(-110%);
-  opacity:0;pointer-events:none;
-  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .3s;
-  overflow-y:auto;
-}
-#control.open { transform:translateY(0);opacity:1;pointer-events:auto; }
-.cc-head { display:flex;justify-content:space-between;align-items:center;margin-bottom:22px; }
-.cc-title { font-size:28px;font-weight:750; }
-.cc-time { opacity:.8;font-size:14px; }
-.cc-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+#controlCentre.show {display:block;animation:appOpen .25s}
+.cc-top {display:flex;justify-content:space-between;align-items:center}
+.cc-grid {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
 .cc-tile {
-  min-height:88px;border-radius:23px;padding:14px;
-  border:1px solid #ffffff30;background:#ffffff16;
-  display:flex;flex-direction:column;justify-content:space-between;gap:12px;
-  text-align:left;
+  min-height:95px;border:0;border-radius:24px;
+  background:#ffffff19;padding:18px;text-align:left;
 }
-.cc-tile.active { background:#e8f2ff;color:#16336c; }
-.cc-tile .tile-icon { font-size:25px; }
-.cc-tile strong { font-size:14px; }
-.cc-tile small { opacity:.72; }
-.cc-slider { border-radius:22px;padding:17px;margin-top:13px;background:#ffffff16;border:1px solid #ffffff25; }
-.cc-slider label { display:flex;justify-content:space-between;font-size:13px; }
-.cc-slider input { accent-color:white; }
-.cc-close { width:100%;margin-top:18px;border-radius:18px;border:1px solid #ffffff40;background:#ffffff18;padding:14px; }
-
+.cc-tile.on {background:#d9e7ff;color:#152344}
+.cc-tile b {display:block;margin-bottom:9px;font-size:17px}
+.cc-tile small {opacity:.75}
+.cc-slider {margin-top:20px;padding:18px;border-radius:23px;background:#ffffff18}
+.game-wrap {text-align:center}
+#snakeCanvas {
+  width:100%;max-width:340px;aspect-ratio:1;
+  border-radius:20px;background:#081421;border:1px solid #ffffff30;
+  touch-action:none;
+}
+.game-controls {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
+.game-controls button {padding:15px;border-radius:15px;background:#ffffff20;border:0}
 #toast {
-  position:absolute;z-index:100;left:50%;bottom:45px;
-  transform:translate(-50%,20px);opacity:0;pointer-events:none;
-  background:#142449e8;color:white;padding:11px 17px;border-radius:22px;
-  font-size:13px;transition:.25s;white-space:nowrap;
-}
-#toast.show { transform:translate(-50%,0);opacity:1; }
-
-.snake-board {
-  display:grid;
-  grid-template-columns:repeat(16,1fr);
-  gap:2px;
-  width:100%;
-  aspect-ratio:1;
-  padding:7px;border-radius:20px;
-  background:#d8e7fa;
-}
-.cell { border-radius:4px;background:#edf4ff;aspect-ratio:1; }
-.cell.snake { background:#20b77b;box-shadow:inset 0 1px 2px #ffffff9a; }
-.cell.food { background:#f64e75;border-radius:50%; }
-.dpad { display:grid;grid-template-columns:repeat(3,55px);gap:7px;justify-content:center;margin-top:18px; }
-.dpad button { height:48px;border:0;border-radius:14px;background:#ffffffbd;color:#173464;font-size:22px; }
-.dpad button:active { background:#c4dafa; }
-
-#gestureHint {
-  position:absolute;z-index:18;top:48px;right:0;width:70px;height:26px;
-}
-.hidden { display:none!important; }
-
-@media (max-height:720px) {
-  .widget { height:155px;padding:13px; }
-  .widget-clock { font-size:49px; }
-  .weather-row { margin-top:10px; }
-  .page { padding-top:12px;gap:4px 3px; }
-  .icon-label { font-size:10px; }
-  .dock { height:74px;margin-bottom:9px; }
-  .dock .icon-art { width:52px;height:52px;min-width:52px;min-height:52px; }
-  .icon-art { border-radius:19px; }
+  position:absolute;z-index:120;bottom:110px;left:50%;
+  transform:translateX(-50%);background:#f1f3ff;color:#142044;
+  padding:12px 20px;border-radius:25px;font-size:13px;
+  display:none;white-space:nowrap;
 }
 </style>
 </head>
 
 <body>
-<div id="os">
-  <div class="wallpaper">
-    <div class="ribbon one"></div>
-    <div class="ribbon two"></div>
-    <div class="ribbon three"></div>
-  </div>
+<div id="phone">
+  <div class="wallpaper" id="wallpaper"></div>
 
   <div id="status">
-    <span id="statusTime">9:41</span>
+    <span id="statusTime">11:32</span>
     <div class="status-right">
-      <span>▂▄▆</span><span>◉</span><span class="battery">78%</span>
+      <span class="wifi">◉</span>
+      <span class="signal">▂▄▆</span>
+      <span class="battery">48</span>
     </div>
   </div>
-
-  <div id="gestureHint" aria-label="Open Control Center"></div>
 
   <main id="home">
-    <div class="widgets">
-      <div class="widget glass">
-        <div class="widget-clock" id="widgetClock">9:41</div>
-        <div class="widget-date" id="widgetDate">Mon, 23 Jun</div>
-        <div class="weather-row">
-          <span class="weather-icon">🌤️</span>
-          <div>
-            <div class="weather-temp">26°</div>
-            <div class="weather-small">Mostly cloudy</div>
-          </div>
-        </div>
+    <div class="widget-grid">
+      <div class="widget">
+        <div class="big-time" id="homeTime">11:32</div>
+        <div class="widget-date" id="homeDate">Sat 10 Oct</div>
+        <div class="weather">🌤️ &nbsp;26°<br>Mostly cloudy</div>
       </div>
-
-      <div class="widget glass brand-widget">
-        <div>
-          <div class="brand-name">ZoraOS</div>
-          <div class="brand-tag">Your world.<br>Your OS.</div>
-          <div class="planet">🪐</div>
-        </div>
-        <div class="event">▢ &nbsp; No events today<br>&nbsp;&nbsp;&nbsp;&nbsp; Enjoy your day!</div>
+      <div class="widget brand-widget">
+        <h2>ZoraOS</h2>
+        <p>Your world.<br>Your OS.</p>
+        <div class="planet">🪐</div>
+        <hr style="width:100%;border-color:#ffffff30">
+        <small>◯ No events</small>
       </div>
     </div>
 
-    <div class="pages" id="pages">
-      <div class="page" id="page1"></div>
-      <div class="page" id="page2"></div>
+    <div class="app-grid">
+      <button class="app" onclick="openApp('Phone')">
+        <span class="app-icon green">☎</span><span class="app-label">Phone</span>
+      </button>
+      <button class="app" onclick="openApp('Messages')">
+        <span class="app-icon blue">●</span><span class="app-label">Messages</span>
+      </button>
+      <button class="app" onclick="openApp('Camera')">
+        <span class="app-icon gray">📷</span><span class="app-label">Camera</span>
+      </button>
+      <button class="app" onclick="openApp('Music')">
+        <span class="app-icon purple">♫</span><span class="app-label">Music</span>
+      </button>
+      <button class="app" onclick="openApp('Snake')">
+        <span class="app-icon green">🐍</span><span class="app-label">Snake</span>
+      </button>
+      <button class="app" onclick="openApp('Settings')">
+        <span class="app-icon gray">⚙</span><span class="app-label">Settings</span>
+      </button>
+      <button class="app" onclick="openApp('About ZoraOS')">
+        <span class="app-icon blue">🪐</span><span class="app-label">About ZoraOS</span>
+      </button>
+      <button class="app" onclick="openApp('Notes')">
+        <span class="app-icon white">📝</span><span class="app-label">Notes</span>
+      </button>
+      <button class="app" onclick="openApp('Lock Screen Editor')">
+        <span class="app-icon gray">🔒</span><span class="app-label">Lock screen</span>
+      </button>
+      <button class="app" onclick="openApp('Control Centre')">
+        <span class="app-icon blue">☷</span><span class="app-label">Control Centre</span>
+      </button>
+      <button class="app" onclick="openApp('Browser')">
+        <span class="app-icon white">🌐</span><span class="app-label">Browser</span>
+      </button>
+      <button class="app" onclick="openApp('Gallery')">
+        <span class="app-icon purple">🌄</span><span class="app-label">Gallery</span>
+      </button>
     </div>
 
-    <div class="page-dots">
-      <span class="dot active" id="dot0"></span>
-      <span class="dot" id="dot1"></span>
+    <div class="home-banner">
+      <strong>◉ &nbsp; ZoraOS</strong><br>
+      <span style="font-size:18px">Your world. Your OS.</span><br>
+      <small>Welcome back to your device.</small>
     </div>
-
-    <div class="dock" id="dock"></div>
+    <div class="page-dots"><span></span><span class="active"></span></div>
   </main>
 
-  <div id="lockscreen">
-    <div class="lock-top">
-      <div class="lock-date" id="lockDate">Monday, 23 June</div>
-      <div class="lock-clock" id="lockClock">9:41</div>
-      <div class="lock-weather">🌤️ &nbsp; 26° &nbsp; Mostly cloudy</div>
-    </div>
-
-    <div class="lock-notification glass">
-      <strong>◉ &nbsp; ZoraOS</strong>
-      <div>Your world. Your OS.</div>
-      <div style="font-size:12px;opacity:.75">Welcome back to your device.</div>
-    </div>
-
-    <div class="lock-bottom">
-      <div class="lock-shortcuts">
-        <button class="shortcut" onclick="toast('Flashlight simulation')">☼</button>
-        <button class="shortcut" onclick="openApp('Camera')">◎</button>
-      </div>
-      <div class="unlock-hint">Swipe up to unlock</div>
-    </div>
+  <div class="dock" id="dock">
+    <button class="app" onclick="openApp('Phone')">
+      <span class="app-icon green">☎</span>
+    </button>
+    <button class="app" onclick="openApp('Messages')">
+      <span class="app-icon blue">●</span>
+    </button>
+    <button class="app" onclick="openApp('Browser')">
+      <span class="app-icon blue">🪐</span>
+    </button>
+    <button class="app" onclick="openApp('Music')">
+      <span class="app-icon purple">♫</span>
+    </button>
   </div>
 
-  <section class="screen" id="appScreen">
-    <div class="screen-inner" id="appContent"></div>
+  <section id="appScreen">
+    <div class="app-header">
+      <button class="back" onclick="closeApp()">‹</button>
+      <h2 id="appTitle">Settings</h2>
+      <button class="back" onclick="showCC()">☷</button>
+    </div>
+    <div class="app-body" id="appBody"></div>
   </section>
 
-  <section id="control">
-    <div class="cc-head">
-      <div>
-        <div class="cc-title">Control Center</div>
-        <div class="cc-time" id="ccTime">Monday · 9:41</div>
+  <section id="lockscreen">
+    <div class="lock-wallpaper" id="lockWallpaper"></div>
+    <div class="lock-content">
+      <div class="lock-date" id="lockDate">Saturday, 10 October</div>
+      <div class="lock-time" id="lockTime">11:32</div>
+      <div class="lock-widgets">
+        <div class="lock-widget">🌤️ &nbsp; <b>26°</b><br>Mostly cloudy</div>
+        <div class="lock-widget">🪐 &nbsp; <b>ZoraOS</b><br>Your world. Your OS.</div>
       </div>
-      <button class="shortcut" onclick="closeControl()">✕</button>
+      <div class="lock-notifications">
+        <div class="notification"><strong>◉ &nbsp; ZoraOS</strong><p>Welcome back to your device.</p></div>
+        <div class="notification"><strong>☼ &nbsp; Notifications</strong><p>Your lock screen is ready.</p></div>
+      </div>
+      <div class="unlock-hint">Swipe up to unlock</div>
+      <div class="lock-shortcuts">
+        <button class="shortcut" onclick="toast('Flashlight demo')">☼</button>
+        <button class="shortcut" onclick="openApp('Camera');unlock()">◉</button>
+      </div>
     </div>
-
-    <div class="cc-grid">
-      <button class="cc-tile active" data-toggle="Wi-Fi" onclick="toggleTile(this)">
-        <span class="tile-icon">⌁</span><strong>Wi-Fi</strong><small>Connected</small>
-      </button>
-      <button class="cc-tile active" data-toggle="Bluetooth" onclick="toggleTile(this)">
-        <span class="tile-icon">ᛒ</span><strong>Bluetooth</strong><small>On</small>
-      </button>
-      <button class="cc-tile" data-toggle="Airplane Mode" onclick="toggleTile(this)">
-        <span class="tile-icon">✈</span><strong>Airplane Mode</strong><small>Off</small>
-      </button>
-      <button class="cc-tile" data-toggle="Focus" onclick="toggleTile(this)">
-        <span class="tile-icon">☾</span><strong>Focus</strong><small>Off</small>
-      </button>
-      <button class="cc-tile" onclick="openApp('Settings');closeControl()">
-        <span class="tile-icon">⚙</span><strong>Settings</strong><small>Customize ZoraOS</small>
-      </button>
-      <button class="cc-tile" onclick="openApp('Snake');closeControl()">
-        <span class="tile-icon">🐍</span><strong>Snake</strong><small>Play a game</small>
-      </button>
-    </div>
-
-    <div class="cc-slider">
-      <label><span>☼ &nbsp; Brightness</span><span id="brightVal">85%</span></label>
-      <input type="range" min="20" max="100" value="85" oninput="setBrightness(this.value)">
-    </div>
-    <div class="cc-slider">
-      <label><span>♫ &nbsp; Volume</span><span id="volumeVal">65%</span></label>
-      <input type="range" min="0" max="100" value="65" oninput="document.getElementById('volumeVal').textContent=this.value+'%'">
-    </div>
-    <button class="cc-close" onclick="closeControl()">Done</button>
   </section>
 
-  <div id="nav-pill"></div>
+  <section id="controlCentre">
+    <div class="cc-top">
+      <div><h2 style="margin:0">Control Centre</h2><small id="ccDate"></small></div>
+      <button class="back" onclick="hideCC()">✕</button>
+    </div>
+    <div class="cc-grid">
+      <button class="cc-tile on" onclick="toggleTile(this)"><b>◉ Wi-Fi</b><small>Connected</small></button>
+      <button class="cc-tile on" onclick="toggleTile(this)"><b>▥ Bluetooth</b><small>On</small></button>
+      <button class="cc-tile" onclick="toggleTile(this)"><b>✈ Airplane mode</b><small>Off</small></button>
+      <button class="cc-tile" onclick="toggleTile(this)"><b>☾ Focus</b><small>Off</small></button>
+      <button class="cc-tile" onclick="toggleTile(this)"><b>◐ Dark mode</b><small>Appearance</small></button>
+      <button class="cc-tile" onclick="lockDevice()"><b>🔒 Lock</b><small>Lock device</small></button>
+    </div>
+    <div class="cc-slider"><b>☼ &nbsp; Brightness</b><input type="range" min="15" max="100" value="85" oninput="document.getElementById('phone').style.filter='brightness('+this.value+'%)'"></div>
+    <div class="cc-slider"><b>♫ &nbsp; Volume</b><input type="range" min="0" max="100" value="60"></div>
+  </section>
+
+  <div id="homeIndicator" onclick="closeApp()"></div>
   <div id="toast"></div>
 </div>
 
 <script>
-"use strict";
-
 const $ = id => document.getElementById(id);
-
-const apps = [
-  {name:"Phone",icon:"☎",cls:"icon-phone",page:1},
-  {name:"Messages",icon:"●",cls:"icon-messages",page:1},
-  {name:"Camera",icon:"◎",cls:"icon-camera",page:1},
-  {name:"Music",icon:"♫",cls:"icon-music",page:1},
-  {name:"Gallery",icon:"🌈",cls:"icon-gallery",page:1},
-  {name:"Browser",icon:"🪐",cls:"icon-browser",page:1},
-  {name:"Play Store",icon:"▶",cls:"icon-store",page:1},
-  {name:"Files",icon:"📁",cls:"icon-files",page:1},
-  {name:"Weather",icon:"🌤️",cls:"icon-weather",page:1},
-  {name:"Calendar",icon:"23",cls:"icon-calendar",page:1},
-  {name:"Clock",icon:"◷",cls:"icon-clock",page:1},
-  {name:"Email",icon:"✉",cls:"icon-email",page:1},
-  {name:"Calculator",icon:"⊞",cls:"icon-calculator",page:1},
-  {name:"Recorder",icon:"〰",cls:"icon-recorder",page:1},
-  {name:"Compass",icon:"🧭",cls:"icon-compass",page:1},
-  {name:"Maps",icon:"➤",cls:"icon-maps",page:1},
-  {name:"Snake",icon:"🐍",cls:"icon-snake",page:2},
-  {name:"Settings",icon:"⚙",cls:"icon-settings",page:2},
-  {name:"About ZoraOS",icon:"🪐",cls:"icon-browser",page:2},
-  {name:"Notes",icon:"📝",cls:"icon-calendar",page:2},
-  {name:"Lock screen",icon:"🔒",cls:"icon-gallery",page:2}
-];
-
-const dockApps = ["Phone","Messages","Browser","Music"];
-let currentPage = 0;
 let currentApp = "";
+let locked = false;
+let clockSize = 82;
+let clockY = 105;
 let snakeTimer = null;
-let snake = [];
-let food = 0;
-let direction = {x:1,y:0};
-let nextDirection = {x:1,y:0};
-let score = 0;
-let snakeRunning = false;
-let toastTimer = null;
-let brightness = 85;
+let snake = [], food = {}, direction = "right", nextDirection = "right";
+let score = 0, gameRunning = false;
 
-function makeIcon(app, label=true) {
-  const btn = document.createElement("button");
-  btn.className = "app-icon";
-  btn.setAttribute("aria-label", app.name);
-  btn.innerHTML = `
-    <div class="icon-art ${app.cls}"><span>${app.icon}</span></div>
-    ${label ? `<span class="icon-label">${app.name}</span>` : ""}
-  `;
-  btn.addEventListener("click", () => openApp(app.name));
-  return btn;
-}
-
-function buildHome() {
-  $("page1").replaceChildren();
-  $("page2").replaceChildren();
-  apps.filter(a => a.page===1).forEach(a=>$("page1").appendChild(makeIcon(a)));
-  apps.filter(a => a.page===2).forEach(a=>$("page2").appendChild(makeIcon(a)));
-  $("dock").replaceChildren();
-  dockApps.forEach(name => {
-    const app=apps.find(a=>a.name===name);
-    if(app) $("dock").appendChild(makeIcon(app,false));
-  });
-}
-buildHome();
-
-function updateTime() {
+function updateClock() {
   const now = new Date();
-  const time = now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
-  const date = now.toLocaleDateString([], {weekday:"short",day:"numeric",month:"short"});
+  const time = now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",hour12:false});
   $("statusTime").textContent = time;
-  $("widgetClock").textContent = time;
-  $("widgetDate").textContent = date;
-  $("lockClock").textContent = time;
-  $("lockDate").textContent = now.toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"});
-  $("ccTime").textContent = now.toLocaleDateString([], {weekday:"long"})+" · "+time;
+  $("homeTime").textContent = time;
+  $("lockTime").textContent = time;
+  $("homeDate").textContent = now.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+  $("lockDate").textContent = now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+  $("ccDate").textContent = now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
 }
-updateTime();
-setInterval(updateTime,1000);
+updateClock();
+setInterval(updateClock,1000);
 
 function toast(message) {
-  const el=$("toast");
-  el.textContent=message;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove("show"),2000);
-}
-
-function setPage(page) {
-  currentPage = Math.max(0,Math.min(1,page));
-  $("pages").style.transform = `translateX(-${currentPage*100}%)`;
-  $("dot0").classList.toggle("active",currentPage===0);
-  $("dot1").classList.toggle("active",currentPage===1);
-}
-
-function showLock() {
-  closeApp();
-  closeControl();
-  $("lockscreen").classList.remove("unlocked");
-}
-
-function unlock() {
-  $("lockscreen").classList.add("unlocked");
+  $("toast").textContent = message;
+  $("toast").style.display = "block";
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(()=>$("toast").style.display="none",1800);
 }
 
 function openApp(name) {
-  closeControl();
-  if(name==="Lock screen") { showLock(); return; }
-  currentApp=name;
-  $("appContent").innerHTML=renderApp(name);
+  hideCC();
+  currentApp = name;
+  $("appTitle").textContent = name;
+  $("appBody").innerHTML = appContent(name);
+  $("appScreen").classList.remove("open");
+  void $("appScreen").offsetWidth;
   $("appScreen").classList.add("open");
-  $("appScreen").scrollTop=0;
-  if(name==="Snake") initSnake();
+  $("homeIndicator").classList.remove("dark");
+  if(name === "Snake") initSnake();
+  if(name === "Lock Screen Editor") refreshEditor();
 }
 
 function closeApp() {
+  if (!$("appScreen").classList.contains("open")) return;
   stopSnake();
   $("appScreen").classList.remove("open");
-  currentApp="";
+  currentApp = "";
+  $("homeIndicator").classList.remove("dark");
 }
 
-function backAction() {
-  if($("control").classList.contains("open")) { closeControl();return; }
-  if($("appScreen").classList.contains("open")) {
-    if(currentApp==="About ZoraOS") { openApp("Settings");return; }
-    closeApp();return;
-  }
-  if(!$("lockscreen").classList.contains("unlocked")) unlock();
+function lockDevice() {
+  closeApp();
+  hideCC();
+  locked = true;
+  $("lockscreen").classList.add("show");
+  $("homeIndicator").classList.remove("dark");
+}
+function unlock() {
+  locked = false;
+  $("lockscreen").classList.remove("show");
+}
+function showCC() {
+  $("controlCentre").classList.add("show");
+}
+function hideCC() {
+  $("controlCentre").classList.remove("show");
+}
+function toggleTile(button) {
+  button.classList.toggle("on");
+  const detail = button.querySelector("small");
+  if(detail) detail.textContent = button.classList.contains("on") ? "On" : "Off";
+}
+function setWallpaper(type) {
+  const wallpapers = {
+    blue:"linear-gradient(135deg,#061638,#164fba 48%,#3214a1 75%,#061638)",
+    purple:"linear-gradient(135deg,#160b38,#6928c7 55%,#e051b0)",
+    black:"linear-gradient(145deg,#050505,#20232d 65%,#050505)",
+    sunset:"linear-gradient(145deg,#36145c,#d64c88 50%,#ffae68)"
+  };
+  document.documentElement.style.setProperty("--wallpaper",wallpapers[type] || wallpapers.blue);
+  $("wallpaper").style.background = wallpapers[type] || wallpapers.blue;
+  $("lockWallpaper").style.background = wallpapers[type] || wallpapers.blue;
+  toast("Wallpaper changed");
 }
 
-function openControl() {
-  if(!$("lockscreen").classList.contains("unlocked")) return;
-  $("control").classList.add("open");
-}
-function closeControl() { $("control").classList.remove("open"); }
-
-function toggleTile(el) {
-  el.classList.toggle("active");
-  const name=el.dataset.toggle;
-  const enabled=el.classList.contains("active");
-  el.querySelector("small").textContent=enabled?"On":"Off";
-  toast(name+" "+(enabled?"enabled":"disabled")+" (demo)");
-}
-
-function setBrightness(value) {
-  brightness=Number(value);
-  $("brightVal").textContent=value+"%";
-  $("os").style.filter=`brightness(${0.45+brightness/180})`;
-}
-
-function row(icon,title,desc,action) {
-  return `<div class="row-item" ${action?`onclick="${action}" style="cursor:pointer"`:""}>
-    <div class="row-emoji">${icon}</div>
-    <div class="row-main"><div class="row-title">${title}</div><div class="row-desc">${desc}</div></div>
-    ${action?'<span class="chevron">›</span>':""}
-  </div>`;
-}
-
-function header(title,sub="") {
-  return `<div class="app-header">
-    <button class="back" onclick="backAction()">‹</button>
-    <div><div class="app-title">${title}</div>${sub?`<div class="app-subtitle">${sub}</div>`:""}</div>
-  </div>`;
-}
-
-function renderApp(name) {
-  switch(name) {
-    case "Settings": return renderSettings();
-    case "About ZoraOS": return renderAbout();
-    case "Snake": return renderSnake();
-    case "Phone": return header("Phone","Calls · Demo")+`
-      <div class="panel"><div style="font-size:48px;text-align:center;padding:24px">☎</div>
-      <input type="text" id="dialNumber" placeholder="Enter phone number" inputmode="tel">
-      <button class="action" style="width:100%;margin-top:12px" onclick="toast('Calling is not available in this web demo')">Call</button></div>`;
-    case "Messages": return header("Messages","Your conversations")+`
-      <div class="panel">${row("💬","ZoraOS","Welcome to your messages.")}</div>
-      <div class="panel"><input type="text" id="messageText" placeholder="Write a message...">
-      <button class="action" style="margin-top:10px" onclick="sendMessage()">Send</button><div id="messageOutput"></div></div>`;
-    case "Camera": return header("Camera","Camera preview")+`
-      <div class="panel" style="text-align:center;padding:30px">
-      <div style="font-size:90px">📷</div><p>Camera simulation</p>
-      <button class="action" onclick="toast('Photo captured in demo mode')">Capture</button></div>`;
-    case "Music": return header("Music","Your music")+`
-      <div class="panel" style="text-align:center;padding:30px">
-      <div style="font-size:80px">🎵</div><h3>Zora Mix</h3><p>Music player prototype</p>
-      <button class="action" onclick="toast('Add audio playback in a future update')">▶ Play</button></div>`;
-    case "Gallery": return header("Gallery","Your memories")+`
-      <div class="panel" style="text-align:center;padding:35px"><div style="font-size:60px">🌄</div><p>Your gallery is empty.</p></div>`;
-    case "Browser": return header("Browser","Web preview")+`
-      <div class="panel"><input type="text" id="webAddress" value="https://example.com">
-      <button class="action" style="margin-top:10px" onclick="visitWeb()">Go</button></div>
-      <div class="panel"><p>For safety, this demo opens websites in a separate browser tab.</p></div>`;
-    case "Play Store": return header("Play Store","Apps and games")+`
-      <div class="panel" style="text-align:center;padding:30px"><div style="font-size:60px">▶️</div>
-      <p>Store concept</p><p class="setting-label">This prototype cannot install Android apps.</p></div>`;
-    case "Files": return header("Files","Recent files")+`
-      <div class="panel">${row("📁","Internal storage","File manager demo")}${row("⬇️","Downloads","No downloads shown")}</div>`;
-    case "Weather": return header("Weather","Local weather demo")+`
-      <div class="panel" style="text-align:center;padding:25px"><div style="font-size:65px">🌤️</div>
-      <div style="font-size:42px">26°C</div><p>Mostly cloudy</p></div>`;
-    case "Calendar": return header("Calendar","Your schedule")+`
-      <div class="panel" style="text-align:center;padding:25px"><div id="calendarToday" style="font-size:58px">23</div><p>${new Date().toLocaleDateString([], {weekday:"long",month:"long",year:"numeric"})}</p><p>No events today</p></div>`;
-    case "Clock": return header("Clock","Time and timers")+`
-      <div class="panel" style="text-align:center;padding:28px"><div style="font-size:50px" id="bigClock">9:41</div><p>Local time</p>
-      <button class="action" onclick="toast('Timer feature coming soon')">＋ Timer</button></div>`;
-    case "Email": return header("Email","Mail demo")+`
-      <div class="panel">${row("✉","Welcome to ZoraOS","Your new home for productivity.")}</div>`;
-    case "Calculator": return renderCalculator();
-    case "Recorder": return header("Recorder","Voice recorder demo")+`
-      <div class="panel" style="text-align:center;padding:28px"><div style="font-size:65px">〰️</div>
-      <button class="action" onclick="toast('Microphone recording is not implemented yet')">● Record</button></div>`;
-    case "Compass": return header("Compass","Compass demo")+`
-      <div class="panel" style="text-align:center;padding:30px"><div style="font-size:100px">🧭</div><p>North · 0°</p></div>`;
-    case "Maps": return header("Maps","Map preview")+`
-      <div class="panel" style="text-align:center;padding:30px"><div style="font-size:75px">🗺️</div><p>Map simulation</p></div>`;
-    case "Notes": return header("Notes","Quick notes")+`
-      <div class="panel"><textarea id="noteArea" rows="8" placeholder="Write your note..."></textarea>
-      <button class="action" style="margin-top:10px" onclick="saveNote()">Save note</button></div>`;
-    default: return header(name)+`<div class="panel">Welcome to ${name}.</div>`;
-  }
-}
-
-function renderSettings() {
-  return header("Settings","Personalize your ZoraOS")+`
+function appContent(name) {
+  if(name === "Settings") return `
+    <div class="panel"><h3>Settings</h3><p>Personalise your ZoraOS experience.</p></div>
     <div class="panel">
-      ${row("🪐","About ZoraOS","Version, device details","openApp('About ZoraOS')")}
-      ${row("🔒","Lock screen & wallpaper","Clock size and appearance","openApp('Lock screen & wallpaper')")}
-      ${row("🎨","Display & brightness","Screen appearance","openApp('Display & brightness')")}
-      ${row("🎛️","Control Center","Quick settings","openControl()")}
-      ${row("🔊","Sound & vibration","Volume demo","toast('Sound settings are simulated')")}
-      ${row("🛡️","Privacy","Prototype privacy information","openApp('Privacy')")}
-      ${row("ℹ️","System updates","Check ZoraOS version","toast('You are using the latest demo')")}
-    </div>
-    <div class="setting-label" style="text-align:center;padding:8px">ZoraOS · Your world. Your OS.</div>`;
-}
-
-function renderAbout() {
-  return header("About device","ZoraOS device information")+`
-    <div class="panel about-hero">
-      <div class="about-logo">🪐</div>
-      <div style="font-size:24px;font-weight:750">ZoraOS</div>
-      <div class="about-version">Version 1.0 · Web Edition</div>
-    </div>
-    <div class="panel">
-      <div style="font-size:16px;font-weight:750;margin-bottom:8px">Device information</div>
-      <div class="info-line"><span>Device name</span><span>ZoraOS Prototype</span></div>
-      <div class="info-line"><span>Model</span><span>ZOS-01</span></div>
-      <div class="info-line"><span>Software version</span><span>1.0.0</span></div>
-      <div class="info-line"><span>UI version</span><span>Zora UI 1.0</span></div>
-      <div class="info-line"><span>Platform</span><span>Web</span></div>
-      <div class="info-line"><span>Build number</span><span>ZORA-100</span></div>
-    </div>
-    <div class="panel">
-      <div style="font-weight:750;margin-bottom:10px">Storage</div>
-      <div class="setting-label">Browser prototype · No real device storage access</div>
-      <div style="height:8px;border-radius:10px;background:#d9e5f8;margin-top:12px;overflow:hidden">
-        <div style="height:100%;width:38%;background:#4288ef;border-radius:10px"></div>
-      </div>
-    </div>
-    <button class="action" style="width:100%" onclick="toast('ZoraOS is up to date!')">Check for updates</button>`;
-}
-
-function renderLockEditor() {
-  return header("Lock screen & wallpaper","Customize your lock screen")+`
-    <div class="panel" style="text-align:center">
-      <div style="font-size:12px;color:#687895">CLOCK PREVIEW</div>
-      <div id="editorClock" style="font-size:var(--clock-size);font-weight:250;letter-spacing:-4px">9:41</div>
-      <div class="setting-label">Clock size</div>
-      <input type="range" min="52" max="120" value="${parseInt(getComputedStyle(document.documentElement).getPropertyValue('--clock-size'))||82}" oninput="setClockSize(this.value)">
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:#71809a"><span>Shorter</span><span>Larger</span></div>
-    </div>
-    <div class="panel">
-      <div class="row-title">Clock style</div>
-      <div style="display:flex;gap:9px;margin-top:12px">
-        <button class="secondary" onclick="toggleLockStyle('thin')">Thin</button>
-        <button class="secondary" onclick="toggleLockStyle('bold')">Bold</button>
-        <button class="secondary" onclick="toggleLockStyle('soft')">Soft</button>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="row-title">Wallpaper glow</div>
-      <input type="range" min="0" max="100" value="60" oninput="setWallpaperGlow(this.value)">
-    </div>
-    <button class="action" style="width:100%" onclick="toast('Lock screen settings saved')">Save changes</button>`;
-}
-
-function setClockSize(value) {
-  document.documentElement.style.setProperty('--clock-size',value+'px');
-  const preview=$("editorClock");
-  if(preview) preview.style.fontSize=value+'px';
-  toast("Clock size: "+value);
-}
-function toggleLockStyle(style) {
-  const clock=$("lockClock");
-  clock.style.fontWeight=style==="bold"?"600":style==="soft"?"350":"250";
-  clock.style.letterSpacing=style==="soft"?"0px":"-4px";
-  toast("Clock style updated");
-}
-function setWallpaperGlow(value) {
-  const glow=.15+(Number(value)/100)*.7;
-  document.querySelectorAll(".ribbon").forEach(r=>r.style.opacity=glow);
-}
-
-function renderDisplay() {
-  return header("Display & brightness","Appearance")+`
-    <div class="panel">
-      <div class="row-title">Screen brightness</div>
-      <input type="range" min="30" max="100" value="${brightness}" oninput="setBrightness(this.value)">
-      <div class="setting-label">This changes the prototype's screen brightness.</div>
-    </div>
-    <div class="panel">
-      <div class="row-title">Animations</div>
-      <div class="row-desc">ZoraOS uses smooth app transitions and glass effects.</div>
-      <button class="action" style="margin-top:12px" onclick="document.documentElement.style.setProperty('--glass','rgba(255,255,255,.2)');toast('Glass effect refreshed')">Refresh glass effect</button>
+      <div class="row-setting"><label>Lock Screen Editor<br><small>Customise your clock</small></label><button class="action" onclick="openApp('Lock Screen Editor')">Open</button></div>
+      <div class="row-setting"><label>Control Centre<br><small>Quick settings</small></label><button class="action" onclick="showCC()">Open</button></div>
+      <div class="row-setting"><label>Wallpaper</label><button class="action" onclick="openApp('Wallpaper')">Change</button></div>
+      <div class="row-setting"><label>About ZoraOS</label><button class="action" onclick="openApp('About ZoraOS')">View</button></div>
+      <div class="row-setting"><label>Lock device</label><button class="action" onclick="lockDevice()">Lock</button></div>
     </div>`;
-}
 
-function renderCalculator() {
-  return header("Calculator","Simple calculator")+`
+  if(name === "Lock Screen Editor") return `
+    <div class="panel"><h3>Lock Screen Editor</h3><p>Make the clock your own.</p>
+      <div class="row-setting"><label>Clock size</label><b id="sizeValue">${clockSize}px</b></div>
+      <input id="sizeSlider" type="range" min="48" max="150" value="${clockSize}" oninput="changeClockSize(this.value)">
+      <div class="row-setting"><label>Clock vertical position</label><b id="positionValue">${clockY}px</b></div>
+      <input id="positionSlider" type="range" min="65" max="260" value="${clockY}" oninput="changeClockY(this.value)">
+      <p><small>Move the clock up or down and adjust its size. The lock screen stays opaque.</small></p>
+      <button class="action primary" onclick="lockDevice()">Preview lock screen</button>
+      <button class="action" onclick="resetClock()">Reset</button>
+    </div>
+    <div class="panel"><h3>Wallpaper</h3><div class="wallpapers">
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#061638,#164fba,#3214a1)" onclick="setWallpaper('blue')"></button>
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#160b38,#6928c7,#e051b0)" onclick="setWallpaper('purple')"></button>
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#050505,#343849)" onclick="setWallpaper('black')"></button>
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#36145c,#d64c88,#ffae68)" onclick="setWallpaper('sunset')"></button>
+    </div></div>`;
+
+  if(name === "About ZoraOS") return `
+    <div class="panel" style="text-align:center;padding:30px 15px">
+      <div style="font-size:60px">🪐</div><h2 style="margin-bottom:5px">ZoraOS</h2>
+      <p>Your world. Your OS.</p><small>Version 1.0 • Web Edition</small>
+    </div>
     <div class="panel">
-      <input type="text" id="calcDisplay" value="0" readonly style="font-size:27px;text-align:right;margin-bottom:12px">
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-      ${["AC","(",")","÷","7","8","9","×","4","5","6","−","1","2","3","+","0",".","⌫","="].map(k=>
-        `<button class="secondary" style="height:49px;font-size:18px" onclick="calcPress('${k}')">${k}</button>`
-      ).join("")}
+      ${aboutRow("Device name","ZoraOS Device")}
+      ${aboutRow("Model","ZoraOS Web")}
+      ${aboutRow("Version","1.0")}
+      ${aboutRow("Interface","ZoraOS UI")}
+      ${aboutRow("Platform","Browser")}
+      ${aboutRow("Developer","ZoraOS-dev")}
+      ${aboutRow("Status","Prototype")}
+    </div>`;
+
+  if(name === "Wallpaper") return `
+    <div class="panel"><h3>Choose wallpaper</h3><div class="wallpapers">
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#061638,#164fba,#3214a1)" onclick="setWallpaper('blue')"></button>
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#160b38,#6928c7,#e051b0)" onclick="setWallpaper('purple')"></button>
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#050505,#343849)" onclick="setWallpaper('black')"></button>
+      <button class="wallpaper-choice" style="background:linear-gradient(135deg,#36145c,#d64c88,#ffae68)" onclick="setWallpaper('sunset')"></button>
+    </div></div>`;
+
+  if(name === "Notes") return `
+    <div class="panel"><h3>Quick Notes</h3>
+      <textarea id="noteText" placeholder="Write something..." oninput="saveNote(this.value)"></textarea>
+      <p><small>Your note is saved in this browser on this device.</small></p>
+      <button class="action" onclick="$('noteText').value='';saveNote('')">Clear</button>
+    </div>`;
+
+  if(name === "Snake") return `
+    <div class="panel game-wrap">
+      <h3>Snake</h3><p>Score: <b id="snakeScore">0</b></p>
+      <canvas id="snakeCanvas" width="320" height="320"></canvas>
+      <p><small>Eat the food and avoid the walls.</small></p>
+      <button class="action primary" onclick="startSnake()">Start / Restart</button>
+      <div class="game-controls">
+        <span></span><button onclick="turnSnake('up')">▲</button><span></span>
+        <button onclick="turnSnake('left')">◀</button>
+        <button onclick="turnSnake('down')">▼</button>
+        <button onclick="turnSnake('right')">▶</button>
       </div>
     </div>`;
-}
-let calcExpression="";
-function calcPress(k) {
-  if(k==="AC") calcExpression="";
-  else if(k==="⌫") calcExpression=calcExpression.slice(0,-1);
-  else if(k==="=") {
-    try {
-      if(!/^[0-9+\-*/().\s]+$/.test(calcExpression)) throw Error();
-      const result=Function('"use strict";return ('+calcExpression+')')();
-      if(!Number.isFinite(result)) throw Error();
-      calcExpression=String(result);
-    } catch { toast("Invalid calculation");calcExpression=""; }
-  } else calcExpression+=({"÷":"/","×":"*","−":"-"}[k]||k);
-  const display=$("calcDisplay");
-  if(display) display.value=calcExpression||"0";
+
+  if(name === "Control Centre") return `
+    <div class="panel"><h3>Control Centre</h3>
+    <button class="action" onclick="showCC()">Open Quick Settings</button></div>`;
+
+  if(name === "Phone") return `
+    <div class="panel" style="text-align:center"><div style="font-size:50px">☎</div><h3>Phone</h3>
+    <p>This web prototype does not place real calls.</p>
+    <input type="text" placeholder="Enter a phone number">
+    <p><button class="action" onclick="toast('Calling is not available in the demo')">Call</button></p></div>`;
+
+  if(name === "Messages") return `
+    <div class="panel"><h3>Messages</h3><p>This is a messaging UI demo.</p>
+    <textarea placeholder="Write a message..."></textarea>
+    <button class="action" onclick="toast('Demo message ready')">Send</button></div>`;
+
+  if(name === "Music") return `
+    <div class="panel" style="text-align:center;padding:35px 15px">
+    <div style="font-size:90px">♫</div><h3>Music Player</h3>
+    <p>Select an audio file to play locally.</p>
+    <input type="file" accept="audio/*" id="audioFile">
+    <audio id="audioPlayer" controls style="width:100%;margin-top:20px"></audio>
+    </div>`;
+
+  if(name === "Camera") return `
+    <div class="panel"><h3>Camera</h3><p>Camera access requires browser permission.</p>
+    <video id="cameraVideo" autoplay playsinline style="width:100%;border-radius:20px;background:#111"></video>
+    <button class="action" onclick="startCamera()">Start camera</button>
+    <button class="action" onclick="stopCamera()">Stop</button></div>`;
+
+  if(name === "Browser") return `
+    <div class="panel"><h3>Browser</h3><p>Open a website in a new tab.</p>
+    <input id="webAddress" type="text" placeholder="https://example.com">
+    <button class="action primary" style="margin-top:12px" onclick="goWeb()">Go</button></div>`;
+
+  if(name === "Gallery") return `
+    <div class="panel"><h3>Gallery</h3><p>Select a picture to preview.</p>
+    <input type="file" accept="image/*" onchange="previewImage(this)">
+    <img id="galleryPreview" style="width:100%;margin-top:14px;border-radius:20px;display:none">
+    </div>`;
+
+  return `<div class="panel"><h3>${name}</h3><p>Welcome to ZoraOS.</p></div>`;
 }
 
-function sendMessage() {
-  const input=$("messageText");
-  const output=$("messageOutput");
-  if(!input||!output||!input.value.trim()) return toast("Write a message first");
-  output.innerHTML=`<div class="panel" style="margin-top:12px">${escapeHTML(input.value)}</div>`;
-  input.value="";
+function aboutRow(label,value) {
+  return `<div class="row-setting"><label>${label}</label><span style="font-size:13px;opacity:.8">${value}</span></div>`;
 }
-function saveNote() {
-  const value=$("noteArea")?.value||"";
-  try { localStorage.setItem("zora-note",value); } catch {}
-  toast("Note saved in this browser");
+function changeClockSize(value) {
+  clockSize = Number(value);
+  document.documentElement.style.setProperty("--clock-size",clockSize+"px");
+  $("sizeValue").textContent=clockSize+"px";
 }
-function visitWeb() {
-  let address=$("webAddress")?.value.trim();
-  if(!address) return;
-  if(!/^https?:\/\//i.test(address)) address="https://"+address;
-  window.open(address,"_blank","noopener");
+function changeClockY(value) {
+  clockY=Number(value);
+  document.documentElement.style.setProperty("--clock-y",clockY+"px");
+  $("positionValue").textContent=clockY+"px";
 }
-function escapeHTML(text) {
-  return text.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function refreshEditor() {
+  $("sizeSlider").value=clockSize;
+  $("positionSlider").value=clockY;
+  $("sizeValue").textContent=clockSize+"px";
+  $("positionValue").textContent=clockY+"px";
 }
+function resetClock() {
+  clockSize=82;clockY=105;
+  changeClockSize(clockSize);changeClockY(clockY);refreshEditor();
+}
+function saveNote(value) {
+  try {localStorage.setItem("zora-note",value)} catch(e) {}
+}
+function goWeb() {
+  let url=$("webAddress").value.trim();
+  if(!url) return;
+  if(!/^https?:\/\//i.test(url)) url="https://"+url;
+  window.open(url,"_blank","noopener");
+}
+async function startCamera() {
+  try {
+    const stream=await navigator.mediaDevices.getUserMedia({video:true});
+    $("cameraVideo").srcObject=stream;
+  } catch(e) {toast("Camera unavailable or permission denied");}
+}
+function stopCamera() {
+  const video=$("cameraVideo");
+  if(video && video.srcObject) video.srcObject.getTracks().forEach(t=>t.stop());
+}
+function previewImage(input) {
+  if(!input.files[0]) return;
+  const img=$("galleryPreview");
+  img.src=URL.createObjectURL(input.files[0]);img.style.display="block";
+}
+$("appBody").addEventListener("change",e=>{
+  if(e.target.id==="audioFile") {
+    const file=e.target.files[0];
+    if(file) {
+      const player=$("audioPlayer");
+      player.src=URL.createObjectURL(file);player.play().catch(()=>{});
+    }
+  }
+});
 
-function renderSnake() {
-  return header("Snake","Classic game · Touch controls")+`
-    <div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <strong>Score: <span id="snakeScore">0</span></strong>
-        <span id="snakeStatus" class="setting-label">Ready</span>
-      </div>
-      <div class="snake-board" id="snakeBoard"></div>
-      <div class="dpad">
-        <span></span><button onclick="setDirection(0,-1)">↑</button><span></span>
-        <button onclick="setDirection(-1,0)">←</button><button onclick="startSnake()">▶</button><button onclick="setDirection(1,0)">→</button>
-        <span></span><button onclick="setDirection(0,1)">↓</button><span></span>
-      </div>
-      <button class="action" style="width:100%;margin-top:16px" onclick="startSnake()">Start / Restart</button>
-    </div>
-    <div class="setting-label">Eat the red dots. Avoid the walls and your own tail.</div>`;
-}
-
+/* SNAKE — SLOWER SPEED */
 function initSnake() {
   stopSnake();
-  snake=[{x:5,y:8},{x:4,y:8},{x:3,y:8}];
-  direction={x:1,y:0};
-  nextDirection={x:1,y:0};
-  score=0;
-  snakeRunning=false;
-  food=randomFood();
+  snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];
+  direction="right";nextDirection="right";score=0;
+  food={x:13,y:8};gameRunning=false;
   drawSnake();
-  if($("snakeStatus")) $("snakeStatus").textContent="Ready";
-}
-function randomFood() {
-  let p;
-  do { p={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}; }
-  while(snake.some(s=>s.x===p.x&&s.y===p.y));
-  return p;
-}
-function drawSnake() {
-  const board=$("snakeBoard");
-  if(!board) return;
-  board.replaceChildren();
-  for(let y=0;y<16;y++) for(let x=0;x<16;x++) {
-    const cell=document.createElement("div");
-    cell.className="cell";
-    if(snake.some(s=>s.x===x&&s.y===y)) cell.classList.add("snake");
-    if(food.x===x&&food.y===y) cell.classList.add("food");
-    board.appendChild(cell);
-  }
-  if($("snakeScore")) $("snakeScore").textContent=score;
 }
 function startSnake() {
-  if(currentApp!=="Snake") return;
-  if(snakeRunning) { initSnake(); }
-  snakeRunning=true;
-  if($("snakeStatus")) $("snakeStatus").textContent="Playing";
-  snakeTimer=setInterval(stepSnake,190);
+  stopSnake();
+  snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];
+  direction="right";nextDirection="right";score=0;
+  spawnFood();gameRunning=true;drawSnake();
+  snakeTimer=setInterval(tickSnake,190);
 }
 function stopSnake() {
-  clearInterval(snakeTimer);
-  snakeTimer=null;
-  snakeRunning=false;
+  if(snakeTimer) clearInterval(snakeTimer);
+  snakeTimer=null;gameRunning=false;
 }
-function setDirection(x,y) {
-  if(direction.x+x===0 && direction.y+y===0) return;
-  nextDirection={x,y};
-  if(!snakeRunning && currentApp==="Snake") startSnake();
+function spawnFood() {
+  food={x:Math.floor(Math.random()*19),y:Math.floor(Math.random()*19)};
 }
-function stepSnake() {
+function turnSnake(dir) {
+  const opposite={up:"down",down:"up",left:"right",right:"left"};
+  if(opposite[dir]!==direction) nextDirection=dir;
+}
+function tickSnake() {
   direction=nextDirection;
-  const head={x:snake[0].x+direction.x,y:snake[0].y+direction.y};
-  const ate=head.x===food.x&&head.y===food.y;
-  const body=ate?snake:snake.slice(0,-1);
-  if(head.x<0||head.y<0||head.x>=16||head.y>=16||body.some(s=>s.x===head.x&&s.y===head.y)) {
-    stopSnake();
-    if($("snakeStatus")) $("snakeStatus").textContent="Game over";
-    toast("Game over · Score "+score);
-    return;
+  const head={...snake[0]};
+  if(direction==="up")head.y--;
+  if(direction==="down")head.y++;
+  if(direction==="left")head.x--;
+  if(direction==="right")head.x++;
+  if(head.x<0||head.y<0||head.x>=20||head.y>=20||
+     snake.some(s=>s.x===head.x&&s.y===head.y)) {
+    stopSnake();toast("Game over! Score: "+score);return;
   }
   snake.unshift(head);
-  if(ate) { score+=10;food=randomFood(); }
-  else snake.pop();
+  if(head.x===food.x&&head.y===food.y) {
+    score++;$("snakeScore").textContent=score;spawnFood();
+  } else snake.pop();
   drawSnake();
 }
+function drawSnake() {
+  const canvas=$("snakeCanvas");if(!canvas)return;
+  const ctx=canvas.getContext("2d"),cell=16;
+  ctx.clearRect(0,0,320,320);
+  ctx.fillStyle="#081421";ctx.fillRect(0,0,320,320);
+  ctx.fillStyle="#ff607d";ctx.fillRect(food.x*cell+2,food.y*cell+2,12,12);
+  snake.forEach((s,i)=>{
+    ctx.fillStyle=i===0?"#b4ffd9":"#36ce91";
+    ctx.fillRect(s.x*cell+1,s.y*cell+1,14,14);
+  });
+}
 document.addEventListener("keydown",e=>{
-  const map={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]};
-  const d=map[e.key];
-  if(d&&currentApp==="Snake") { e.preventDefault();setDirection(d[0],d[1]); }
-  if(e.key==="Escape") backAction();
+  const keys={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right"};
+  if(keys[e.key]&&currentApp==="Snake"){e.preventDefault();turnSnake(keys[e.key]);}
 });
 
-let startX=0,startY=0,lastX=0,lastY=0;
-const os=$("os");
-
-os.addEventListener("touchstart",e=>{
+/* SWIPE GESTURES */
+let touchStartX=0,touchStartY=0,touchStartTime=0;
+$("appScreen").addEventListener("touchstart",e=>{
   const t=e.changedTouches[0];
-  startX=t.clientX;startY=t.clientY;lastX=t.clientX;lastY=t.clientY;
+  touchStartX=t.clientX;touchStartY=t.clientY;touchStartTime=Date.now();
 },{passive:true});
-
-os.addEventListener("touchend",e=>{
+$("appScreen").addEventListener("touchend",e=>{
   const t=e.changedTouches[0];
-  const dx=t.clientX-startX,dy=t.clientY-startY;
-  const absX=Math.abs(dx),absY=Math.abs(dy);
-
-  if(!$("lockscreen").classList.contains("unlocked")) {
-    if(dy < -45) unlock();
-    return;
-  }
-
-  if(startY<35 && startX>window.innerWidth*.62 && dy>55) {
-    openControl();return;
-  }
-
-  if($("control").classList.contains("open")) {
-    if(dy < -50) closeControl();
-    return;
-  }
-
-  if($("appScreen").classList.contains("open")) {
-    if(dy < -100 && startY>window.innerHeight-75) backAction();
-    return;
-  }
-
-  if(absX>55 && absX>absY) {
-    setPage(currentPage+(dx<0?1:-1));
+  const dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;
+  if(Math.abs(dy)>65 && dy>0 && touchStartY<150 && currentApp==="Snake") return;
+  if(dy < -75 && Math.abs(dx)<100) {
+    if(currentApp==="Snake" && touchStartY>150) return;
+    closeApp();
+  } else if(dx>100 && Math.abs(dy)<90) {
+    closeApp();
   }
 },{passive:true});
 
-$("gestureHint").addEventListener("click",openControl);
-$("nav-pill").addEventListener("click",backAction);
+$("lockscreen").addEventListener("touchstart",e=>{
+  const t=e.changedTouches[0];
+  touchStartY=t.clientY;touchStartX=t.clientX;
+},{passive:true});
+$("lockscreen").addEventListener("touchend",e=>{
+  const t=e.changedTouches[0];
+  if(touchStartY-t.clientY>65) unlock();
+},{passive:true});
 
-let mouseStartX=0,mouseStartY=0;
-os.addEventListener("mousedown",e=>{mouseStartX=e.clientX;mouseStartY=e.clientY;});
-os.addEventListener("mouseup",e=>{
-  const dx=e.clientX-mouseStartX,dy=e.clientY-mouseStartY;
-  if(!$("lockscreen").classList.contains("unlocked")&&dy<-45) unlock();
-  else if(mouseStartY<30&&mouseStartX>window.innerWidth*.62&&dy>55) openControl();
-  else if(!$("appScreen").classList.contains("open")&&Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)) setPage(currentPage+(dx<0?1:-1));
+let ccStartY=0;
+$("status").addEventListener("touchstart",e=>{
+  ccStartY=e.touches[0].clientY;
+},{passive:true});
+$("status").addEventListener("touchend",e=>{
+  if(e.changedTouches[0].clientY-ccStartY>65 && !locked) showCC();
+},{passive:true});
+
+$("lockscreen").addEventListener("click",e=>{
+  if(e.target.id==="lockscreen" || e.target.classList.contains("lock-content")) {
+    // Tap does not unlock; swipe up to unlock.
+  }
 });
 
+// Load the saved note whenever Notes opens.
 const originalOpenApp=openApp;
 openApp=function(name) {
-  if(name==="Lock screen & wallpaper") {
-    currentApp=name;
-    $("appContent").innerHTML=renderLockEditor();
-    $("appScreen").classList.add("open");
-    $("appScreen").scrollTop=0;
-    return;
-  }
-  if(name==="Display & brightness") {
-    currentApp=name;
-    $("appContent").innerHTML=renderDisplay();
-    $("appScreen").classList.add("open");
-    $("appScreen").scrollTop=0;
-    return;
-  }
-  if(name==="Privacy") {
-    currentApp=name;
-    $("appContent").innerHTML=header("Privacy","Prototype information")+`
-      <div class="panel"><p>ZoraOS is a browser-based prototype. It does not change your Android system settings.</p>
-      <p>Some features are simulated for the demo.</p></div>`;
-    $("appScreen").classList.add("open");
-    return;
-  }
   originalOpenApp(name);
+  if(name==="Notes") {
+    try {$("noteText").value=localStorage.getItem("zora-note")||"";}catch(e){}
+  }
 };
 
-try {
-  const savedNote=localStorage.getItem("zora-note");
-  if(savedNote) window.savedZoraNote=savedNote;
-} catch {}
-
+// Home gesture / indicator
+$("homeIndicator").addEventListener("touchstart",e=>{
+  touchStartY=e.touches[0].clientY;
+},{passive:true});
+$("homeIndicator").addEventListener("touchend",e=>{
+  const dy=e.changedTouches[0].clientY-touchStartY;
+  if(currentApp && dy < -15) closeApp();
+});
 </script>
 </body>
 </html>
