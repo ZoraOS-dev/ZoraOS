@@ -3,591 +3,324 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#000000">
-<title>About ZoraOS</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#08091d">
+<title>ZoraOS</title>
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-:root {
-  --bg: #000;
-  --card: #242426;
-  --text: #f7f7fb;
-  --muted: #99999f;
-  --accent: #1685ff;
-}
-
-body {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Arial, sans-serif;
-  padding: 0 18px 35px;
-  overflow-x: hidden;
-}
-
-/* STATUS BAR */
-
-.status-bar {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5px;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: .2px;
-}
-
-.status-right {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.status-icon {
-  width: 17px;
-  height: 17px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.battery {
-  background: #ededed;
-  color: #333;
-  border-radius: 5px;
-  padding: 3px 7px;
-  font-size: 12px;
-  min-width: 42px;
-}
-
-/* TOP BAR */
-
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 17px;
-  margin: 14px 0 35px;
-}
-
-.back-button {
-  width: 66px;
-  height: 66px;
-  border-radius: 50%;
-  background: #242426;
-  display: grid;
-  place-items: center;
-  border: none;
-  color: white;
-  cursor: pointer;
-  transition: background .2s, transform .2s;
-}
-
-.back-button:active {
-  transform: scale(.92);
-  background: #38383b;
-}
-
-.back-button svg {
-  width: 30px;
-  height: 30px;
-}
-
-.topbar h1 {
-  font-size: 30px;
-  font-weight: 750;
-  letter-spacing: -.8px;
-}
-
-/* SATURN HERO */
-
-.hero {
-  height: 420px;
-  border-radius: 38px;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  background:
-    radial-gradient(ellipse at 20% 0%,
-      #372078 0%, transparent 45%),
-    linear-gradient(145deg,
-      #09071d 0%,
-      #201044 38%,
-      #090914 100%);
-  border: 1px solid rgba(255,255,255,.06);
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Stars */
-
-.stars {
-  position: absolute;
-  inset: 0;
-  opacity: .8;
-  background-image:
-    radial-gradient(2px 2px at 12% 18%, #fff, transparent),
-    radial-gradient(1px 1px at 78% 12%, #fff, transparent),
-    radial-gradient(1px 1px at 88% 32%, #d8d4ff, transparent),
-    radial-gradient(2px 2px at 25% 48%, #fff, transparent),
-    radial-gradient(1px 1px at 65% 62%, #fff, transparent),
-    radial-gradient(1px 1px at 18% 78%, #b8b4ff, transparent),
-    radial-gradient(2px 2px at 85% 82%, #fff, transparent),
-    radial-gradient(1px 1px at 45% 25%, #fff, transparent);
-}
-
-/* Saturn rings */
-
-.saturn {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  top: 27px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: float 7s ease-in-out infinite;
-}
-
-.ring {
-  position: absolute;
-  width: 340px;
-  height: 112px;
-  left: 50%;
-  top: 53%;
-  transform: translate(-50%, -50%) rotate(-20deg);
-  border-radius: 50%;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,232,194,.12),
-      #f4c78d 15%,
-      #d68c61 27%,
-      #754b77 42%,
-      #e6b9dc 51%,
-      #b88bce 64%,
-      #f4d6a4 78%,
-      rgba(255,255,255,.08) 100%
-    );
-  box-shadow:
-    0 0 25px rgba(201,143,255,.18),
-    inset 0 3px 8px rgba(255,255,255,.3);
-  -webkit-mask-image: linear-gradient(
-    180deg, transparent 0%, #000 18%,
-    #000 82%, transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg, transparent 0%, #000 18%,
-    #000 82%, transparent 100%
-  );
-}
-
-.planet {
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      rgba(255,255,255,.10) 8px,
-      transparent 16px,
-      rgba(85,40,90,.12) 24px
-    ),
-    linear-gradient(
-      115deg,
-      #ffe7c4 0%,
-      #d7a4a3 20%,
-      #a875a0 38%,
-      #e6c0a4 53%,
-      #b9847b 69%,
-      #593d76 100%
-    );
-  box-shadow:
-    inset -25px -10px 45px rgba(12,5,35,.7),
-    inset 12px 8px 25px rgba(255,255,255,.45),
-    0 0 35px rgba(167,116,255,.2);
-  overflow: hidden;
-}
-
-.planet::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    90deg,
-    transparent 30%,
-    rgba(255,255,255,.22) 50%,
-    transparent 75%
-  );
-}
-
-/* Ring in front of planet */
-
-.front-ring {
-  position: absolute;
-  width: 340px;
-  height: 112px;
-  left: 50%;
-  top: 53%;
-  transform: translate(-50%, -50%) rotate(-20deg);
-  border-radius: 50%;
-  border: 13px solid rgba(255,220,183,.78);
-  border-left-color: rgba(168,123,190,.75);
-  border-right-color: rgba(239,192,150,.9);
-  border-bottom-color: rgba(207,164,214,.85);
-  clip-path: inset(50% 0 0 0);
-  filter: drop-shadow(0 2px 5px rgba(255,210,180,.2));
-}
-
-.hero-info {
-  position: absolute;
-  bottom: 35px;
-  left: 24px;
-  right: 24px;
-  text-align: center;
-  z-index: 2;
-  text-shadow: 0 2px 12px rgba(0,0,0,.4);
-}
-
-.hero-info h2 {
-  font-size: 38px;
-  font-weight: 750;
-  letter-spacing: -1.5px;
-  background: linear-gradient(90deg, #f1d8ff, #fff, #d7c7ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.hero-info p {
-  margin-top: 9px;
-  font-size: 17px;
-  color: rgba(255,255,255,.78);
-  letter-spacing: 1.2px;
-}
-
-.version-button {
-  margin-top: 20px;
-  padding: 13px 24px;
-  border-radius: 30px;
-  border: 1px solid rgba(255,255,255,.22);
-  color: white;
-  background: rgba(255,255,255,.13);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.version-button:active {
-  transform: scale(.96);
-  background: rgba(255,255,255,.25);
-}
-
-/* INFORMATION CARDS */
-
-.card {
-  background: var(--card);
-  border-radius: 30px;
-  padding: 26px 24px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255,255,255,.025);
-}
-
-.info-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  min-height: 40px;
-}
-
-.info-row h3 {
-  font-size: 19px;
-  font-weight: 650;
-}
-
-.info-row span {
-  color: var(--muted);
-  font-size: 16px;
-  font-weight: 600;
-  text-align: right;
-}
-
-.separator {
-  height: 1px;
-  background: rgba(255,255,255,.09);
-  margin: 22px 0;
-}
-
-.storage-track {
-  width: 100%;
-  height: 13px;
-  background: #39393b;
-  border-radius: 20px;
-  overflow: hidden;
-  margin-top: 17px;
-}
-
-.storage-fill {
-  height: 100%;
-  width: 21%;
-  background: #1685ff;
-  border-radius: inherit;
-  box-shadow: 0 0 12px rgba(22,133,255,.3);
-}
-
-.storage-caption {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.detail-card {
-  padding: 26px 24px;
-  min-height: 126px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 16px;
-}
-
-.detail-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-
-.detail-heading h3 {
-  font-size: 20px;
-  font-weight: 650;
-}
-
-.detail-card p {
-  font-size: 16px;
-  color: var(--muted);
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.detail-icon {
-  width: 25px;
-  height: 25px;
-  color: #99999f;
-  flex-shrink: 0;
-}
-
-/* BOTTOM NAVIGATION */
-
-.gesture-bar {
-  width: 120px;
-  height: 5px;
-  background: #f5f5f5;
-  border-radius: 10px;
-  margin: 24px auto 0;
-  opacity: .85;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, -8px);
-  }
-}
-
-@media (max-width: 380px) {
-  body {
-    padding-left: 13px;
-    padding-right: 13px;
-  }
-
-  .hero {
-    height: 390px;
-  }
-
-  .saturn {
-    transform: translateX(-50%) scale(.85);
-    transform-origin: top center;
-  }
-
-  .hero-info h2 {
-    font-size: 32px;
-  }
-
-  .info-row h3 {
-    font-size: 17px;
-  }
-
-  .info-row span {
-    font-size: 14px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .saturn {
-    animation: none;
-  }
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--blue:#7899ff;--glass:rgba(255,255,255,.105);--text:#f8f8ff}
+body{margin:0;background:#090909;color:white;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100dvh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+#caption{position:fixed;bottom:8px;color:#777;font-size:12px;z-index:0}
+.phone{width:min(390px,94vw,calc((100dvh - 32px)*.49));height:min(820px,calc(100dvh - 36px),calc(94vw*2.04));min-height:360px;position:relative;z-index:1;border-radius:52px;padding:9px;background:linear-gradient(130deg,#d9efff,#384450 12%,#05070a 23%,#8ca8b6 80%,#101319);box-shadow:0 0 0 1px #a5bdc9,0 0 0 4px #14191f,0 22px 65px #000}
+.screen{height:100%;width:100%;position:relative;overflow:hidden;border-radius:43px;background:#080d30;isolation:isolate}
+.wallpaper{position:absolute;inset:0;z-index:-2;background:radial-gradient(ellipse at 85% 23%,#283a94 0,transparent 43%),radial-gradient(ellipse at 10% 85%,#252879 0,transparent 40%),linear-gradient(145deg,#080a26,#111b52 50%,#080923)}
+.wallpaper:before,.wallpaper:after{content:"";position:absolute;width:150%;height:44%;left:-20%;top:28%;border:1px solid #839eff55;border-radius:50%;transform:rotate(-47deg);background:linear-gradient(115deg,transparent,#8ba8ff12,#d4ddff22,transparent);box-shadow:0 0 22px #8aa7ff16}
+.wallpaper:after{top:51%;left:-15%;transform:rotate(-48deg);height:29%;width:140%;background:linear-gradient(90deg,transparent,#738dff22,transparent)}
+.status{height:37px;display:flex;align-items:center;justify-content:space-between;padding:0 17px;font-size:12px;font-weight:700;position:relative;z-index:10}
+.statusRight{display:flex;align-items:center;gap:6px}
+.dynamic{position:absolute;width:73px;height:19px;border-radius:20px;background:#000;left:50%;top:7px;transform:translateX(-50%);z-index:11;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.lens{width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#39677d,#04070b 70%);box-shadow:0 0 0 2px #111}
+.signal{letter-spacing:-3px;font-size:14px}
+.battery{border:1px solid #ffffffa0;border-radius:5px;padding:1px 4px;font-size:10px}
+.content{position:absolute;inset:37px 0 26px;overflow:hidden}
+.page{position:absolute;inset:0;padding:14px 17px 5px;transition:transform .26s ease,opacity .2s}
+.widgets{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;height:111px;margin-bottom:22px}
+.widget{background:linear-gradient(135deg,#ffffff19,#ffffff08);border:1px solid #ffffff20;border-radius:22px;padding:13px 12px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:inset 0 1px #ffffff12}
+.widget .time{font-size:29px;letter-spacing:-1.5px;font-weight:500}
+.widget .date{font-size:11px;color:#d0d5f2;margin-top:5px}
+.widget h3{font-size:13px;margin:3px 0 8px;font-weight:650}
+.widget p{font-size:10px;color:#c8d0ed;margin:0;line-height:1.5}
+.widget .planet{font-size:26px;margin-bottom:5px;display:block;filter:grayscale(1)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:8px;row-gap:18px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;background:none;border:0;padding:0}
+.icon{width:min(100%,59px);aspect-ratio:1;border-radius:19px;display:grid;place-items:center;background:linear-gradient(145deg,#ffffff20,#ffffff08);border:1px solid #ffffff25;box-shadow:inset 0 1px #ffffff20,0 5px 12px #0002;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#e4e7f5;transition:transform .16s,background .2s}
+.app:active .icon{transform:scale(.87)}
+.icon svg{width:27px;height:27px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.app span{font-size:10px;color:#f0f1fa;text-shadow:0 1px 5px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dots{display:flex;justify-content:center;gap:7px;position:absolute;bottom:77px;left:0;right:0}
+.dot{width:6px;height:6px;border-radius:50%;background:#ffffff55}
+.dot.active{background:#fff}
+.dock{position:absolute;bottom:8px;left:15px;right:15px;height:67px;border:1px solid #ffffff30;border-radius:26px;background:linear-gradient(120deg,#ffffff20,#ffffff09);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);display:grid;grid-template-columns:repeat(4,1fr);align-items:center;padding:5px 8px;box-shadow:inset 0 1px #ffffff15}
+.dock .icon{width:45px;border-radius:15px}
+.dock button{display:grid;place-items:center;background:none;border:0;padding:0}
+.gesture{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:90px;height:4px;border-radius:9px;background:#fff;z-index:30;opacity:.85}
+#homePages{position:absolute;inset:0}
+#page2{transform:translateX(100%);opacity:0}
+#drawer,#control,#settings,#appWindow,#aod{position:absolute;inset:0;z-index:20;display:none}
+#drawer{background:#0b0c19ed;backdrop-filter:blur(28px);padding:50px 18px 30px;overflow:auto}
+.panelTitle{font-size:24px;font-weight:700;margin-bottom:20px}
+.search{width:100%;border:1px solid #ffffff25;background:#ffffff12;border-radius:18px;padding:13px;color:white;margin-bottom:20px;outline:none}
+#drawerGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 7px}
+#control{background:#090b18ed;backdrop-filter:blur(28px);padding:56px 19px 30px}
+.ccgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tile{border:1px solid #ffffff1c;background:#ffffff13;border-radius:21px;padding:17px 12px;text-align:left;min-height:76px}
+.tile.on{background:#dfe7ff;color:#15182a}
+.tile strong{display:block;font-size:14px;margin-bottom:6px}
+.tile small{opacity:.7}
+.slider{width:100%;accent-color:#fff;margin:23px 0}
+.close{position:absolute;right:17px;top:15px;width:34px;height:34px;border:0;border-radius:50%;background:#ffffff18;font-size:20px}
+#settings{background:#080910;padding:55px 17px 25px;overflow:auto}
+.settingRow{padding:17px 14px;border-radius:17px;background:#ffffff10;display:flex;justify-content:space-between;align-items:center;margin:9px 0;font-size:14px}
+.settingRow small{display:block;color:#aaa;margin-top:5px}
+.switch{width:42px;height:24px;border-radius:20px;background:#555;position:relative;border:0;flex-shrink:0}
+.switch:after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:.2s}
+.switch.on{background:#8ca7ff}
+.switch.on:after{left:21px;background:#13162b}
+#appWindow{background:#0c0d17;padding:60px 20px 30px;text-align:center}
+.appBig{font-size:55px;margin:35px 0 15px;color:#ddd}
+#appWindow h2{font-size:25px}
+#appWindow p{color:#aaa;font-size:13px;line-height:1.7}
+.action{background:#ffffff14;border:1px solid #ffffff20;border-radius:17px;padding:12px 17px;margin:8px}
+#aod{background:#03040b;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+#aod .aodtime{font-size:54px;font-weight:300;letter-spacing:-2px;color:#dbe2ff}
+#aod .aoddate{font-size:13px;color:#9ca7c9;margin-top:10px}
+#aod .aodplanet{font-size:20px;margin-top:28px;color:#8d9aca}
+#aod .aodhint{position:absolute;bottom:30px;color:#656982;font-size:11px}
+.hidden{display:none!important}
 </style>
 </head>
-
 <body>
-
-<!-- Status bar -->
-<div class="status-bar">
-  <span id="time">9:41</span>
-
-  <div class="status-right">
-    <span class="status-icon">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M2 8.5 12 1l10 7.5v2.8L12 3.8 2 11.3z"/>
-        <path d="M5 12 12 7l7 5v9h-5v-6h-4v6H5z"/>
-      </svg>
-    </span>
-
-    <span class="status-icon">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <rect x="2" y="14" width="4" height="8" rx="1"/>
-        <rect x="9" y="10" width="4" height="12" rx="1"/>
-        <rect x="16" y="5" width="4" height="17" rx="1"/>
-      </svg>
-    </span>
-
-    <span class="battery">66%</span>
+<div class="phone">
+<div class="screen" id="screen">
+<div class="wallpaper"></div>
+<div class="status">
+  <span id="statusTime">09:41</span>
+  <div class="dynamic"><span class="lens"></span></div>
+  <div class="statusRight">
+    <span>◆</span><span>⌁</span><span class="signal">▂▄▆</span>
+    <span class="battery">100</span>
   </div>
 </div>
 
-<!-- Header -->
-<header class="topbar">
-  <button class="back-button" onclick="history.back()" aria-label="Go back">
-    <svg viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2.5"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M19 12H5"/>
-      <path d="m12 19-7-7 7-7"/>
-    </svg>
-  </button>
-
-  <h1>About</h1>
-</header>
-
-<!-- Saturn hero -->
-<section class="hero">
-  <div class="stars"></div>
-
-  <div class="saturn">
-    <div class="ring"></div>
-    <div class="planet"></div>
-    <div class="front-ring"></div>
-  </div>
-
-  <div class="hero-info">
-    <h2>ZoraOS</h2>
-    <p>26.3 Beta 7.5.1</p>
-
-    <button class="version-button" onclick="showVersion()">
-      Version up to date
-    </button>
-  </div>
+<div class="content" id="content">
+<div id="homePages">
+<section class="page" id="page1">
+<div class="widgets">
+<div class="widget">
+<div class="time" id="widgetTime">09:41</div>
+<div class="date" id="widgetDate">MON, OCT 13</div>
+<p style="margin-top:9px">◐ &nbsp; Weather at a glance</p>
+</div>
+<div class="widget">
+<span class="planet">◉</span>
+<h3>ZoraOS</h3>
+<p>Your world.<br>Your OS.</p>
+</div>
+</div>
+<div class="grid" id="mainGrid"></div>
 </section>
-
-<!-- Device and storage -->
-<section class="card">
-  <div class="info-row">
-    <h3>Device name</h3>
-    <span>SM-A346E</span>
-  </div>
-
-  <div class="separator"></div>
-
-  <div class="info-row">
-    <h3>Storage</h3>
-    <span>47.3 GB / 225 GB</span>
-  </div>
-
-  <div class="storage-track">
-    <div class="storage-fill"></div>
-  </div>
-
-  <div class="storage-caption">
-    <span>Used storage</span>
-    <span>21% used</span>
-  </div>
+<section class="page" id="page2">
+<div class="widgets">
+<div class="widget"><div class="time">Zora</div><div class="date">YOUR SPACE</div><p style="margin-top:9px">A calmer way to use your phone.</p></div>
+<div class="widget"><h3>Quick access</h3><p>Settings and tools</p></div>
+</div>
+<div class="grid" id="secondGrid"></div>
 </section>
+</div>
+<div class="dots"><span class="dot active" id="dot1"></span><span class="dot" id="dot2"></span></div>
+<div class="dock" id="dock"></div>
+</div>
 
-<!-- ZoraOS details -->
-<section class="card detail-card">
-  <div class="detail-heading">
-    <h3>ZoraOS</h3>
+<div id="drawer">
+<button class="close" onclick="closeOverlay()">×</button>
+<div class="panelTitle">Apps</div>
+<input class="search" id="search" placeholder="Search apps..." oninput="renderDrawer()">
+<div id="drawerGrid"></div>
+</div>
 
-    <svg class="detail-icon" viewBox="0 0 24 24"
-      fill="currentColor">
-      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 4a1.2 1.2 0 1 1 0 2.4A1.2 1.2 0 0 1 12 6Zm2 12h-4v-1.5h1v-4h-1V11h3v5.5h1z"/>
-    </svg>
-  </div>
+<div id="control">
+<button class="close" onclick="closeOverlay()">×</button>
+<div class="panelTitle">Control Centre</div>
+<div class="ccgrid">
+<button class="tile on" id="wifiTile" onclick="toggleTile(this)"><strong>◉ Wi-Fi</strong><small>Connected</small></button>
+<button class="tile on" onclick="toggleTile(this)"><strong>▥ Bluetooth</strong><small>Available</small></button>
+<button class="tile" onclick="toggleTile(this)"><strong>◐ Dark mode</strong><small>Appearance</small></button>
+<button class="tile" onclick="toggleAOD()"><strong>◷ Always-On</strong><small id="aodLabel">Disabled</small></button>
+<button class="tile" onclick="openSettings()"><strong>⚙ Settings</strong><small>Personalise ZoraOS</small></button>
+<button class="tile" onclick="showApp('Notifications')"><strong>▤ Notifications</strong><small>Notification centre</small></button>
+</div>
+<p style="font-size:12px;color:#aaa;margin-top:20px">Brightness</p>
+<input class="slider" type="range" min="35" max="100" value="100" oninput="document.querySelector('.screen').style.filter='brightness('+this.value+'%)'">
+</div>
 
-  <p>26.3 Beta 7.5.1 · Build 115</p>
-</section>
+<div id="settings">
+<button class="close" onclick="closeOverlay()">×</button>
+<div class="panelTitle">Settings</div>
+<p style="color:#aaa;font-size:13px;margin-bottom:20px">Personalise your ZoraOS experience</p>
+<div class="settingRow"><div>Always-On Display<small>Show a dim clock screen</small></div><button id="aodSwitch" class="switch" onclick="toggleAOD()"></button></div>
+<div class="settingRow"><div>Dark icons<small>Keep a monochrome icon style</small></div><button class="switch on" onclick="this.classList.toggle('on');document.body.classList.toggle('mono')"></button></div>
+<div class="settingRow"><div>Liquid Glass<small>Translucent panels and dock</small></div><button class="switch on" onclick="this.classList.toggle('on');document.querySelectorAll('.widget,.dock,.icon').forEach(x=>x.style.backdropFilter=this.classList.contains('on')?'blur(22px)':'none')"></button></div>
+<div class="settingRow"><div>Device<small>Prototype device information</small></div><span>›</span></div>
+<div class="settingRow" onclick="showApp('About ZoraOS')"><div>About ZoraOS<small>Version 26.3 Beta 7.5.1</small></div><span>›</span></div>
+<button class="action" onclick="openHome()">Return Home</button>
+</div>
 
-<!-- Android details -->
-<section class="card detail-card">
-  <div class="detail-heading">
-    <h3>Android 16</h3>
+<div id="appWindow">
+<button class="close" onclick="closeOverlay()">×</button>
+<div class="appBig" id="appSymbol">◉</div>
+<h2 id="appTitle">App</h2>
+<p id="appDescription">Welcome to ZoraOS.</p>
+<div id="appActions"></div>
+</div>
 
-    <svg class="detail-icon" viewBox="0 0 24 24"
-      fill="currentColor">
-      <path d="M7 7 5.5 4.5 6.8 4l1.7 2.7a9 9 0 0 1 7 0L17.2 4l1.3.5L17 7a7.5 7.5 0 0 1 3 6H4a7.5 7.5 0 0 1 3-6ZM8 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm8 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM4 14h16v5a2 2 0 0 1-2 2h-1v-3h-2v3H9v-3H7v3H6a2 2 0 0 1-2-2z"/>
-    </svg>
-  </div>
-
-  <p>Android version</p>
-</section>
-
-<div class="gesture-bar"></div>
+<div id="aod">
+<div class="aodtime" id="aodTime">09:41</div>
+<div class="aoddate" id="aodDate">MONDAY, OCTOBER 13</div>
+<div class="aodplanet">◉ &nbsp; ZoraOS</div>
+<div class="aodhint">Tap twice to wake</div>
+</div>
+<div class="gesture" id="gesture"></div>
+</div>
+</div>
+<div id="caption">ZoraOS Web Prototype</div>
 
 <script>
-function showVersion() {
-  alert("You're using ZoraOS 26.3 Beta 7.5.1.");
+const iconPaths={
+Camera:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M8 4 10 2h4l2 2"/>',
+Browser:'<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
+Clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
+Compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+Gallery:'<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m4 17 5-5 3 3 3-4 5 6"/>',
+Phone:'<path d="M6 3 3.5 5c0 7 8.5 15.5 15.5 15.5L21 18l-5-4-3 2c-2-1-4-3-5-5l2-3z"/>',
+Messages:'<path d="M4 5h16v12H9l-5 4z"/><path d="M8 10h.1M12 10h.1M16 10h.1"/>',
+Music:'<path d="M14 4v13"/><path d="m14 6 6-2v12"/><ellipse cx="10" cy="18" rx="4" ry="3"/><ellipse cx="16" cy="17" rx="3" ry="2"/>',
+Settings:'<circle cx="12" cy="12" r="3"/><path d="m19 13 2-1-2-1-.5-2 1-2-2-2-2 1-2-.5-1-2-2 2-2 1-2-1-2 2 1 2-.5 2-2 1 2 2 1 2-1 2 2 2 2-1 2 .5 1 2 2-2 2-1 2 1 2-2-1-2 .5-2z"/>',
+'Play Store':'<path d="M5 3v18l15-9z"/><path d="m5 3 11 9-11 9M16 12l4-3M16 12l4 3"/>',
+Files:'<path d="M3 7h7l2 2h9v10H3z"/><path d="M3 7V5h7l2 2"/>',
+Weather:'<circle cx="16" cy="8" r="4"/><path d="M6 19a4 4 0 0 1 0-8 5 5 0 0 1 9-1 4 4 0 1 1 1 9z"/>',
+Calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18"/>',
+Email:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
+Notes:'<path d="M6 3h12v18H6zM9 8h6M9 12h6M9 16h4"/>',
+Contacts:'<circle cx="12" cy="8" r="3"/><path d="M5 20c0-5 14-5 14 0"/>',
+Calculator:'<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/>',
+Recorder:'<path d="M3 12h2m2-4v8m4-12v16m4-13v10m4-8v6m2-3h1"/>',
+Tools:'<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>',
+Themes:'<path d="M12 3a9 9 0 1 0 9 9c0-2-2-3-4-3h-2a2 2 0 0 1-2-2c0-2 2-4-1-4z"/><circle cx="7" cy="11" r="1"/><circle cx="10" cy="7" r="1"/>',
+Games:'<path d="M6 8h12a4 4 0 0 1 3 7l-2 3-4-3H9l-4 3-2-3a4 4 0 0 1 3-7zM7 12h4M9 10v4M16 11h.1M18 13h.1"/>',
+Store:'<path d="M5 8h14l1 13H4zM8 8V5a4 4 0 0 1 8 0v3"/>',
+'Zora AI':'<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c5 5 5 11 0 16M12 4c-5 5-5 11 0 16"/>',
+'About ZoraOS':'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.1"/>',
+'Control Centre':'<path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="12" r="2"/>',
+'Always-On':'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
+'Video':'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/>',
+'Security':'<path d="M12 2 20 5v6c0 5-4 8-8 11-4-3-8-6-8-11V5z"/>',
+'Backup':'<path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/>',
+Translate:'<path d="M4 5h10M9 3v2m3 0c0 6-4 9-8 11M6 9c1 3 4 5 7 6M14 20l4-10 4 10M15.5 17h5"/>'
+};
+const apps=[
+'Camera','Browser','Clock','Compass',
+'Gallery','Phone','Weather','Security',
+'Messages','Control Centre','Recorder','Always-On',
+'Files','Play Store','Music','Video',
+'Calculator','Notes','Contacts','Settings',
+'Tools','Themes','Games','Store',
+'Zora AI','Translate','Backup','About ZoraOS'
+];
+const dockApps=['Calculator','Files','Music','Settings'];
+let currentPage=0,aodEnabled=false,overlay=null,startX=0,startY=0;
+function iconSvg(name){
+return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(iconPaths[name]||iconPaths.Tools)+'</svg>';
 }
-
-/* Update the clock */
-function updateTime() {
-  const now = new Date();
-
-  document.getElementById("time").textContent =
-    now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-    });
+function makeApp(name){
+const b=document.createElement('button');b.className='app';b.innerHTML='<div class="icon">'+iconSvg(name)+'</div><span>'+name+'</span>';
+b.onclick=()=>launch(name);return b;
 }
-
-updateTime();
-setInterval(updateTime, 30000);
+function fillGrid(id,list){
+const g=document.getElementById(id);g.innerHTML='';list.forEach(n=>g.appendChild(makeApp(n)));
+}
+fillGrid('mainGrid',apps.slice(0,16));
+fillGrid('secondGrid',apps.slice(16));
+const dock=document.getElementById('dock');
+dockApps.forEach(n=>{const b=document.createElement('button');b.innerHTML='<div class="icon">'+iconSvg(n)+'</div>';b.onclick=()=>launch(n);dock.appendChild(b)});
+function updateClock(){
+const d=new Date(),t=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false});
+document.getElementById('statusTime').textContent=t;
+document.getElementById('widgetTime').textContent=t;
+document.getElementById('aodTime').textContent=t;
+document.getElementById('widgetDate').textContent=d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+document.getElementById('aodDate').textContent=d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
+}
+updateClock();setInterval(updateClock,15000);
+function setPage(n){
+currentPage=(n+2)%2;
+document.getElementById('page1').style.transform=currentPage===0?'translateX(0)':'translateX(-100%)';
+document.getElementById('page1').style.opacity=currentPage===0?'1':'0';
+document.getElementById('page2').style.transform=currentPage===1?'translateX(0)':'translateX(100%)';
+document.getElementById('page2').style.opacity=currentPage===1?'1':'0';
+document.getElementById('dot1').classList.toggle('active',currentPage===0);
+document.getElementById('dot2').classList.toggle('active',currentPage===1);
+}
+function show(id){['drawer','control','settings','appWindow','aod'].forEach(x=>document.getElementById(x).style.display='none');document.getElementById(id).style.display='block';overlay=id}
+function closeOverlay(){if(overlay==='aod'){if(aodEnabled)return; }['drawer','control','settings','appWindow'].forEach(x=>document.getElementById(x).style.display='none');overlay=null}
+function openHome(){closeOverlay();setPage(0)}
+function openSettings(){show('settings')}
+function launch(name){
+if(name==='Settings'){openSettings();return}
+if(name==='Control Centre'){show('control');return}
+if(name==='Always-On'){toggleAOD();return}
+if(name==='About ZoraOS'){showApp(name);return}
+showApp(name)
+}
+function showApp(name){
+show('appWindow');
+document.getElementById('appTitle').textContent=name;
+document.getElementById('appSymbol').innerHTML=iconSvg(name);
+const descriptions={
+'About ZoraOS':'ZoraOS Web Prototype<br>Version 26.3 Beta 7.5.1<br>Build 115',
+'Camera':'Camera interface prototype. Native camera access is not connected.',
+'Phone':'Phone app preview. Real calls are not available in this browser prototype.',
+'Messages':'Your messages interface will live here.',
+'Weather':'Weather widget preview. Live weather data is not connected.',
+'Zora AI':'Meet Zora AI — your future personal assistant.',
+'Notifications':'You are all caught up.',
+'Play Store':'Store preview. This prototype cannot install Android applications.',
+'Browser':'Your ZoraOS browser preview.',
+'Files':'File manager preview.',
+'Music':'Your music player preview.',
+'Security':'Your device security hub.',
+'Backup':'Backup settings preview.'
+};
+document.getElementById('appDescription').innerHTML=descriptions[name]||'This is the '+name+' prototype.<br>More ZoraOS features coming soon.';
+document.getElementById('appActions').innerHTML='<button class="action" onclick="closeOverlay()">Done</button>';
+}
+function renderDrawer(){
+const q=document.getElementById('search').value.toLowerCase();
+const g=document.getElementById('drawerGrid');g.innerHTML='';
+apps.filter(n=>n.toLowerCase().includes(q)).forEach(n=>g.appendChild(makeApp(n)));
+}
+function toggleTile(el){el.classList.toggle('on')}
+function toggleAOD(){
+aodEnabled=!aodEnabled;
+document.getElementById('aodSwitch').classList.toggle('on',aodEnabled);
+document.getElementById('aodLabel').textContent=aodEnabled?'Enabled':'Disabled';
+document.getElementById('aod').style.display=aodEnabled?'flex':'none';
+if(aodEnabled)overlay='aod';
+else if(overlay==='aod')overlay=null;
+}
+document.getElementById('gesture').onclick=()=>{if(overlay){if(overlay==='aod'){if(aodEnabled)toggleAOD();return}closeOverlay()}else openHome()};
+let touchStartX=0,touchStartY=0;
+const screen=document.getElementById('screen');
+screen.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;touchStartY=e.touches[0].clientY},{passive:true});
+screen.addEventListener('touchend',e=>{
+const dx=e.changedTouches[0].clientX-touchStartX;
+const dy=e.changedTouches[0].clientY-touchStartY;
+const r=screen.getBoundingClientRect();
+const y=touchStartY-r.top;
+if(overlay==='aod'){
+if(Math.abs(dy)>15||Math.abs(dx)>15){if(aodEnabled)toggleAOD();else closeOverlay()}
+return;
+}
+if(overlay){
+if(dy>70&&touchStartY-r.top<60){closeOverlay();return}
+return;
+}
+if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)){setPage(currentPage+(dx<0?1:-1));return}
+if(dy< -65&&touchStartY-r.top>r.height*.48){show('drawer');renderDrawer();return}
+if(dy>70&&y<80){show('control');return}
+},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(overlay==='aod'&&aodEnabled)return;closeOverlay()}});
+document.getElementById('aod').addEventListener('click',e=>{if(e.target.id==='aod'&&aodEnabled)toggleAOD()});
 </script>
-
 </body>
 </html>
